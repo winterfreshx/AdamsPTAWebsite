@@ -1,0 +1,153 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import takeCare from '../assets/images/eagle-take-care.png';
+import octopus from '../assets/images/mural-octopus.jpg';
+import unicorn from '../assets/images/mural-unicorn.jpg';
+import giraffe from '../assets/images/mural-giraffe.jpg';
+import owl from '../assets/images/mural-owl.jpg';
+import { execBoard } from '../data/contacts';
+import { links } from '../data/links';
+import { site } from '../data/site';
+
+const murals = [
+  { src: octopus, alt: 'Octopus mural with swirling blue waves' },
+  { src: unicorn, alt: 'Mural of a unicorn rowing a boat beneath snowy mountains' },
+  { src: giraffe, alt: 'Giraffe mural against a swirly blue background' },
+  { src: owl, alt: 'Big-eyed owl mural' },
+];
+const initials = (n: string) => n.split(' ').map((p) => p[0]).join('');
+---
+
+<BaseLayout title="About Our PTA" description="Who the Adams Elementary PTA is, what we do, our 2026/27 executive board, and how to get involved.">
+  <PageHero
+    eyebrow="About our PTA"
+    title="Families and teachers, working together for Adams"
+    intro="A nonprofit organization of parents, families and teachers dedicated to supporting Adams Elementary."
+  />
+
+  <section class="section">
+    <div class="container split">
+      <div class="stack-lg">
+        <div>
+          <h2>Who we are</h2>
+          <p class="lead">A nonprofit organization composed of parents, families, and teachers dedicated to supporting Adams Elementary.</p>
+        </div>
+        <div>
+          <h2>What we do</h2>
+          <p class="lead">Support our students, staff and community through volunteer efforts, fundraising, advocacy and other supports.</p>
+        </div>
+        <div>
+          <h2>Why PTA?</h2>
+          <p>
+            Our Parent Teacher Association is made up of members who are part of a greater network that includes the
+            <a href={links.scptsa}>Seattle Council PTSA</a>, <a href={links.wspta}>Washington State PTA</a> and
+            <a href={links.nationalPta}>National PTA</a>. Our members elect an executive board, vote on our budget and other
+            issues, and uphold standards set by the city, state and national Parent Teacher Associations. While our mission
+            is to support Adams Elementary, we are an independent organization.
+          </p>
+        </div>
+      </div>
+      <Image src={takeCare} alt="Adams Elementary PTA eagle sailing a Viking ship: We take care of each other" widths={[400, 700]} sizes="(min-width: 860px) 28rem, 90vw" class="take-care" />
+    </div>
+  </section>
+
+  <section class="section section-tint" aria-labelledby="board-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Adams PTA {execBoard.year}</p>
+        <h2 id="board-title">Executive Board</h2>
+      </div>
+      <div class="grid grid-4">
+        {
+          execBoard.members.map((m) => (
+            <article class="card person">
+              <span class="avatar" aria-hidden="true">{initials(m.name)}</span>
+              <h3>{m.name}</h3>
+              <p class="role">{m.role}</p>
+              <a href={`mailto:${m.email}`} class="email"><Icon name="mail" size={18} /> {m.email}</a>
+            </article>
+          ))
+        }
+      </div>
+      <p class="callout callout-green board-note">
+        <Icon name="info" />
+        <span>Not sure who to contact? Reach our team by emailing <a href={`mailto:${site.email}`}>{site.email}</a>.</span>
+      </p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="involved-title">
+    <div class="container">
+      <div class="section-head center">
+        <p class="eyebrow">Join in</p>
+        <h2 id="involved-title">How to get involved</h2>
+      </div>
+      <div class="grid grid-3">
+        <article class="card card-accent">
+          <Icon name="hand" size={32} class="inv-icon" />
+          <h3>Volunteer!</h3>
+          <p>
+            We need all kinds of volunteers, from helping at school events to filling a one-time or continuing PTA role.
+            Visit our <a href="/volunteering">Volunteer page</a> and start the process of
+            <a href={links.spsVolunteerApplication}>registering with SPS</a> as a volunteer.
+          </p>
+        </article>
+        <article class="card card-accent">
+          <Icon name="users" size={32} class="inv-icon" />
+          <h3>Attend a meeting</h3>
+          <p>
+            You don't need to be a PTA member or hold a board role to attend our monthly board meetings or any of our three
+            general meetings each year. Come meet other volunteers and learn what we do. Follow our
+            <a href={links.ptaCalendar}>Calendar</a> and <a href={links.konstella}>Konstella</a> updates.
+          </p>
+        </article>
+        <article class="card card-accent">
+          <Icon name="sparkles" size={32} class="inv-icon" />
+          <h3>Attend a community event</h3>
+          <p>
+            For our events to be a success, we want our families to attend! Watch for news about Fall Fest, the Multicultural
+            Potluck, Talent Fest and other fun events throughout the year.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-gold" aria-labelledby="murals-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Around our school</p>
+        <h2 id="murals-title">The murals of Adams</h2>
+      </div>
+      <div class="murals">
+        {murals.map((m) => (
+          <div class="photo">
+            <Image src={m.src} alt={m.alt} widths={[400, 700]} sizes="(min-width: 860px) 25vw, 50vw" />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .take-care { width: min(100%, 28rem); margin-inline: auto; border-radius: var(--radius-lg); }
+  .person { text-align: center; display: flex; flex-direction: column; align-items: center; gap: var(--space-2); }
+  .avatar {
+    display: grid; place-items: center; width: 4.5rem; height: 4.5rem; border-radius: 50%;
+    background: var(--green-700); color: var(--gold-300); font-family: var(--font-display); font-weight: 800; font-size: 1.5rem;
+    box-shadow: 0 0 0 4px var(--gold-300);
+    margin-bottom: var(--space-2);
+  }
+  .person h3 { margin: 0; }
+  .role { font-weight: 800; color: var(--green-500); margin: 0; }
+  .email { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.875rem; overflow-wrap: anywhere; }
+  .board-note { margin-top: var(--space-5); }
+  .card :global(.inv-icon) { color: var(--green-500); margin-bottom: var(--space-3); }
+  .murals { display: grid; gap: var(--space-4); grid-template-columns: repeat(2, 1fr); }
+  @media (min-width: 860px) { .murals { grid-template-columns: repeat(4, 1fr); } }
+  .murals .photo { aspect-ratio: 1; }
+</style>

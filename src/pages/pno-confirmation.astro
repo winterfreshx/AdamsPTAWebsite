@@ -1,0 +1,13 @@
+---
+import MessageLayout from '../layouts/MessageLayout.astro';
+import { schoolContacts } from '../data/contacts';
+const { name, email } = schoolContacts.parentNightOut;
+---
+
+<MessageLayout title="Parent Night Out Confirmation" heading="Thank you for signing up for Parent Night Out!">
+  <p>Please forward a copy of your receipt to {name} at <a href={`mailto:${email}`}>{email}</a>.</p>
+  <div class="btn-row">
+    <a class="btn" href={`mailto:${email}?subject=Parent%20Night%20Out%20receipt`}>Email {name}</a>
+    <a class="btn btn-ghost" href="/">Back to home</a>
+  </div>
+</MessageLayout>

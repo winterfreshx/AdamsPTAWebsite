@@ -1,0 +1,240 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import { links, mailto } from '../data/links';
+import { ptaInboxes, gradeReps, schoolContacts, inbox } from '../data/contacts';
+import { site } from '../data/site';
+
+const quick = [
+  { label: 'Join Konstella', href: links.konstella, icon: 'app' },
+  { label: 'Family Directory', href: links.konstellaDirectory, icon: 'users' },
+  { label: 'Staff Appreciation', href: '/we-appreciate-adams', icon: 'heart' },
+  { label: 'Follow on Instagram', href: links.instagram, icon: 'instagram' },
+  { label: 'Like us on Facebook', href: links.facebook, icon: 'facebook' },
+  { label: 'Adams SPS Site', href: links.adamsSps, icon: 'school' },
+] as const;
+
+const linkGroups = [
+  {
+    title: 'Enrichment & child care',
+    icon: 'sparkles',
+    items: [
+      { label: 'Adams After School Programs (Homeroom)', href: links.homeroom },
+      { label: 'Kids Co. at Adams', href: links.kidsCo },
+      { label: 'Ballard Boys & Girls Club', href: links.ballardBoysGirlsClub },
+      { label: 'Ballard Community Center', href: links.ballardCommunityCenter },
+    ],
+  },
+  {
+    title: 'Seattle Public Schools',
+    icon: 'school',
+    items: [
+      { label: 'Seattle Public Schools home', href: links.sps },
+      { label: 'SPS school-year calendar', href: links.spsCalendar },
+      { label: 'SchoolPay', href: links.schoolPay },
+      { label: 'The Source', href: links.theSource },
+      { label: 'SPS: Adams staff', href: links.adamsStaff },
+      { label: 'Seattle School Board', href: links.schoolBoard },
+    ],
+  },
+  {
+    title: 'PTA organizations',
+    icon: 'users',
+    items: [
+      { label: 'Washington State PTA', href: links.wspta },
+      { label: 'Seattle Council PTSA', href: links.scptsa },
+      { label: 'Seattle Special Education PTSA', href: links.specialEdPtsa },
+      { label: 'National PTA family resources', href: links.nationalPtaFamilies },
+    ],
+  },
+  {
+    title: 'Middle schools',
+    icon: 'book',
+    items: [
+      { label: 'Whitman Middle School', href: links.whitman },
+      { label: 'Salmon Bay K-8', href: links.salmonBay },
+    ],
+  },
+] as const;
+---
+
+<BaseLayout title="Resources & Contacts" description="Adams PTA contacts, grade reps, newsletters, the family directory, and helpful links for Adams Elementary families.">
+  <PageHero eyebrow="Resources" title="Links, contacts & resources" intro="Everything you need to stay informed and connected with the Adams community.">
+    <ul class="quick" role="list">
+      {quick.map((q) => (
+        <li><a href={q.href}><Icon name={q.icon} size={20} />{q.label}</a></li>
+      ))}
+    </ul>
+  </PageHero>
+
+  <section class="section" aria-labelledby="stay-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Communications</p>
+        <h2 id="stay-title">Stay in the loop</h2>
+      </div>
+      <div class="grid grid-3">
+        <article class="card card-accent">
+          <Icon name="mail" size={30} class="i" />
+          <h3>Adams weekly newsletter</h3>
+          <p>Sent most Tuesdays by email. The best way to hear about school events, volunteer opportunities and special announcements.</p>
+          <a class="btn" href={links.newsletterSignup}>Subscribe</a>
+        </article>
+        <article class="card card-accent">
+          <Icon name="app" size={30} class="i" />
+          <h3>Konstella</h3>
+          <p>Our private parent community app for timely updates, sign-ups, the directory and messages.</p>
+          <a class="btn" href="/communications-app">About Konstella</a>
+        </article>
+        <article class="card card-accent">
+          <Icon name="calendar" size={30} class="i" />
+          <h3>Calendars & events</h3>
+          <p>
+            Follow the <a href={links.ptaCalendar}>PTA calendar</a> and the <a href={links.spsCalendar}>SPS school-year calendar</a>,
+            and don't miss <a href="/parent-night-out">Parent Night Out</a>.
+          </p>
+          <a class="btn" href={links.ptaCalendar}>PTA calendar</a>
+        </article>
+        <article class="card">
+          <Icon name="users" size={30} class="i" />
+          <h3>Family directory</h3>
+          <p>
+            Families opt in to be listed; sign-up begins mid-September. The current <a href={links.konstellaDirectory}>family directory</a>
+            is on Konstella. For edits or removal, email <a href={`mailto:${inbox.familyDirectory}`}>{inbox.familyDirectory}</a>.
+          </p>
+          <a class="btn btn-ghost" href="/school-directory">Looking for the 2024/25 directory?</a>
+        </article>
+        <article class="card">
+          <Icon name="megaphone" size={30} class="i" />
+          <h3>SPS School Beat newsletter</h3>
+          <p>District news about academic initiatives and the accomplishments of students and teachers. Story tips: <a href={`mailto:${schoolContacts.spsGoodNews}`}>{schoolContacts.spsGoodNews}</a>.</p>
+          <a class="btn btn-ghost" href={links.spsSchoolBeatSignup}>Subscribe</a>
+        </article>
+        <article class="card">
+          <Icon name="instagram" size={30} class="i" />
+          <h3>Social media</h3>
+          <p>Follow the Adams PTA for photos and reminders.</p>
+          <div class="btn-row">
+            <a class="btn btn-ghost" href={links.instagram}>Instagram</a>
+            <a class="btn btn-ghost" href={links.facebook}>Facebook</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-tint" id="contacts" aria-labelledby="contacts-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Contacts</p>
+        <h2 id="contacts-title">Who to email</h2>
+        <p>For more contacts, visit our Konstella app.</p>
+      </div>
+      <div class="contacts">
+        {
+          ptaInboxes.map((c) => (
+            <a class="contact" href={mailto(c.email, c.subject)}>
+              <span class="c-label">{c.label}</span>
+              <span class="c-email">{c.email}</span>
+              {c.note && <span class="c-note">{c.note}</span>}
+            </a>
+          ))
+        }
+      </div>
+
+      <div class="reps" id="grade-reps">
+        <h3>Grade reps by graduating class</h3>
+        <p class="muted">
+          Grade reps are parent liaisons to the PTA and our principal. They share information, answer questions (or find the
+          answers!) and are a resource for any concerns. Each grade also has a mailing list; let your rep know if you're not
+          receiving emails or would like to opt out.
+        </p>
+        <ul class="rep-list" role="list">
+          {gradeReps.map((r) => (
+            <li class="rep">
+              <a href={mailto(r.email ?? inbox.execTeam, r.email ? undefined : `Class of ${r.classOf} grade rep`)}>
+                <span class="class-of">Class of {r.classOf}</span>
+                <span class="grade">{r.grade}</span>
+                <span>{r.email ?? `Rep coming soon. Email ${inbox.execTeam}`}</span>
+              </a>
+              {r.facebook && <a class="rep-fb" href={r.facebook}><Icon name="facebook" size={16} /> Class of {r.classOf} Facebook group</a>}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <p class="callout tax">
+        <Icon name="info" />
+        <span>Adams Elementary PTA Tax ID: <strong>{site.taxId}</strong>. See <a href="/corporate-matching">corporate matching</a>.</span>
+      </p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="links-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Other links</p>
+        <h2 id="links-title">Helpful links</h2>
+      </div>
+      <div class="grid grid-4">
+        {
+          linkGroups.map((g) => (
+            <section class="card link-group">
+              <h3><Icon name={g.icon} size={22} />{g.title}</h3>
+              <ul role="list">
+                {g.items.map((i) => (
+                  <li><a href={i.href}>{i.label}</a></li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .quick { list-style: none; padding: 0; margin-top: var(--space-6); display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); }
+  .quick li { margin: 0; }
+  .quick a {
+    display: flex; align-items: center; gap: var(--space-2); min-height: 3rem; padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius); background: rgb(255 255 255 / 0.1); border: 1px solid rgb(255 255 255 / 0.25);
+    color: var(--white); font-weight: 800; text-decoration: none;
+  }
+  .quick a :global(svg) { color: var(--gold-300); flex: none; }
+  .quick a:hover { background: var(--gold-500); color: var(--green-900); }
+  .quick a:hover :global(svg) { color: var(--green-900); }
+  .card { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); }
+  .card > .btn, .card > .btn-row { margin-top: auto; }
+  .card :global(.i) { color: var(--green-500); }
+  .contacts { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); }
+  .contact {
+    display: flex; flex-direction: column; padding: var(--space-4); border-radius: var(--radius); text-decoration: none;
+    background: var(--white); border: 1px solid var(--line); transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .contact:hover { border-color: var(--gold-500); transform: translateY(-2px); }
+  .c-label { font-weight: 800; color: var(--green-900); }
+  .c-email { font-size: var(--fs-sm); color: var(--green-700); overflow-wrap: anywhere; }
+  .c-note { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.15rem; }
+  .reps { margin-top: var(--space-7); }
+  .reps p { margin-top: var(--space-2); max-width: 46rem; }
+  .rep-list { list-style: none; padding: 0; margin-top: var(--space-4); display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); }
+  .rep-list li { margin: 0; }
+  .rep-list a {
+    display: flex; flex-direction: column; padding: var(--space-3) var(--space-4); border-radius: var(--radius);
+    background: var(--green-700); color: var(--white); text-decoration: none; font-size: var(--fs-sm);
+  }
+  .rep-list a:hover { background: var(--green-500); color: var(--white); }
+  .rep-list a.rep-fb { flex-direction: row; align-items: center; gap: 0.35rem; margin-top: 0.35rem; padding: 0.35rem 0.5rem; background: transparent; color: var(--green-700); font-weight: 700; font-size: 0.8125rem; }
+  .rep-list a.rep-fb:hover { background: var(--green-100); color: var(--green-900); }
+  .class-of { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--gold-300); }
+  .grade { font-weight: 800; font-size: 0.8125rem; color: #cfe5d6; }
+  .tax { margin-top: var(--space-6); }
+  .link-group h3 { display: flex; align-items: center; gap: var(--space-2); font-size: 1.15rem; }
+  .link-group h3 :global(svg) { color: var(--gold-500); flex: none; }
+  .link-group ul { list-style: none; padding: 0; }
+  .link-group li { margin: 0 0 var(--space-2); }
+  .link-group a { font-weight: 700; }
+</style>

@@ -1,0 +1,111 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import ActionCard from '../components/ActionCard.astro';
+import Icon from '../components/Icon.astro';
+import bigGiveLogo from '../assets/images/big-give-logo.png';
+import moveShirt from '../assets/images/moveathon-2026-shirt.jpg';
+import { links } from '../data/links';
+
+const supports = [
+  'Playground & lunch staff',
+  'Math, literacy and enrichment tutors',
+  'Social emotional learning (SEL) programming',
+  'Classroom supplies',
+  'Community engagement and events',
+  'School-wide assemblies',
+  'And more!',
+];
+---
+
+<BaseLayout title="Fundraising" description="How the Adams Elementary PTA raises money and what it supports: the Big Give, Moveathon, corporate matching, the readerboard and direct donations.">
+  <PageHero
+    eyebrow="Fundraising"
+    title="Every dollar stays at Adams"
+    intro="PTA fundraising pays for tutors, playground and lunch staff, SEL programs, assemblies and so much more."
+  >
+    <div class="btn-row stack-mobile">
+      <a class="btn btn-accent btn-lg" href={links.donateGeneral}><Icon name="heart" /> Donate to Adams</a>
+      <a class="btn btn-light btn-lg" href="/reader-board-request-1"><Icon name="sign" /> Readerboard rental</a>
+    </div>
+  </PageHero>
+
+  <section class="section" aria-labelledby="annual-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Annual fundraisers</p>
+        <h2 id="annual-title">Two big ways we come together</h2>
+      </div>
+      <div class="grid grid-2">
+        <a class="fund-card" href="/big-give">
+          <Image src={bigGiveLogo} alt="" width={260} class="fund-art" />
+          <span class="badge">October</span>
+          <h3>The Big Give</h3>
+          <p>Our annual direct-giving campaign, and the single biggest source of PTA funding.</p>
+          <span class="more">Learn more <Icon name="arrow-right" size={18} /></span>
+        </a>
+        <a class="fund-card" href="/moveathon">
+          <Image src={moveShirt} alt="" width={200} class="fund-art" />
+          <span class="badge">Spring 2027</span>
+          <h3>Adams Moveathon</h3>
+          <p>Our school-wide FUNraiser where students get moving for their school.</p>
+          <span class="more">Learn more <Icon name="arrow-right" size={18} /></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-tint" aria-labelledby="supports-title">
+    <div class="container split">
+      <div>
+        <p class="eyebrow">Where it goes</p>
+        <h2 id="supports-title">What our funds support</h2>
+        <ul class="supports" role="list">
+          {supports.map((s) => <li><Icon name="check" size={20} />{s}</li>)}
+        </ul>
+      </div>
+      <div class="card card-green match">
+        <Icon name="briefcase" size={36} />
+        <h3>Don't forget your corporate matches!</h3>
+        <p>Many employers will match your donation and even your volunteer hours, which can double your impact at no extra cost.</p>
+        <a class="btn btn-accent" href="/corporate-matching">Find your employer <Icon name="arrow-right" /></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="more-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">More ways to help</p>
+        <h2 id="more-title">Fundraising quick links</h2>
+      </div>
+      <div class="grid grid-3">
+        <ActionCard href={links.donateGeneral} title="Donate to Adams" icon="heart" tone="gold">Give any amount, any time of year via PayPal.</ActionCard>
+        <ActionCard href="/reader-board-request-1" title="Readerboard Rental" icon="sign">Put your message on the Adams sign for a $25 donation.</ActionCard>
+        <ActionCard href="/everyday-giving" title="Everyday Giving" icon="gift" tone="gold">Box Tops, Fred Meyer Rewards, Smith Brothers and more.</ActionCard>
+        <ActionCard href="/pay-for-school-supplies" title="School Supplies" icon="pencil">Chip in for your student's classroom supplies.</ActionCard>
+        <ActionCard href="/corporate-matching" title="Corporate Matching" icon="briefcase" tone="gold">Double your gift through your employer.</ActionCard>
+        <ActionCard href="/pta-membership" title="PTA Membership" icon="users">Join the PTA for $16, or free with a scholarship.</ActionCard>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .fund-card {
+    display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); height: 100%;
+    padding: var(--space-6); border-radius: var(--radius-lg); text-decoration: none; color: var(--ink);
+    background: var(--white); border: 1px solid var(--line); box-shadow: var(--shadow-sm);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .fund-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); color: var(--ink); }
+  .fund-art { height: 9rem; width: auto; object-fit: contain; margin-bottom: var(--space-2); }
+  .fund-card p { color: var(--ink-soft); }
+  .more { margin-top: auto; display: inline-flex; align-items: center; gap: 0.3rem; font-weight: 800; color: var(--green-700); }
+  .supports { list-style: none; padding: 0; margin-top: var(--space-5); display: grid; gap: var(--space-2); grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+  .supports li { display: flex; gap: var(--space-2); align-items: flex-start; margin: 0; font-weight: 700; }
+  .supports :global(svg) { flex: none; color: var(--white); background: var(--green-500); border-radius: 50%; padding: 3px; margin-top: 0.2rem; }
+  .match { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); padding: var(--space-6); }
+  .match :global(svg:first-child) { color: var(--gold-300); }
+</style>

@@ -1,0 +1,153 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import { employers } from '../data/corporateMatching';
+import { site } from '../data/site';
+import { inbox } from '../data/contacts';
+
+// Group by first letter for the A–Z list.
+const groups = Object.entries(
+  employers.reduce<Record<string, typeof employers>>((acc, e) => {
+    const k = e.name[0].toUpperCase();
+    (acc[k] ||= []).push(e);
+    return acc;
+  }, {}),
+).sort(([a], [b]) => a.localeCompare(b));
+---
+
+<BaseLayout title="Corporate Matching" description={`Double your gift to Adams Elementary PTA. Find your employer's matching program among ${employers.length} companies. Tax ID ${site.taxId}.`}>
+  <PageHero
+    eyebrow="Corporate matching"
+    title="Double your impact for Adams"
+    intro="Many employers will match your donation and/or your volunteer hours, which is an easy way to secure more resources for Adams!"
+  />
+
+  <section class="section">
+    <div class="container split">
+      <div class="stack">
+        <h2>Three simple steps</h2>
+        <ol class="steps">
+          <li>Confirm eligibility with your Human Resources team and complete the necessary forms.</li>
+          <li>
+            Make your gift of <strong>time</strong> (submit your volunteer hours through Benevity or whatever tool your employer
+            uses) or <strong>treasure</strong> (a financial contribution flagged for your employer as a match) to
+            <strong>Adams Elementary PTA</strong>.
+          </li>
+          <li>Watch your dollars and hours support our school!</li>
+        </ol>
+      </div>
+      <aside class="card card-green tax">
+        <p class="tax-label">Adams Elementary PTA Tax ID</p>
+        <p class="tax-id" id="tax-id">{site.taxId}</p>
+        <button type="button" class="btn btn-accent" data-copy={site.taxId}>
+          <Icon name="copy" /> <span data-copy-label>Copy Tax ID</span>
+        </button>
+        <p class="tax-note">
+          Many companies allow employees to request a match for donations made within the last year, so it may not be too
+          late to get a match for an earlier gift! Questions? Email
+          <a href={`mailto:${inbox.treasurer}`}>{inbox.treasurer}</a>.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section-tint" aria-labelledby="list-title">
+    <div class="container">
+      <div class="list-head">
+        <div>
+          <h2 id="list-title">Find your employer</h2>
+          <p class="muted"><span data-count>{employers.length}</span> companies with matching programs. Tap a name to open its giving portal.</p>
+        </div>
+        <label class="search">
+          <Icon name="search" />
+          <span class="visually-hidden">Search employers</span>
+          <input type="search" placeholder="Search employers…" autocomplete="off" data-search />
+        </label>
+      </div>
+
+      <div class="az" data-list>
+        {
+          groups.map(([letter, list]) => (
+            <section class="letter" data-letter>
+              <h3>{letter}</h3>
+              <ul role="list">
+                {list.map((e) => (
+                  <li data-name={e.name.toLowerCase()}>
+                    {e.url ? <a href={e.url}>{e.name}</a> : <span class="nolink">{e.name}</span>}
+                    {e.note && <span class="badge">{e.note}</span>}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+      </div>
+      <p class="empty" data-empty hidden>
+        No match in our list, but your employer may still have a program! Ask your HR team, or email
+        <a href={`mailto:${inbox.treasurer}`}>{inbox.treasurer}</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>('[data-search]');
+  const empty = document.querySelector<HTMLElement>('[data-empty]');
+  const count = document.querySelector<HTMLElement>('[data-count]');
+  input?.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    let shown = 0;
+    document.querySelectorAll<HTMLElement>('[data-letter]').forEach((sec) => {
+      let any = false;
+      sec.querySelectorAll<HTMLElement>('li[data-name]').forEach((li) => {
+        const hit = !q || li.dataset.name!.includes(q);
+        li.hidden = !hit;
+        if (hit) { any = true; shown++; }
+      });
+      sec.hidden = !any;
+    });
+    if (empty) empty.hidden = shown > 0;
+    if (count) count.textContent = String(shown);
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) =>
+    btn.addEventListener('click', async () => {
+      const label = btn.querySelector('[data-copy-label]');
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy!);
+        if (label) label.textContent = 'Copied!';
+      } catch {
+        if (label) label.textContent = btn.dataset.copy!;
+      }
+      setTimeout(() => label && (label.textContent = 'Copy Tax ID'), 2000);
+    }),
+  );
+</script>
+
+<style>
+  .tax { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); padding: var(--space-6); }
+  .tax-label { font-weight: 800; color: var(--gold-300); text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.875rem; }
+  .tax-id { font-family: var(--font-display); font-weight: 800; font-size: 2.5rem; letter-spacing: 0.04em; margin: 0; }
+  .tax-note { font-size: var(--fs-sm); color: #dcebe1; }
+  .list-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-5); }
+  .search {
+    display: flex; align-items: center; gap: var(--space-2); width: min(100%, 22rem);
+    padding: 0 var(--space-4); border-radius: 999px; background: var(--white); border: 2px solid var(--line);
+  }
+  .search:focus-within { border-color: var(--green-500); }
+  .search :global(svg) { color: var(--green-500); flex: none; }
+  .search input { flex: 1; border: 0; background: transparent; font: inherit; min-height: 3rem; outline: none; min-width: 0; }
+  .az { columns: 15rem; column-gap: var(--space-5); }
+  .letter { break-inside: avoid; margin-bottom: var(--space-5); background: var(--white); border-radius: var(--radius); padding: var(--space-4) var(--space-5); border: 1px solid var(--line); }
+  .letter h3 {
+    display: inline-block; font-size: 1.5rem; color: var(--green-700); margin-bottom: var(--space-2);
+    padding-bottom: 0.1rem; border-bottom: 3px solid var(--gold-500);
+  }
+  .letter ul { list-style: none; padding: 0; }
+  .letter li { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin: 0; padding-block: 0.35rem; border-bottom: 1px dashed var(--line); }
+  .letter li:last-child { border-bottom: 0; }
+  .letter a { font-weight: 700; }
+  .nolink { font-weight: 700; }
+  .empty { margin-top: var(--space-4); }
+</style>

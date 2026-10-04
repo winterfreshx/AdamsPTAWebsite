@@ -1,0 +1,53 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import konstellaIcon from '../assets/images/konstella-icon.png';
+import { links } from '../data/links';
+
+const features = [
+  { icon: 'megaphone', title: 'Timely updates', text: 'Most PTA news and reminders show up here first.' },
+  { icon: 'mail', title: 'Your choice of alerts', text: 'Get notifications by email, push, or both.' },
+  { icon: 'users', title: 'Family directory', text: 'Find and connect with other Adams families.' },
+  { icon: 'hand', title: 'Volunteer sign-ups', text: 'See new volunteer spots and sign up in a tap.' },
+] as const;
+---
+
+<BaseLayout title="Konstella App" description="Join the Adams Elementary PTA on Konstella, our private parent community app for news, sign-ups, the directory and messages.">
+  <PageHero eyebrow="Join our app" title="Join us on Konstella" intro="Konstella is a private online parent community. Download the app or use the web interface.">
+    <div class="btn-row"><a class="btn btn-accent btn-lg" href={links.konstella}>Join Konstella <Icon name="arrow-right" /></a></div>
+    <Image slot="art" src={konstellaIcon} alt="" width={180} class="k-icon" />
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="lead">
+          Most of our timely communications and interactive tools live in Konstella. You aren't required to join, but setting
+          up an account gives you the most control over how you hear from the PTA. On Konstella you can also find our
+          directory, connect with PTA leaders, volunteer, send private messages to other parents, and more.
+        </p>
+      </div>
+      <div class="grid grid-4">
+        {features.map((f) => (
+          <article class="card">
+            <Icon name={f.icon} size={28} class="i" />
+            <h3>{f.title}</h3>
+            <p class="muted">{f.text}</p>
+          </article>
+        ))}
+      </div>
+      <p class="callout callout-green how">
+        <Icon name="info" />
+        <span>Join today at <a href={links.konstella}>www.konstella.com</a> and click "find your school," or look out for invitations from the PTA or your teachers.</span>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  :global(.k-icon) { width: 9rem; border-radius: 2rem; box-shadow: var(--shadow-lg); }
+  .card :global(.i) { color: var(--green-500); margin-bottom: var(--space-3); }
+  .how { margin-top: var(--space-6); }
+</style>

@@ -1,0 +1,15 @@
+---
+import { inbox } from '../data/contacts';
+import MessageLayout from '../layouts/MessageLayout.astro';
+import { mailto } from '../data/links';
+// The Wix page showed a .com typo for this inbox; contacts.ts has the correct .org address.
+const email = inbox.readerboard;
+---
+
+<MessageLayout title="Readerboard Confirmation" heading="Thank you for renting the Adams Readerboard!">
+  <p>Don't forget to email <a href={mailto(email)}>{email}</a> with your requested date and message!</p>
+  <div class="btn-row">
+    <a class="btn btn-accent" href={mailto(email, 'Readerboard Request', 'Your first and last name:\nRequested date:\nMessage:\n')}>Email your request</a>
+    <a class="btn btn-ghost" href="/">Back to home</a>
+  </div>
+</MessageLayout>

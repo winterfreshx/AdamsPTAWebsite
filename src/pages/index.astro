@@ -1,0 +1,319 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ActionCard from '../components/ActionCard.astro';
+import Icon from '../components/Icon.astro';
+import eagle from '../assets/images/eagle-logo.png';
+import bigGiveLogo from '../assets/images/big-give-logo.png';
+import homeroomLogo from '../assets/images/homeroom-logo.png';
+import mural from '../assets/images/mural-octopus.jpg';
+import { links } from '../data/links';
+import { bigGive, spiritWear } from '../data/announcements';
+import { scheduled } from '../data/schedule';
+import { site, school, bellTimes } from '../data/site';
+
+const fmt = (n: number) => `$${n.toLocaleString('en-US')}`;
+const totalGoal = bigGive.communityGoal + bigGive.corporateGoal;
+const totalRaised = bigGive.raised.community + bigGive.raised.corporate;
+const pct = Math.min(100, Math.round((totalRaised / totalGoal) * 100));
+---
+
+<BaseLayout title="Home">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <p class="hero-kicker"><Icon name="feather" size={18} /> Adams Elementary School PTA · Ballard, Seattle</p>
+        <h1>Go <span class="gold">Eagles!</span><br />{site.tagline}</h1>
+        <p class="hero-lead">
+          We're the parents, families and teachers who make Adams a great place to learn. We volunteer, fundraise
+          and advocate together, and everyone is welcome.
+        </p>
+        <div class="btn-row stack-mobile">
+          <a class="btn btn-accent btn-lg" href="/pta-membership"><Icon name="users" /> Join the PTA</a>
+          <a class="btn btn-light btn-lg" href="/big-give" {...scheduled(bigGive.window)}><Icon name="heart" /> Give to the Big Give</a>
+          <a class="btn btn-light btn-lg" href="/fundraising" {...scheduled(bigGive.window, { invert: true })}><Icon name="heart" /> Ways to give</a>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="sun" aria-hidden="true"></div>
+        <Image
+          src={eagle}
+          alt="The Adams Elementary Eagle with wings spread"
+          widths={[360, 560, 800, 1100]}
+          sizes="(min-width: 860px) 32rem, 80vw"
+          loading="eager"
+          fetchpriority="high"
+          class="hero-eagle"
+        />
+      </div>
+    </div>
+    <svg class="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 80V40c180-30 420-45 720-20s540 30 720 0v60z" fill="currentColor"></path>
+    </svg>
+  </section>
+
+  <!-- Quick actions -->
+  <section class="section quick" aria-labelledby="quick-title">
+    <div class="container">
+      <div class="section-head center">
+        <p class="eyebrow">Get connected</p>
+        <h2 id="quick-title">Everything Adams families need</h2>
+      </div>
+      <div class="grid grid-3">
+        <ActionCard href={links.konstella} title="Register for Konstella" icon="app">
+          Our main communication app: news, sign-ups, the directory and messages.
+        </ActionCard>
+        <ActionCard href={links.ptaCalendar} title="Subscribe to PTA Calendar" icon="calendar" tone="gold">
+          Meetings, events and important school dates.
+        </ActionCard>
+        <ActionCard href="/volunteering" title="Volunteer" icon="hand">
+          One-time sign-ups, ongoing roles, and how to get approved with SPS.
+        </ActionCard>
+        <ActionCard href="/pta-membership" title="Become a Member" icon="users" tone="gold">
+          $16 single, $27 dual, or free with a confidential scholarship.
+        </ActionCard>
+        <ActionCard href={links.homeroomEnrichment} title="After-School Programs" icon="sparkles">
+          Enroll in enrichment classes on the Adams Homeroom page.
+        </ActionCard>
+        <ActionCard href="/corporate-matching" title="Corporate Matching" icon="briefcase" tone="gold">
+          Many employers match your gifts and volunteer hours.
+        </ActionCard>
+      </div>
+    </div>
+  </section>
+
+  <!-- What's happening -->
+  <section class="section section-tint" aria-labelledby="happening-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">What's happening at Adams</p>
+        <h2 id="happening-title">News & happenings</h2>
+      </div>
+
+      <div class="happening">
+        <article class="card feature-card" {...scheduled(bigGive.window)}>
+          <div class="bg-head">
+            <Image src={bigGiveLogo} alt="The Big Give" width={180} class="bg-logo" />
+            <div>
+              <span class="badge">{bigGive.dates}</span>
+              <h3>Our annual giving campaign is here</h3>
+            </div>
+          </div>
+          <p>
+            The Big Give funds tutors, playground and lunch staff, SEL programs, classroom supplies and more. Families who
+            are able are asked to give <strong>{fmt(bigGive.perChildAsk)} per child</strong>. Every amount makes a difference.
+          </p>
+          <div class="progress" role="img" aria-label={`Goal: ${fmt(totalGoal)} — ${fmt(bigGive.communityGoal)} from our community and ${fmt(bigGive.corporateGoal)} in corporate match.`}>
+            <div class="progress-bar"><span style={`width:${Math.max(pct, 2)}%`}></span></div>
+            <div class="progress-legend">
+              <span><strong>{fmt(bigGive.communityGoal)}</strong> community goal</span>
+              <span><strong>+ {fmt(bigGive.corporateGoal)}</strong> corporate match</span>
+            </div>
+          </div>
+          <div class="btn-row">
+            <a class="btn btn-accent" href={links.donateBigGive}><Icon name="heart" /> Donate now</a>
+            <a class="btn btn-ghost" href="/big-give">Learn more</a>
+          </div>
+        </article>
+
+        <!-- Shown outside the Big Give window instead of the campaign card. -->
+        <article class="card feature-card" {...scheduled(bigGive.window, { invert: true })}>
+          <span class="news-icon"><Icon name="heart" size={28} /></span>
+          <h3>Support Adams all year long</h3>
+          <p>
+            PTA fundraising pays for math and literacy tutors, playground and lunch staff, SEL programs, classroom supplies,
+            assemblies and community events. Every gift, of any size, stays at Adams.
+          </p>
+          <ul class="check-list">
+            <li>Give directly any time of year</li>
+            <li>Double your gift with <a href="/corporate-matching">corporate matching</a></li>
+            <li>Small <a href="/everyday-giving">everyday ways to give</a>, like Box Tops and Fred Meyer Rewards</li>
+          </ul>
+          <div class="btn-row">
+            <a class="btn btn-accent" href={links.donateGeneral}><Icon name="heart" /> Donate to Adams</a>
+            <a class="btn btn-ghost" href="/fundraising">Where it goes</a>
+          </div>
+        </article>
+
+        <article class="card card-accent" {...scheduled(spiritWear.window)}>
+          <span class="news-icon"><Icon name="shirt" size={28} /></span>
+          <h3>Eagles Spirit Wear</h3>
+          <p>
+            The 2026 Adams Eagles Spirit Wear shop is open! Gear up for the season with brand-new apparel. The store is
+            open for a limited time. <strong>All orders must be placed by {spiritWear.orderDeadline}.</strong>
+          </p>
+          <a class="btn" href={links.spiritWearStore}>Shop the store <Icon name="external" /></a>
+        </article>
+
+        <article class="card card-accent">
+          <Image src={homeroomLogo} alt="Homeroom" width={180} class="homeroom-logo" />
+          <h3>After-School Enrollment</h3>
+          <p>
+            Browse and enroll in after-school enrichment on the Adams Homeroom page. For scholarship and financial aid
+            information, <a href={links.afterSchoolScholarshipForm}>read and complete this form</a> before enrolling.
+          </p>
+          <a class="btn" href={links.homeroomEnrichment}>Adams Homeroom page <Icon name="external" /></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Calendar -->
+  <section class="section" id="calendar" aria-labelledby="cal-title">
+    <div class="container">
+      <div class="cal-head">
+        <div class="section-head">
+          <p class="eyebrow">Mark your calendar</p>
+          <h2 id="cal-title">PTA Calendar</h2>
+          <p>Board meetings, general meetings, community events and important dates, all in one place.</p>
+        </div>
+        <div class="btn-row">
+          <a class="btn" href={links.ptaCalendar}><Icon name="calendar" /> Subscribe to PTA Calendar</a>
+          <a class="btn btn-ghost" href={links.spsCalendar}>SPS school-year calendar</a>
+        </div>
+      </div>
+      <div class="cal-frame">
+        <iframe
+          src={links.ptaCalendarEmbed}
+          title="Adams PTA Google Calendar"
+          loading="lazy"
+          width="100%"
+          height="600"
+          frameborder="0"
+          scrolling="no"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bell times + visit -->
+  <section class="section section-gold" aria-labelledby="day-title">
+    <div class="container split">
+      <div>
+        <p class="eyebrow">A day at Adams</p>
+        <h2 id="day-title">Bell times</h2>
+        <ol class="timeline" role="list">
+          {
+            bellTimes.map((b) => (
+              <li class:list={{ highlight: b.highlight }}>
+                <span class="tl-time">{b.time}</span>
+                <span class="tl-label">{b.label}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+      <div class="visit">
+        <div class="photo visit-photo">
+          <Image src={mural} alt="The colorful octopus mural painted on the side of Adams Elementary" widths={[480, 800]} sizes="(min-width: 860px) 30rem, 100vw" />
+        </div>
+        <div class="card visit-card">
+          <h3>Visit Adams Elementary</h3>
+          <ul class="visit-list" role="list">
+            <li><Icon name="pin" /><a href={school.mapUrl}>{school.street}, {school.city}, {school.state} {school.zip}</a></li>
+            <li><Icon name="phone" /><a href={`tel:${school.phone.replace(/-/g, '')}`}>{school.phone}</a></li>
+            <li><Icon name="school" /><span>Principal {school.principal}</span></li>
+            <li><Icon name="mail" /><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative; overflow: hidden; color: var(--white);
+    background:
+      radial-gradient(50rem 30rem at 85% 30%, rgb(228 168 60 / 0.28), transparent 65%),
+      radial-gradient(45rem 30rem at 0% 100%, var(--green-500), transparent 70%),
+      linear-gradient(160deg, var(--green-700), var(--green-900)) var(--green-700);
+    padding-top: clamp(2.5rem, 1.5rem + 5vw, 6rem);
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0; opacity: 0.06; pointer-events: none;
+    background-image: repeating-linear-gradient(120deg, #fff 0 2px, transparent 2px 26px);
+  }
+  .hero-inner { position: relative; z-index: 1; display: grid; gap: var(--space-6); align-items: center; padding-bottom: clamp(4rem, 3rem + 4vw, 7rem); }
+  @media (min-width: 860px) { .hero-inner { grid-template-columns: 1.05fr 0.95fr; } }
+  .hero-kicker {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    padding: 0.35rem 0.85rem; border-radius: 999px; background: rgb(255 255 255 / 0.1); border: 1px solid rgb(255 255 255 / 0.2);
+    font-size: 0.875rem; font-weight: 700; color: var(--gold-100); margin-bottom: var(--space-5);
+  }
+  .hero h1 { color: var(--white); font-size: clamp(2.4rem, 1.6rem + 3.6vw, 4.25rem); }
+  .hero h1 .gold { color: var(--gold-500); }
+  .hero-lead { margin-top: var(--space-5); font-size: var(--fs-lg); color: #dcebe1; max-width: 34rem; }
+  .hero .btn-row { margin-top: var(--space-6); }
+
+  .hero-art { position: relative; display: grid; place-items: center; order: -1; }
+  @media (min-width: 860px) { .hero-art { order: 0; } }
+  .sun {
+    position: absolute; width: min(78%, 28rem); aspect-ratio: 1; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, var(--gold-300), var(--gold-500) 60%, #c98b1f);
+    box-shadow: 0 0 0 14px rgb(228 168 60 / 0.18), 0 0 0 30px rgb(228 168 60 / 0.08), var(--shadow-lg);
+  }
+  .hero-eagle {
+    position: relative; width: min(100%, 32rem); height: auto;
+    filter: drop-shadow(0 18px 30px rgb(0 0 0 / 0.35));
+  }
+  @media (max-width: 859px) { .hero-eagle { width: min(80%, 22rem); } }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-eagle { animation: soar 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+    .sun { animation: rise 0.9s ease-out both; }
+    @keyframes soar { from { opacity: 0; transform: translateY(24px) scale(0.96); } }
+    @keyframes rise { from { opacity: 0; transform: scale(0.85); } }
+  }
+  .hero-wave { position: absolute; bottom: -1px; left: 0; width: 100%; height: 60px; color: var(--paper); }
+
+  /* ---------- What's happening ---------- */
+  .happening { display: grid; gap: var(--space-5); }
+  @media (min-width: 900px) {
+    .happening { grid-template-columns: 1fr 1fr; }
+    .feature-card { grid-row: span 2; }
+  }
+  .happening .card { display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-6); }
+  .happening .card > .btn, .happening .card > .btn-row { margin-top: auto; }
+  .happening .card > .btn { align-self: flex-start; }
+  .bg-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); }
+  .bg-logo { width: 9rem; }
+  .bg-head h3 { margin-top: var(--space-2); }
+  .news-icon {
+    display: grid; place-items: center; width: 3.25rem; height: 3.25rem; border-radius: 0.9rem;
+    background: var(--gold-100); color: var(--green-700);
+  }
+  .homeroom-logo { width: 10rem; }
+
+  .progress-bar { height: 1rem; border-radius: 999px; background: var(--green-100); overflow: hidden; border: 1px solid var(--line); }
+  .progress-bar span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--green-500), var(--gold-500)); }
+  .progress-legend { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2); margin-top: var(--space-2); font-size: var(--fs-sm); color: var(--ink-soft); }
+  .progress-legend strong { color: var(--green-900); }
+
+  /* ---------- Calendar ---------- */
+  .cal-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-5); }
+  .cal-head .section-head { margin-bottom: 0; }
+  .cal-frame { border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--line); box-shadow: var(--shadow); background: var(--white); }
+  .cal-frame iframe { width: 100%; height: 600px; border: 0; }
+  @media (max-width: 640px) { .cal-frame iframe { height: 460px; } }
+
+  /* ---------- Bell times ---------- */
+  .timeline { list-style: none; padding: 0; margin-top: var(--space-5); position: relative; }
+  .timeline::before { content: ''; position: absolute; left: 2.6rem; top: 0.6rem; bottom: 0.6rem; width: 3px; background: var(--gold-300); border-radius: 3px; }
+  .timeline li { position: relative; display: grid; grid-template-columns: 5.2rem 1fr; gap: var(--space-4); align-items: start; margin: 0; padding-block: var(--space-3); }
+  .tl-time {
+    position: relative; z-index: 1; justify-self: start; min-width: 5.2rem; text-align: center;
+    font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; color: var(--white);
+    background: var(--green-700); border-radius: 999px; padding: 0.3rem 0.6rem;
+  }
+  .tl-label { padding-top: 0.3rem; font-weight: 600; }
+  .timeline .highlight .tl-time { background: var(--gold-500); color: var(--green-900); }
+  .timeline .highlight .tl-label { font-weight: 800; color: var(--green-900); }
+
+  .visit { display: grid; gap: var(--space-4); }
+  .visit-photo { aspect-ratio: 16 / 9; }
+  .visit-card { margin-top: calc(-1 * var(--space-7)); margin-inline: var(--space-4); position: relative; box-shadow: var(--shadow); }
+  .visit-list { list-style: none; padding: 0; margin-top: var(--space-3); display: grid; gap: var(--space-3); }
+  .visit-list li { display: flex; gap: var(--space-3); align-items: flex-start; margin: 0; overflow-wrap: anywhere; }
+  .visit-list :global(svg) { flex: none; color: var(--green-500); margin-top: 0.2rem; width: 1.25rem; height: 1.25rem; }
+</style>

@@ -1,0 +1,118 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import shirt from '../assets/images/moveathon-2026-shirt.jpg';
+import { links } from '../data/links';
+import { moveathonSponsors } from '../data/sponsors';
+
+// TODO(PTA) D4: refresh for the Spring 2027 Moveathon.
+const schedule = {
+  morning: [
+    { grade: 'Kindergarten', time: '8:25–8:55' },
+    { grade: '1st Grade', time: '9:05–9:35' },
+    { grade: '3rd Grade', time: '9:45–10:15' },
+    { grade: '2nd Grade', time: '10:25–10:55' },
+  ],
+  afternoon: [
+    { grade: '4th Grade', time: '12:20–12:50' },
+    { grade: '5th Grade', time: '1:05–1:35' },
+  ],
+};
+---
+
+<BaseLayout title="Moveathon" description="The Adams Elementary Moveathon: a school-wide FUNraiser that supports tutors, recess staff, the arts and more. Pledge or volunteer!">
+  <PageHero eyebrow="The 5th annual Adams Moveathon" title="Get moving for Adams!" intro="A one-day, school-wide event where every student takes part in a fun, healthy, community-building activity and sees how their effort supports their school.">
+    <div class="btn-row stack-mobile">
+      <a class="btn btn-accent btn-lg" href={links.moveathonPledge}><Icon name="heart" /> Pledge now!</a>
+      <a class="btn btn-light btn-lg" href={links.konstellaMoveathonVolunteer}><Icon name="hand" /> Volunteer</a>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container split">
+      <div class="stack">
+        <span class="badge">Friday, May 15, 2026</span>
+        <h2>Why the Moveathon matters</h2>
+        <p>
+          This FUNdraising event is critical to meeting our annual fundraising goal. Proceeds go directly to the PTA's
+          operating budget, which covers math and literacy tutors, lunch and recess staff, art-focused assemblies and
+          partnerships, scholarships for after-school enrichment programs, and more.
+        </p>
+        <p>
+          We couldn't sustain these wonderful learning opportunities and support systems at Adams without your incredible
+          help. No amount is too small. Your support is truly appreciated!
+        </p>
+        <p class="callout">
+          <Icon name="info" />
+          <span>
+            To volunteer for the Moveathon, use the <a href={links.konstellaMoveathonVolunteer}>Volunteer sign-up</a>. You
+            <strong>must</strong> be an <a href={links.spsVolunteerApplication}>approved volunteer with SPS</a> to sign up for a role.
+          </span>
+        </p>
+      </div>
+      <figure class="shirt">
+        <div class="photo"><Image src={shirt} alt="Winning 2026 Moveathon T-shirt design: a sneaker over a colorful globe" width={288} /></div>
+        <figcaption>Congratulations to <strong>Amali Gooze</strong> for her winning T-shirt design!</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section section-tint" aria-labelledby="sched-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Schedule</p>
+        <h2 id="sched-title">When each grade runs</h2>
+      </div>
+      <div class="grid grid-2">
+        {
+          Object.entries(schedule).map(([part, rows]) => (
+            <div class="table-wrap">
+              <table>
+                <caption class="visually-hidden">{part} schedule</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">{part === 'morning' ? 'Morning' : 'Afternoon'}</th>
+                    <th scope="col">Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((r) => (
+                    <tr>
+                      <td>{r.grade}</td>
+                      <td><strong>{r.time}</strong></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="sponsors-title">
+    <div class="container">
+      <div class="section-head center">
+        <p class="eyebrow">With gratitude</p>
+        <h2 id="sponsors-title">Thank you to our 2026 sponsors</h2>
+      </div>
+      <ul class="logos" role="list">
+        {moveathonSponsors.map((s) => (
+          <li><Image src={s.logo} alt={s.name} width={220} class="logo" /></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .shirt { max-width: 18rem; margin-inline: auto; text-align: center; }
+  .shirt .photo { border: 8px solid var(--white); transform: rotate(-2deg); }
+  .shirt figcaption { margin-top: var(--space-4); }
+  .logos { list-style: none; padding: 0; display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(min(45%, 10rem), 1fr)); }
+  .logos li { margin: 0; display: grid; place-items: center; aspect-ratio: 4 / 3; padding: var(--space-4); background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); }
+  .logos :global(.logo) { max-height: 100%; width: auto; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; }
+</style>

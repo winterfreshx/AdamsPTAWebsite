@@ -1,0 +1,60 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import staffPhoto from '../assets/images/staff-appreciation.jpg';
+import { links } from '../data/links';
+import { site } from '../data/site';
+
+// D1: the binder was a Wix password page. Until the PTA provides a shared-drive link, point to the info page.
+const binderHref = links.staffAppreciationBinder || '/we-appreciate-adams-web-list';
+---
+
+<BaseLayout title="Staff Appreciation" description="Celebrate Adams Elementary teachers and staff: the staff favorites binder, staff lounge restocks, and how to help.">
+  <PageHero eyebrow="We appreciate Adams" title="Staff appreciation" intro="Help us celebrate the amazing people who care for our students every day." />
+
+  <section class="section">
+    <div class="container split">
+      <div class="stack">
+        <h2>Staff favorites</h2>
+        <p>
+          Families can use the staff favorites list to find out what their child's teacher truly enjoys: snack foods, sweet
+          treats, restaurants, hot and cold drinks, places to shop and more. Use it for ideas for the holidays, Teacher
+          Appreciation Week, and end-of-year gifts.
+        </p>
+        <p class="callout">
+          <Icon name="info" />
+          <span>The online Staff Appreciation Binder is private to Adams families. If you don't have access, contact your
+          <a href="/resources#grade-reps">grade rep</a> or check the school newsletter.</span>
+        </p>
+        <div class="btn-row"><a class="btn btn-lg" href={binderHref}><Icon name="book" /> Online Staff Appreciation Binder</a></div>
+      </div>
+      <div class="photo"><Image src={staffPhoto} alt="A staff appreciation table with gold THANK YOU balloons and treats" widths={[400, 700]} sizes="(min-width: 860px) 30rem, 100vw" /></div>
+    </div>
+  </section>
+
+  <section class="section section-gold">
+    <div class="container grid grid-2">
+      <article class="card card-green stack">
+        <Icon name="star" size={32} />
+        <h2>We're looking for Staff Appreciation leads!</h2>
+        <p>Help support the amazing people who care for our students.</p>
+        <a class="btn btn-accent" href="/volunteering">Volunteer <Icon name="arrow-right" /></a>
+      </article>
+      <article class="card stack">
+        <Icon name="gift" size={32} class="i" />
+        <h3>Staff lounge snack restocks</h3>
+        <p>
+          The Adams PTA regularly coordinates staff lounge snack restocks. This is one role of our staff appreciation team.
+          A contribution to our staff is welcome any time. Contact <a href={`mailto:${site.email}`}>{site.email}</a>.
+        </p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .card :global(.i) { color: var(--green-500); }
+  .card-green :global(svg) { color: var(--gold-300); }
+</style>

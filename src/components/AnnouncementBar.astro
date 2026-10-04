@@ -1,0 +1,44 @@
+---
+import { announcements } from '../data/announcements';
+import { scheduled } from '../data/schedule';
+import Icon from './Icon.astro';
+
+// Every announcement is rendered; the schedule script in BaseLayout shows only the ones in their window.
+// The bar collapses itself (CSS :has) when no item is visible.
+---
+
+{
+  announcements.length > 0 && (
+    <div class="announce" role="region" aria-label="Announcements">
+      {announcements.map((a) => (
+        <p class="announce-item" {...scheduled(a.window)}>
+          <Icon name="megaphone" size={20} />
+          <span>{a.text}</span>
+          <a href={a.cta.href}>
+            {a.cta.label}
+            <Icon name="arrow-right" size={16} />
+          </a>
+        </p>
+      ))}
+    </div>
+  )
+}
+
+<style>
+  .announce { background: var(--gold-500); color: var(--green-900); }
+  .announce:not(:has(.announce-item:not([hidden]))) { display: none; }
+  .announce-item {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.35rem 0.6rem;
+    padding: 0.55rem var(--gutter); font-weight: 700; font-size: var(--fs-sm); text-align: center; margin: 0;
+  }
+  .announce-item:not([hidden]) ~ .announce-item:not([hidden]) { border-top: 1px solid rgb(11 61 39 / 0.15); }
+  .announce-item a {
+    display: inline-flex; align-items: center; gap: 0.25rem; color: var(--green-900); font-weight: 800;
+    text-decoration-color: var(--green-900);
+  }
+  @media (max-width: 520px) {
+    .announce-item { display: block; padding-block: 0.45rem; font-size: 0.8125rem; line-height: 1.35; }
+    .announce-item > :global(svg) { display: none; }
+    .announce-item a { margin-left: 0.25rem; white-space: nowrap; }
+  }
+</style>

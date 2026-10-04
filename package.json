@@ -1,0 +1,23 @@
+{
+  "name": "adams-pta-website",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Adams Elementary PTA website (Seattle, WA)",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "verify": "node scripts/verify-links.mjs",
+    "audit:contrast": "node scripts/audit-contrast.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/nunito": "^5.3.0",
+    "astro": "^7.3.5"
+  },
+  "engines": {
+    "node": ">=22.12"
+  }
+}
