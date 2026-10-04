@@ -1,4 +1,5 @@
 ---
+import { inbox } from '../data/contacts';
 import MessageLayout from '../layouts/MessageLayout.astro';
 import takeCare from '../assets/images/eagle-take-care.png';
 ---
@@ -6,7 +7,7 @@ import takeCare from '../assets/images/eagle-take-care.png';
 <MessageLayout title="Thank You for Giving" heading="Thank you for supporting the Adams Elementary PTA with the Big Give!" image={takeCare} imageAlt="Adams Elementary PTA eagle: We take care of each other">
   <p>
     Please ask your employer about corporate matches! For questions about a corporate match, or to report one, contact
-    <a href="mailto:ptatreasurer@adamselementary.org">ptatreasurer@adamselementary.org</a>.
+    <a href={`mailto:${inbox.treasurer}`}>{inbox.treasurer}</a>.
   </p>
   <div class="btn-row">
     <a class="btn btn-accent" href="/corporate-matching">Find your employer</a>

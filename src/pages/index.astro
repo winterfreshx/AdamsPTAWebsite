@@ -8,7 +8,8 @@ import bigGiveLogo from '../assets/images/big-give-logo.png';
 import homeroomLogo from '../assets/images/homeroom-logo.png';
 import mural from '../assets/images/mural-octopus.jpg';
 import { links } from '../data/links';
-import { bigGive } from '../data/announcements';
+import { bigGive, spiritWear } from '../data/announcements';
+import { scheduled } from '../data/schedule';
 import { site, school, bellTimes } from '../data/site';
 
 const fmt = (n: number) => `$${n.toLocaleString('en-US')}`;
@@ -30,7 +31,8 @@ const pct = Math.min(100, Math.round((totalRaised / totalGoal) * 100));
         </p>
         <div class="btn-row stack-mobile">
           <a class="btn btn-accent btn-lg" href="/pta-membership"><Icon name="users" /> Join the PTA</a>
-          <a class="btn btn-light btn-lg" href="/big-give"><Icon name="heart" /> Give to the Big Give</a>
+          <a class="btn btn-light btn-lg" href="/big-give" {...scheduled(bigGive.window)}><Icon name="heart" /> Give to the Big Give</a>
+          <a class="btn btn-light btn-lg" href="/fundraising" {...scheduled(bigGive.window, { invert: true })}><Icon name="heart" /> Ways to give</a>
         </div>
       </div>
       <div class="hero-art">
@@ -90,7 +92,7 @@ const pct = Math.min(100, Math.round((totalRaised / totalGoal) * 100));
       </div>
 
       <div class="happening">
-        <article class="card big-give-card">
+        <article class="card feature-card" {...scheduled(bigGive.window)}>
           <div class="bg-head">
             <Image src={bigGiveLogo} alt="The Big Give" width={180} class="bg-logo" />
             <div>
@@ -115,12 +117,31 @@ const pct = Math.min(100, Math.round((totalRaised / totalGoal) * 100));
           </div>
         </article>
 
-        <article class="card card-accent">
+        <!-- Shown outside the Big Give window instead of the campaign card. -->
+        <article class="card feature-card" {...scheduled(bigGive.window, { invert: true })}>
+          <span class="news-icon"><Icon name="heart" size={28} /></span>
+          <h3>Support Adams all year long</h3>
+          <p>
+            PTA fundraising pays for math and literacy tutors, playground and lunch staff, SEL programs, classroom supplies,
+            assemblies and community events. Every gift, of any size, stays at Adams.
+          </p>
+          <ul class="check-list">
+            <li>Give directly any time of year</li>
+            <li>Double your gift with <a href="/corporate-matching">corporate matching</a></li>
+            <li>Small <a href="/everyday-giving">everyday ways to give</a>, like Box Tops and Fred Meyer Rewards</li>
+          </ul>
+          <div class="btn-row">
+            <a class="btn btn-accent" href={links.donateGeneral}><Icon name="heart" /> Donate to Adams</a>
+            <a class="btn btn-ghost" href="/fundraising">Where it goes</a>
+          </div>
+        </article>
+
+        <article class="card card-accent" {...scheduled(spiritWear.window)}>
           <span class="news-icon"><Icon name="shirt" size={28} /></span>
           <h3>Eagles Spirit Wear</h3>
           <p>
             The 2026 Adams Eagles Spirit Wear shop is open! Gear up for the season with brand-new apparel. The store is
-            open for a limited time. <strong>All orders must be placed by October 9, 2026.</strong>
+            open for a limited time. <strong>All orders must be placed by {spiritWear.orderDeadline}.</strong>
           </p>
           <a class="btn" href={links.spiritWearStore}>Shop the store <Icon name="external" /></a>
         </article>
@@ -207,7 +228,7 @@ const pct = Math.min(100, Math.round((totalRaised / totalGoal) * 100));
     background:
       radial-gradient(50rem 30rem at 85% 30%, rgb(228 168 60 / 0.28), transparent 65%),
       radial-gradient(45rem 30rem at 0% 100%, var(--green-500), transparent 70%),
-      linear-gradient(160deg, var(--green-700), var(--green-900));
+      linear-gradient(160deg, var(--green-700), var(--green-900)) var(--green-700);
     padding-top: clamp(2.5rem, 1.5rem + 5vw, 6rem);
   }
   .hero::before {
@@ -250,7 +271,7 @@ const pct = Math.min(100, Math.round((totalRaised / totalGoal) * 100));
   .happening { display: grid; gap: var(--space-5); }
   @media (min-width: 900px) {
     .happening { grid-template-columns: 1fr 1fr; }
-    .big-give-card { grid-row: span 2; }
+    .feature-card { grid-row: span 2; }
   }
   .happening .card { display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-6); }
   .happening .card > .btn, .happening .card > .btn-row { margin-top: auto; }

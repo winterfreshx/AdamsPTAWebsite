@@ -3,12 +3,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
 import { links, mailto } from '../data/links';
-import { ptaInboxes, gradeReps, schoolContacts } from '../data/contacts';
+import { ptaInboxes, gradeReps, schoolContacts, inbox } from '../data/contacts';
 import { site } from '../data/site';
 
 const quick = [
   { label: 'Join Konstella', href: links.konstella, icon: 'app' },
-  { label: '2025/26 Directory', href: links.konstellaDirectory, icon: 'users' },
+  { label: 'Family Directory', href: links.konstellaDirectory, icon: 'users' },
   { label: 'Staff Appreciation', href: '/we-appreciate-adams', icon: 'heart' },
   { label: 'Follow on Instagram', href: links.instagram, icon: 'instagram' },
   { label: 'Like us on Facebook', href: links.facebook, icon: 'facebook' },
@@ -100,8 +100,8 @@ const linkGroups = [
           <Icon name="users" size={30} class="i" />
           <h3>Family directory</h3>
           <p>
-            Families opt in to be listed; sign-up begins mid-September. The <a href={links.konstellaDirectory}>2025/26 directory</a>
-            is on Konstella. For edits or removal, email <a href="mailto:familydirectory@adamselementary.org">familydirectory@adamselementary.org</a>.
+            Families opt in to be listed; sign-up begins mid-September. The current <a href={links.konstellaDirectory}>family directory</a>
+            is on Konstella. For edits or removal, email <a href={`mailto:${inbox.familyDirectory}`}>{inbox.familyDirectory}</a>.
           </p>
           <a class="btn btn-ghost" href="/school-directory">Looking for the 2024/25 directory?</a>
         </article>
@@ -153,7 +153,11 @@ const linkGroups = [
         <ul class="rep-list" role="list">
           {gradeReps.map((r) => (
             <li class="rep">
-              <a href={mailto(r.email)}><span class="class-of">Class of {r.classOf}</span><span>{r.email}</span></a>
+              <a href={mailto(r.email ?? inbox.execTeam, r.email ? undefined : `Class of ${r.classOf} grade rep`)}>
+                <span class="class-of">Class of {r.classOf}</span>
+                <span class="grade">{r.grade}</span>
+                <span>{r.email ?? `Rep coming soon. Email ${inbox.execTeam}`}</span>
+              </a>
               {r.facebook && <a class="rep-fb" href={r.facebook}><Icon name="facebook" size={16} /> Class of {r.classOf} Facebook group</a>}
             </li>
           ))}
@@ -226,6 +230,7 @@ const linkGroups = [
   .rep-list a.rep-fb { flex-direction: row; align-items: center; gap: 0.35rem; margin-top: 0.35rem; padding: 0.35rem 0.5rem; background: transparent; color: var(--green-700); font-weight: 700; font-size: 0.8125rem; }
   .rep-list a.rep-fb:hover { background: var(--green-100); color: var(--green-900); }
   .class-of { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--gold-300); }
+  .grade { font-weight: 800; font-size: 0.8125rem; color: #cfe5d6; }
   .tax { margin-top: var(--space-6); }
   .link-group h3 { display: flex; align-items: center; gap: var(--space-2); font-size: 1.15rem; }
   .link-group h3 :global(svg) { color: var(--gold-500); flex: none; }

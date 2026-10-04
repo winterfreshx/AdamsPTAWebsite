@@ -2,8 +2,9 @@
 // See designs/CHECKLIST.md Phase 9.
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const dist = join(root, 'dist');
 const crawlDir = join(root, 'designs/crawl');
 let failures = 0;
@@ -40,6 +41,7 @@ const ALLOW = {
   'mailto:rep2022b@adamselementary.org': 'wrong mailto on the stale Grade Reps page',
   'mailto:rep2024@adamselementary.org': 'class of 2024 has graduated (stale Grade Reps page)',
   'mailto:rep2025@adamselementary.org': 'class of 2025 has graduated (stale Grade Reps page)',
+  'mailto:rep2026@adamselementary.org': 'class of 2026 graduated in June 2026',
   'mailto:fundraising@adamselementary.org': 'only on the retired /fundraisingold page',
   'mailto:execteam-group@adamselementary.org': 'only on the retired /fundraisingold page',
 };

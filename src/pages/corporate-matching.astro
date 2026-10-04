@@ -4,6 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
 import { employers } from '../data/corporateMatching';
 import { site } from '../data/site';
+import { inbox } from '../data/contacts';
 
 // Group by first letter for the A–Z list.
 const groups = Object.entries(
@@ -45,7 +46,7 @@ const groups = Object.entries(
         <p class="tax-note">
           Many companies allow employees to request a match for donations made within the last year, so it may not be too
           late to get a match for an earlier gift! Questions? Email
-          <a href="mailto:ptatreasurer@adamselementary.org">ptatreasurer@adamselementary.org</a>.
+          <a href={`mailto:${inbox.treasurer}`}>{inbox.treasurer}</a>.
         </p>
       </aside>
     </div>
@@ -84,7 +85,7 @@ const groups = Object.entries(
       </div>
       <p class="empty" data-empty hidden>
         No match in our list, but your employer may still have a program! Ask your HR team, or email
-        <a href="mailto:ptatreasurer@adamselementary.org">ptatreasurer@adamselementary.org</a>.
+        <a href={`mailto:${inbox.treasurer}`}>{inbox.treasurer}</a>.
       </p>
     </div>
   </section>
@@ -139,12 +140,14 @@ const groups = Object.entries(
   .search input { flex: 1; border: 0; background: transparent; font: inherit; min-height: 3rem; outline: none; min-width: 0; }
   .az { columns: 15rem; column-gap: var(--space-5); }
   .letter { break-inside: avoid; margin-bottom: var(--space-5); background: var(--white); border-radius: var(--radius); padding: var(--space-4) var(--space-5); border: 1px solid var(--line); }
-  .letter h3 { font-size: 1.5rem; color: var(--gold-500); -webkit-text-stroke: 0; margin-bottom: var(--space-2); }
+  .letter h3 {
+    display: inline-block; font-size: 1.5rem; color: var(--green-700); margin-bottom: var(--space-2);
+    padding-bottom: 0.1rem; border-bottom: 3px solid var(--gold-500);
+  }
   .letter ul { list-style: none; padding: 0; }
   .letter li { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin: 0; padding-block: 0.35rem; border-bottom: 1px dashed var(--line); }
   .letter li:last-child { border-bottom: 0; }
   .letter a { font-weight: 700; }
   .nolink { font-weight: 700; }
   .empty { margin-top: var(--space-4); }
-  [hidden] { display: none !important; }
 </style>

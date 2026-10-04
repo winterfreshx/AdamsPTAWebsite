@@ -3,9 +3,11 @@ import { Image } from 'astro:assets';
 import eagle from '../assets/images/eagle-logo.png';
 import { nav, donateCta } from '../data/nav';
 import Icon from './Icon.astro';
+import { scheduledHref } from '../data/schedule';
 
 const current = Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
 const isCurrent = (href: string) => href === current;
+const donateHref = scheduledHref(donateCta.window, donateCta.during, donateCta.otherwise);
 const groupIsCurrent = (items: { href: string }[]) => items.some((i) => isCurrent(i.href));
 ---
 
@@ -46,14 +48,14 @@ const groupIsCurrent = (items: { href: string }[]) => items.some((i) => isCurren
           ))
         }
       </ul>
-      <a href={donateCta.href} class="btn btn-accent nav-cta">
+      <a {...donateHref} class="btn btn-accent nav-cta">
         <Icon name="heart" />
         {donateCta.label}
       </a>
     </nav>
 
     <div class="mobile-actions">
-      <a href={donateCta.href} class="btn btn-accent mobile-donate">{donateCta.label}</a>
+      <a {...donateHref} class="btn btn-accent mobile-donate">{donateCta.label}</a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
         <span class="visually-hidden" data-menu-label>Open menu</span>
         <Icon name="menu" class="icon-open" />
@@ -118,6 +120,11 @@ const groupIsCurrent = (items: { href: string }[]) => items.some((i) => isCurren
       let t: number | undefined;
       d.parentElement?.addEventListener('mouseenter', () => { clearTimeout(t); d.open = true; });
       d.parentElement?.addEventListener('mouseleave', () => { t = window.setTimeout(() => (d.open = false), 150); });
+      // Hovering already opened the menu, so the click that usually follows must not toggle it shut.
+      // Keyboard activation (detail === 0) still toggles normally.
+      d.querySelector('summary')?.addEventListener('click', (e) => {
+        if (e.detail > 0 && d.open) e.preventDefault();
+      });
     });
   }
 

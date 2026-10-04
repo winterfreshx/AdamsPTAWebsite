@@ -1,4 +1,5 @@
 ---
+import { inbox } from '../data/contacts';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
@@ -6,7 +7,7 @@ import Icon from '../components/Icon.astro';
 import readerboard from '../assets/images/readerboard.jpg';
 import { links, mailto } from '../data/links';
 
-const email = 'readerboard@adamselementary.org';
+const email = inbox.readerboard;
 const requestMail = mailto(email, 'Readerboard Request', 'Your first and last name:\nRequested date:\nMessage:\n');
 ---
 

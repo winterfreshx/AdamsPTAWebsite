@@ -4,6 +4,7 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import AnnouncementBar from '../components/AnnouncementBar.astro';
 import { site } from '../data/site';
+import { TIME_ZONE } from '../data/schedule';
 
 interface Props {
   title: string;
@@ -41,8 +42,13 @@ const ogImage = new URL('/og-image.png', Astro.site).href;
 
     <noscript>
       <style>
-        .mobile-menu { display: block !important; position: static !important; }
-        .menu-toggle { display: none !important; }
+        /* Without JS the mobile menu can't open or close, so show it inline. The header must not stay
+           sticky, or the expanded menu would cover the page while scrolling. */
+        @media (max-width: 999px) {
+          .site-header { position: static !important; }
+          .mobile-menu, .mobile-menu[hidden] { display: block !important; position: static !important; }
+          .menu-toggle { display: none !important; }
+        }
       </style>
     </noscript>
   </head>
@@ -54,5 +60,17 @@ const ogImage = new URL('/og-image.png', Astro.site).href;
       <slot />
     </main>
     <SiteFooter />
+
+    <!-- Re-check scheduled content against today's Seattle date (see src/data/schedule.ts). -->
+    <script is:inline define:vars={{ tz: TIME_ZONE }}>
+      const today = new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+      const live = (el) => (!el.dataset.starts || el.dataset.starts <= today) && (!el.dataset.expires || el.dataset.expires >= today);
+      document.querySelectorAll('[data-schedule]').forEach((el) => {
+        el.hidden = live(el) === el.hasAttribute('data-invert');
+      });
+      document.querySelectorAll('[data-schedule-href]').forEach((a) => {
+        a.href = live(a) ? a.dataset.hrefIn : a.dataset.hrefOut;
+      });
+    </script>
   </body>
 </html>

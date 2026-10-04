@@ -1,0 +1,25 @@
+---
+// Shared body for the old Wix directory URLs (/school-directory, /student-directory).
+// D1: those were password-protected Wix pages; the current directory lives in Konstella.
+import MessageLayout from '../layouts/MessageLayout.astro';
+import { links } from '../data/links';
+import { inbox } from '../data/contacts';
+
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+
+<MessageLayout title={title} heading="The family directory has moved to Konstella">
+  <p>The current Adams family directory is available to Adams families in the Konstella app.</p>
+  <p>
+    Looking for an older directory, or need to update your listing? Email
+    <a href={`mailto:${inbox.familyDirectory}`}>{inbox.familyDirectory}</a> or ask your
+    <a href="/resources#grade-reps">grade rep</a>.
+  </p>
+  <div class="btn-row">
+    <a class="btn btn-accent" href={links.konstellaDirectory}>Open the directory on Konstella</a>
+    <a class="btn btn-ghost" href="/communications-app">New to Konstella?</a>
+  </div>
+</MessageLayout>

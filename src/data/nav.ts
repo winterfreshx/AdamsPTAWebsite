@@ -1,3 +1,5 @@
+import { bigGive } from './announcements';
+
 export type NavLink = { label: string; href: string; description?: string };
 export type NavGroup = { label: string; items: NavLink[] };
 
@@ -35,6 +37,6 @@ export const nav: NavGroup[] = [
   },
 ];
 
-// During the Big Give (October) the Donate button goes to the campaign page; otherwise to Fundraising.
-const isBigGiveMonth = new Date().getMonth() === 9;
-export const donateCta = { label: 'Donate', href: isBigGiveMonth ? '/big-give' : '/fundraising' };
+// During the Big Give the Donate button goes to the campaign page; otherwise to Fundraising.
+// The switch happens in the browser (see schedule.ts), so it doesn't depend on a rebuild.
+export const donateCta = { label: 'Donate', window: bigGive.window, during: '/big-give', otherwise: '/fundraising' };

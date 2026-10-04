@@ -1,4 +1,5 @@
 // School-wide facts shown in the header, footer and home page.
+import { inbox } from './contacts';
 
 export const site = {
   name: 'Adams Elementary PTA',
@@ -8,7 +9,7 @@ export const site = {
     'The Adams Elementary School PTA in Ballard, Seattle — supporting our students, staff and community through volunteering, fundraising and advocacy. Go Eagles!',
   url: 'https://www.adamselementarypta.org',
   taxId: '91-0963029',
-  email: 'execteam@adamselementary.org',
+  email: inbox.execTeam,
 };
 
 export const school = {

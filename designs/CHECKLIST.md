@@ -138,3 +138,28 @@ Legend: `[ ]` to do · `[x]` done and verified · `[~]` done with a caveat (see 
 
 ### Still open (Phase 11, owned by the PTA)
 Board review, decisions D1–D6 (see README), the PayPal return-URL test, DNS cutover, and cancelling Wix.
+
+---
+
+## Code review fixes (PR #1, `/code-review high`): 2026-10-04
+
+- [x] R1 Seasonal home-page content (Spirit Wear card, Big Give card, hero Big Give button) now follows the campaign date windows, with a year-round "Support Adams" card and a "Ways to give" button outside the Big Give
+- [x] R2 Dates are re-checked in the visitor's browser (`src/data/schedule.ts` + the inline script in `BaseLayout`), so the announcements, cards and Donate link no longer depend on a nightly rebuild
+- [x] R3 No-JS mobile: the header is no longer sticky, so the inline menu doesn't cover the page while scrolling
+- [x] R4 Corporate-matching letter headings changed from gold (2.11:1) to green-700 with a gold underline
+- [x] R5 Desktop dropdown: a mouse click after hovering keeps it open; keyboard Enter still toggles it
+- [x] R6 Grade reps show the Classes of 2027–2032 with grade labels; the Class of 2032 falls back to the exec team; the graduated Class of 2026 was removed
+- [x] R7 All dates are Seattle dates (`seattleToday()`), not UTC
+- [x] R8 `verify-links.mjs` resolves its root with `fileURLToPath`, so a path with spaces works
+- [x] R9 Resources no longer labels the current directory "2025/26"
+- [x] R10 Every PTA inbox comes from the `inbox` map in `contacts.ts`; the two directory pages share `DirectoryMoved.astro`
+- [x] R11 New `npm run audit:contrast` checks the colors the browser renders, at 375 and 1280 px, and now runs in CI. It was confirmed to catch the R4 regression (fails at 2.11:1) before the fix was restored
+
+| Check | Result |
+|-------|--------|
+| `npm run verify` | ✅ all checks pass |
+| `npm run audit:contrast` | ✅ 4,438 text elements across 24 pages × 2 widths, 0 failures, 0 skipped |
+| Schedule tests with a faked clock (Oct 4, Oct 9 at 11:30pm Seattle, Oct 10, Nov 15, Sep 20, Oct 2027) | ✅ the bar, cards, hero button and Donate link were correct on every date |
+| Dropdown hover + click, keyboard toggle | ✅ |
+| No-JS mobile header scrolls away; desktop header still sticky | ✅ |
+| Layout regression QA: 13 pages × 360/768/1280 | ✅ no horizontal scroll; menu and search OK |

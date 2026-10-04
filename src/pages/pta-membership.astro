@@ -1,4 +1,5 @@
 ---
+import { inbox } from '../data/contacts';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
@@ -11,7 +12,7 @@ const tiers = [
     name: 'Scholarship',
     price: '$0',
     text: 'Anyone may request a confidential scholarship to join.',
-    href: mailto('ptapresident@adamselementary.org', 'Scholarship Request for PTA Membership'),
+    href: mailto(inbox.president, 'Scholarship Request for PTA Membership'),
     cta: 'Request a scholarship',
     featured: false,
   },
