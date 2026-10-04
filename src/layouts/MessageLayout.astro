@@ -1,0 +1,41 @@
+---
+// Centered single-message page: thank-you pages, info stubs and the 404.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import BaseLayout from './BaseLayout.astro';
+import eagle from '../assets/images/eagle-logo.png';
+
+interface Props {
+  title: string;
+  heading: string;
+  description?: string;
+  noindex?: boolean;
+  image?: ImageMetadata;
+  imageAlt?: string;
+}
+const { title, heading, description, noindex = true, image = eagle, imageAlt = 'The Adams Elementary Eagle' } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} noindex={noindex}>
+  <section class="message">
+    <div class="container-narrow inner">
+      <div class="art">
+        <div class="sun" aria-hidden="true"></div>
+        <Image src={image} alt={imageAlt} width={360} class="img" />
+      </div>
+      <h1>{heading}</h1>
+      <div class="body stack"><slot /></div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .message { padding-block: var(--space-8); background: radial-gradient(40rem 24rem at 50% 0%, var(--green-100), transparent 70%); }
+  .inner { text-align: center; display: flex; flex-direction: column; align-items: center; gap: var(--space-5); }
+  .art { position: relative; display: grid; place-items: center; width: min(18rem, 70vw); }
+  .sun { position: absolute; width: 80%; aspect-ratio: 1; border-radius: 50%; background: var(--gold-300); opacity: 0.6; }
+  .art :global(.img) { position: relative; width: 100%; max-height: 18rem; object-fit: contain; border-radius: var(--radius); }
+  h1 { font-size: var(--fs-h2); }
+  .body { font-size: var(--fs-lg); color: var(--ink-soft); max-width: 36rem; }
+  .body :global(.btn-row) { justify-content: center; margin-top: var(--space-5); }
+</style>

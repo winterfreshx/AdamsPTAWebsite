@@ -1,0 +1,49 @@
+---
+// Compact green banner at the top of every inner page.
+interface Props {
+  title: string;
+  eyebrow?: string;
+  intro?: string;
+}
+const { title, eyebrow, intro } = Astro.props;
+---
+
+<section class="page-hero">
+  <div class="container page-hero-inner">
+    <div class="text">
+      {eyebrow && <p class="ph-eyebrow">{eyebrow}</p>}
+      <h1>{title}</h1>
+      {intro && <p class="ph-intro">{intro}</p>}
+      <slot />
+    </div>
+    <div class="art" aria-hidden="true"><slot name="art" /></div>
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    position: relative; overflow: hidden; color: var(--white);
+    background:
+      radial-gradient(60rem 30rem at 110% -20%, rgb(228 168 60 / 0.35), transparent 60%),
+      radial-gradient(40rem 20rem at -10% 120%, rgb(31 122 77 / 0.9), transparent 70%),
+      var(--green-700);
+    padding-block: clamp(2.5rem, 2rem + 4vw, 5rem);
+  }
+  .page-hero::after {
+    /* feather-stripe texture */
+    content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0.07;
+    background-image: repeating-linear-gradient(115deg, #fff 0 2px, transparent 2px 22px);
+    mask-image: linear-gradient(to left, #000, transparent 70%);
+  }
+  .page-hero-inner { position: relative; z-index: 1; display: grid; gap: var(--space-6); align-items: center; }
+  @media (min-width: 860px) { .page-hero-inner:has(.art:not(:empty)) { grid-template-columns: 1fr auto; } }
+  .art:empty { display: none; }
+  h1 { color: var(--white); max-width: 22ch; }
+  .ph-eyebrow {
+    display: inline-block; font-family: var(--font-display); font-weight: 800; font-size: 0.8125rem;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--green-900);
+    background: var(--gold-500); padding: 0.25rem 0.75rem; border-radius: 999px; margin-bottom: var(--space-4);
+  }
+  .ph-intro { margin-top: var(--space-4); font-size: var(--fs-lg); max-width: 46rem; color: #e3efe7; }
+  .text :global(.btn-row) { margin-top: var(--space-5); }
+</style>

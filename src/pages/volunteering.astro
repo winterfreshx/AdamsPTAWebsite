@@ -1,0 +1,155 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import { links } from '../data/links';
+import { schoolContacts } from '../data/contacts';
+import { site } from '../data/site';
+
+// TODO(PTA): update each school year.
+const mostNeeded = { year: '26/27 School Year', roles: ['Big Give Coordinator', '3rd Grade Representative', 'Social Media Coordinator'] };
+
+const faqs = [
+  { href: '#open-roles', label: 'What PTA jobs are open?', icon: 'megaphone' },
+  { href: '#limited-time', label: 'I have limited availability.', icon: 'clock' },
+  { href: '#sps-registration', label: "I'm new! What do I do?", icon: 'sparkles' },
+  { href: '#sps-status', label: 'I need to check my SPS status.', icon: 'check' },
+] as const;
+---
+
+<BaseLayout title="Volunteer" description="Volunteer with the Adams Elementary PTA: open roles, quick one-time tasks, and how to register as an SPS volunteer.">
+  <PageHero
+    eyebrow="Volunteer"
+    title="Thank you for your interest in volunteering at Adams!"
+    intro="There are many ways you can contribute, and every contribution, large or small, makes an impact. This page will help you get started."
+  >
+    <nav class="faq-grid" aria-label="Volunteer questions">
+      {faqs.map((f) => (
+        <a href={f.href} class="faq">
+          <Icon name={f.icon} size={22} />
+          <span>{f.label}</span>
+        </a>
+      ))}
+    </nav>
+  </PageHero>
+
+  <section class="section" id="sps-registration" aria-labelledby="sps-title">
+    <div class="container split">
+      <div class="stack">
+        <p class="eyebrow">Step one</p>
+        <h2 id="sps-title">Registering as a volunteer with SPS</h2>
+        <p>
+          Everyone who works with students or volunteers inside the school during the day (chaperoning field trips,
+          helping in the classroom, working PTA events during school hours) <strong>must be an approved volunteer with SPS</strong>.
+          The process includes watching a training video, providing a copy of a photo ID, and proving that you have lived in
+          Washington State for three years or more.
+        </p>
+        <p class="callout">
+          <Icon name="sparkles" />
+          <span>
+            The district has a new, simplified system for approving volunteers for the 26-27 school year! The "invite form"
+            has been phased out, and the volunteer application is publicly accessible again.
+          </span>
+        </p>
+        <ol class="steps">
+          <li>Confirm a volunteer role with your child's classroom teacher.</li>
+          <li>Complete the volunteer application. Be sure to enter the name of the staff member you'll be supporting.</li>
+          <li>
+            New and returning volunteers can find everything needed to complete or update the application on the
+            <a href={links.spsVolunteerSite}>SPS Volunteer Website</a>.
+          </li>
+        </ol>
+        <div class="btn-row">
+          <a class="btn" href={links.spsVolunteerSite}>SPS Volunteer Website <Icon name="external" /></a>
+          <a class="btn btn-ghost" href={`mailto:${schoolContacts.volunteerOffice.email}`}><Icon name="mail" /> Email {schoolContacts.volunteerOffice.name}</a>
+        </div>
+      </div>
+      <aside class="card card-green notes">
+        <h3>Things to note</h3>
+        <ul class="check-list">
+          <li>Volunteers must be within staff view.</li>
+          <li>When you arrive for your volunteer shift, sign in using the email address you used on your volunteer application.</li>
+          <li>Questions? Email {schoolContacts.volunteerOffice.name} in the office at <a href={`mailto:${schoolContacts.volunteerOffice.email}`}>{schoolContacts.volunteerOffice.email}</a>.</li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section-tint" id="sps-status" aria-labelledby="status-title">
+    <div class="container status">
+      <div>
+        <h2 id="status-title">Already an SPS volunteer?</h2>
+        <p class="lead">Visit the SPS Volunteer Portal to check your status, renew, or add Adams to an existing volunteer profile from another SPS school.</p>
+      </div>
+      <a class="btn btn-lg" href={links.spsVolunteerPortal}>SPS Volunteer Portal <Icon name="external" /></a>
+    </div>
+  </section>
+
+  <section class="section" id="open-roles" aria-labelledby="roles-title">
+    <div class="container split">
+      <div class="stack">
+        <p class="eyebrow">Most needed roles · {mostNeeded.year}</p>
+        <h2 id="roles-title">We're looking for…</h2>
+        <ul class="role-list" role="list">
+          {mostNeeded.roles.map((r) => <li><Icon name="star" size={20} />{r}</li>)}
+        </ul>
+        <p>
+          Email <a href={`mailto:${site.email}`}>{site.email}</a> to ask about these roles, or
+          <a href={links.konstellaCommittees}>sign up on Konstella</a>.
+        </p>
+      </div>
+      <div class="card card-accent stack">
+        <Icon name="book" size={32} class="doc-icon" />
+        <h3>Check out our Google Doc describing all our volunteer roles!</h3>
+        <p>Find the role that fits your interests and schedule.</p>
+        <div class="btn-row">
+          <a class="btn btn-accent" href={links.volunteerRolesDoc}>Volunteer roles doc <Icon name="external" /></a>
+          <a class="btn btn-ghost" href={links.volunteerDoc}>Volunteer document</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-gold" id="limited-time" aria-labelledby="limited-title">
+    <div class="container-narrow stack">
+      <p class="eyebrow">Volunteer with the Adams PTA</p>
+      <h2 id="limited-title">Want to volunteer but only have a little time?</h2>
+      <p class="lead">Reach out to us! There are tons of opportunities during the year to volunteer in all sorts of roles, including:</p>
+      <ul class="check-list">
+        <li>One-time sign-ups for events, both daytime and evening</li>
+        <li>Requests from staff: hanging art, helping with picture day</li>
+        <li>Jobs you can do from home</li>
+        <li>Roles connected to all sorts of interests and expertise: tech, finance, communications, art, sales and more. Let us know what you'd like to do and we may have the perfect role.</li>
+        <li>Attending meetings: we often mention small volunteer needs at both Board and General PTA meetings.</li>
+      </ul>
+      <p>
+        Email <a href={`mailto:${site.email}`}>{site.email}</a> or keep an eye on <a href="/communications-app">Konstella</a>,
+        our communications app, where we post new volunteer spots regularly.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .faq-grid { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); margin-top: var(--space-6); }
+  .faq {
+    display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4);
+    border-radius: var(--radius); background: rgb(255 255 255 / 0.1); border: 1px solid rgb(255 255 255 / 0.25);
+    color: var(--white); font-weight: 800; text-decoration: none; transition: background 0.15s ease;
+  }
+  .faq :global(svg) { flex: none; color: var(--gold-300); }
+  .faq:hover { background: var(--gold-500); color: var(--green-900); }
+  .faq:hover :global(svg) { color: var(--green-900); }
+  .notes { align-self: start; }
+  .notes .check-list { margin-top: var(--space-4); }
+  .status { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-5); }
+  .status > div { max-width: 40rem; }
+  .role-list { list-style: none; padding: 0; display: grid; gap: var(--space-2); }
+  .role-list li {
+    display: flex; align-items: center; gap: var(--space-3); margin: 0; padding: var(--space-3) var(--space-4);
+    background: var(--white); border: 1px solid var(--line); border-left: 5px solid var(--gold-500); border-radius: var(--radius-sm);
+    font-weight: 800; color: var(--green-900);
+  }
+  .role-list :global(svg) { color: var(--gold-500); fill: var(--gold-500); }
+  .card :global(.doc-icon) { color: var(--green-500); }
+</style>

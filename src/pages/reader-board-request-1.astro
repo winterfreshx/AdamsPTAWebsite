@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import readerboard from '../assets/images/readerboard.jpg';
+import { links, mailto } from '../data/links';
+
+const email = 'readerboard@adamselementary.org';
+const requestMail = mailto(email, 'Readerboard Request', 'Your first and last name:\nRequested date:\nMessage:\n');
+---
+
+<BaseLayout title="Readerboard Request" description="Rent the Adams Elementary readerboard for a $25 donation: celebrate a birthday, a milestone or a shout-out for a full day.">
+  <PageHero eyebrow="Readerboard request" title="Rent the Adams Readerboard!" intro="Celebrate a birthday, a milestone or a shout-out. Your message goes up on the sign in front of Adams for a full day." />
+
+  <section class="section">
+    <div class="container split">
+      <div class="stack">
+        <p class="lead">
+          The Adams Readerboard is available to "rent" for a <strong>donation of $25</strong> and will be up for a full day of
+          your choosing, if available. Dates are first-come, first-served.
+        </p>
+        <h2>How to schedule your message</h2>
+        <ol class="steps">
+          <li>
+            <strong>Email your request</strong> to <a href={requestMail}>{email}</a> with:
+            <ul class="req">
+              <li>Your first and last name</li>
+              <li>Requested date</li>
+              <li>Message</li>
+            </ul>
+          </li>
+          <li><strong>Send your $25 donation</strong> using the button below.</li>
+          <li><strong>Watch for your message</strong> on the big day!</li>
+        </ol>
+        <div class="btn-row stack-mobile">
+          <a class="btn btn-lg" href={requestMail}><Icon name="mail" /> Email your request</a>
+          <a class="btn btn-accent btn-lg" href={links.donateReaderboard}><Icon name="heart" /> Donate $25 now</a>
+        </div>
+        <p class="muted small">Questions? Email <a href={mailto(email)}>{email}</a>.</p>
+      </div>
+      <div class="photo rb-photo">
+        <Image src={readerboard} alt="The Adams Elementary readerboard reading “Happy 9th Birthday Ellie!”" width={360} />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .req { margin-top: var(--space-2); }
+  .req li { margin-top: 0.15rem; }
+  .small { font-size: var(--fs-sm); }
+  .rb-photo { max-width: 22rem; margin-inline: auto; transform: rotate(2deg); border: 8px solid var(--white); }
+</style>

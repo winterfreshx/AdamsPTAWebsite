@@ -1,0 +1,44 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import supplies from '../assets/images/school-supplies.jpg';
+import { links } from '../data/links';
+---
+
+<BaseLayout title="Pay for School Supplies" description="Contribute to the Adams PTA school supply program, or request a no-questions-asked scholarship.">
+  <PageHero eyebrow="School supplies" title="Contribute to school supplies" intro="The PTA buys and distributes school supplies for every Adams student. It's popular with teachers and families alike!" />
+
+  <section class="section">
+    <div class="container split">
+      <div class="stack">
+        <p class="lead">
+          The Adams Elementary PTA is proud to arrange the purchase and distribution of school supplies for all our students.
+          This service is very popular with teachers and families!
+        </p>
+        <p>
+          Families have overwhelmingly asked to chip in for these supplies rather than have valuable PTA funding redirected to
+          them, so we offer this opportunity to do so. Teachers are very grateful for this system.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn-accent btn-lg" href={links.donateSchoolSupplies}><Icon name="heart" /> Contribute now</a>
+        </div>
+        <p class="callout callout-green">
+          <Icon name="info" />
+          <span>
+            If paying for supplies is a hardship for you, you may <a href={links.suppliesScholarshipForm}>request a scholarship</a>.
+            No personal information is required.
+          </span>
+        </p>
+      </div>
+      <div class="photo supplies-photo">
+        <Image src={supplies} alt="A fan of colorful felt-tip markers" width={600} />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .supplies-photo { max-width: 28rem; margin-inline: auto; }
+</style>

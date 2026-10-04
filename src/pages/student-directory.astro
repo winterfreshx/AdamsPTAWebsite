@@ -1,0 +1,18 @@
+---
+import MessageLayout from '../layouts/MessageLayout.astro';
+import { links } from '../data/links';
+---
+
+<!-- D1: this was a password-protected Wix page. The current directory lives in Konstella. -->
+<MessageLayout title="Student Directory" heading="The family directory has moved to Konstella">
+  <p>The current Adams family directory is available to Adams families in the Konstella app.</p>
+  <p>
+    Looking for an older directory, or need to update your listing? Email
+    <a href="mailto:familydirectory@adamselementary.org">familydirectory@adamselementary.org</a> or ask your
+    <a href="/resources#grade-reps">grade rep</a>.
+  </p>
+  <div class="btn-row">
+    <a class="btn btn-accent" href={links.konstellaDirectory}>Open the directory on Konstella</a>
+    <a class="btn btn-ghost" href="/communications-app">New to Konstella?</a>
+  </div>
+</MessageLayout>

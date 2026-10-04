@@ -1,0 +1,36 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import pnoBanner from '../assets/images/parents-night-out.jpg';
+import { links } from '../data/links';
+---
+
+<BaseLayout title="Parent Night Out" description="Parent Night Out at Adams Elementary: teacher-hosted Friday fun nights for students, about once a month from 6–9pm.">
+  <PageHero eyebrow="Parent Night Out" title="A night out for you, a fun night IN for them" intro="A few of our Adams teachers regularly host Parent Night Out. Drop your students off for a fun evening at Adams!" />
+
+  <section class="section">
+    <div class="container-narrow stack-lg">
+      <Image src={pnoBanner} alt="Parents Night Out!" widths={[600, 1100]} sizes="(min-width: 760px) 46rem, 100vw" class="banner" />
+      <div class="grid grid-3 facts">
+        <div class="fact"><Icon name="calendar" size={28} /><strong>Almost monthly</strong><span>There's a PNO almost every month</span></div>
+        <div class="fact"><Icon name="moon" size={28} /><strong>Fridays, 6–9pm</strong><span>Typically on Friday nights</span></div>
+        <div class="fact"><Icon name="dollar" size={28} /><strong>For a fee</strong><span>Sign up and pay on Konstella</span></div>
+      </div>
+      <div class="card card-accent center stack">
+        <h2>Stay tuned for dates!</h2>
+        <p>Upcoming Parent Night Out dates are posted on Konstella.</p>
+        <p><a class="btn btn-accent btn-lg" href={links.konstellaParentNightOut}>Sign up on Konstella <Icon name="arrow-right" /></a></p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  :global(.banner) { border-radius: var(--radius-lg); width: 100%; }
+  .fact { display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-1); padding: var(--space-5); background: var(--green-100); border-radius: var(--radius); }
+  .fact :global(svg) { color: var(--green-700); margin-bottom: var(--space-2); }
+  .fact strong { font-family: var(--font-display); font-size: 1.2rem; color: var(--green-900); }
+  .fact span { font-size: var(--fs-sm); color: var(--ink-soft); }
+</style>

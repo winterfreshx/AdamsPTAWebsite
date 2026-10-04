@@ -1,0 +1,54 @@
+---
+import { announcements } from '../data/announcements';
+import Icon from './Icon.astro';
+
+// Build-time filter; the inline script re-checks in the browser so expired items hide even before a rebuild.
+const today = new Date().toISOString().slice(0, 10);
+const active = announcements.filter((a) => a.expires >= today && (!a.starts || a.starts <= today));
+---
+
+{
+  active.length > 0 && (
+    <div class="announce" role="region" aria-label="Announcements">
+      {active.map((a) => (
+        <p class="announce-item" data-starts={a.starts ?? ''} data-expires={a.expires}>
+          <Icon name="megaphone" size={20} />
+          <span>{a.text}</span>
+          <a href={a.cta.href}>
+            {a.cta.label}
+            <Icon name="arrow-right" size={16} />
+          </a>
+        </p>
+      ))}
+    </div>
+  )
+}
+
+<script>
+  const d = new Date();
+  const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  document.querySelectorAll<HTMLElement>('.announce-item').forEach((el) => {
+    const { starts, expires } = el.dataset;
+    if ((expires && expires < today) || (starts && starts > today)) el.remove();
+  });
+  const bar = document.querySelector('.announce');
+  if (bar && !bar.children.length) bar.remove();
+</script>
+
+<style>
+  .announce { background: var(--gold-500); color: var(--green-900); }
+  .announce-item {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.35rem 0.6rem;
+    padding: 0.55rem var(--gutter); font-weight: 700; font-size: var(--fs-sm); text-align: center; margin: 0;
+  }
+  .announce-item + .announce-item { border-top: 1px solid rgb(11 61 39 / 0.15); }
+  .announce-item a {
+    display: inline-flex; align-items: center; gap: 0.25rem; color: var(--green-900); font-weight: 800;
+    text-decoration-color: var(--green-900);
+  }
+  @media (max-width: 520px) {
+    .announce-item { display: block; padding-block: 0.45rem; font-size: 0.8125rem; line-height: 1.35; }
+    .announce-item > :global(svg) { display: none; }
+    .announce-item a { margin-left: 0.25rem; white-space: nowrap; }
+  }
+</style>

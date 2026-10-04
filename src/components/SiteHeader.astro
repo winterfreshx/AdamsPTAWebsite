@@ -1,0 +1,265 @@
+---
+import { Image } from 'astro:assets';
+import eagle from '../assets/images/eagle-logo.png';
+import { nav, donateCta } from '../data/nav';
+import Icon from './Icon.astro';
+
+const current = Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
+const isCurrent = (href: string) => href === current;
+const groupIsCurrent = (items: { href: string }[]) => items.some((i) => isCurrent(i.href));
+---
+
+<header class="site-header" data-header>
+  <div class="container header-inner">
+    <a href="/" class="brand" aria-label="Adams Elementary PTA — home">
+      <Image src={eagle} alt="" width={72} height={59} class="brand-eagle" loading="eager" />
+      <span class="brand-text">
+        <span class="brand-top">Adams Elementary</span>
+        <span class="brand-bottom">PTA · Go Eagles!</span>
+      </span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Main">
+      <ul class="nav-list" role="list">
+        {
+          nav.map((group) => (
+            <li class="nav-item">
+              <details class="nav-group" data-dropdown>
+                <summary class:list={['nav-trigger', { active: groupIsCurrent(group.items) }]}>
+                  {group.label}
+                  <Icon name="chevron-down" size={18} class="chev" />
+                </summary>
+                <div class="dropdown">
+                  <ul role="list">
+                    {group.items.map((item) => (
+                      <li>
+                        <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                          <span class="dd-label">{item.label}</span>
+                          {item.description && <span class="dd-desc">{item.description}</span>}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </details>
+            </li>
+          ))
+        }
+      </ul>
+      <a href={donateCta.href} class="btn btn-accent nav-cta">
+        <Icon name="heart" />
+        {donateCta.label}
+      </a>
+    </nav>
+
+    <div class="mobile-actions">
+      <a href={donateCta.href} class="btn btn-accent mobile-donate">{donateCta.label}</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
+        <span class="visually-hidden" data-menu-label>Open menu</span>
+        <Icon name="menu" class="icon-open" />
+        <Icon name="close" class="icon-close" />
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
+    <nav aria-label="Main (mobile)" class="container">
+      <a href="/" class="mobile-home" aria-current={current === '/' ? 'page' : undefined}><Icon name="home" /> Home</a>
+      {
+        nav.map((group) => (
+          <section class="mobile-group">
+            <h2 class="mobile-group-title">{group.label}</h2>
+            <ul role="list">
+              {group.items.map((item) => (
+                <li>
+                  <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                    {item.label}
+                    <Icon name="arrow-right" size={18} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </nav>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menu = document.querySelector<HTMLElement>('[data-mobile-menu]');
+  const label = document.querySelector<HTMLElement>('[data-menu-label]');
+  const dropdowns = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-dropdown]'));
+
+  const setMenu = (open: boolean) => {
+    if (!toggle || !menu) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    if (open && header) menu.style.top = `${Math.max(0, header.getBoundingClientRect().bottom)}px`;
+    menu.hidden = !open;
+    document.documentElement.classList.toggle('menu-open', open);
+    if (label) label.textContent = open ? 'Close menu' : 'Open menu';
+    if (open) menu.querySelector<HTMLAnchorElement>('a')?.focus();
+  };
+
+  toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+
+  // Only one desktop dropdown open at a time.
+  dropdowns.forEach((d) =>
+    d.addEventListener('toggle', () => {
+      if (d.open) dropdowns.forEach((o) => o !== d && (o.open = false));
+    }),
+  );
+
+  // Hover-to-open on devices with a real pointer.
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    dropdowns.forEach((d) => {
+      let t: number | undefined;
+      d.parentElement?.addEventListener('mouseenter', () => { clearTimeout(t); d.open = true; });
+      d.parentElement?.addEventListener('mouseleave', () => { t = window.setTimeout(() => (d.open = false), 150); });
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    dropdowns.forEach((d) => d.open && !d.contains(e.target as Node) && (d.open = false));
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const openDropdown = dropdowns.find((d) => d.open);
+    if (openDropdown) {
+      openDropdown.open = false;
+      openDropdown.querySelector('summary')?.focus();
+    }
+    if (toggle?.getAttribute('aria-expanded') === 'true') {
+      setMenu(false);
+      toggle.focus();
+    }
+  });
+
+  // Close the mobile menu if the viewport grows to desktop.
+  window.matchMedia('(min-width: 1000px)').addEventListener('change', (mq) => mq.matches && setMenu(false));
+
+  // Add a shadow once the page scrolls.
+  const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgb(255 253 247 / 0.92);
+    backdrop-filter: saturate(1.4) blur(10px);
+    -webkit-backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid transparent;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .site-header.scrolled { box-shadow: var(--shadow); border-color: var(--line); }
+  .header-inner { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); min-height: var(--header-h); }
+
+  .brand { display: flex; align-items: center; gap: var(--space-3); text-decoration: none; color: var(--green-900); flex: none; }
+  .brand-eagle { width: 3.5rem; height: auto; transition: transform 0.25s ease; }
+  .brand:hover .brand-eagle { transform: rotate(-4deg) scale(1.05); }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.05; }
+  .brand-top { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; letter-spacing: -0.01em; }
+  .brand-bottom { font-size: 0.8rem; font-weight: 800; color: var(--green-500); letter-spacing: 0.06em; text-transform: uppercase; }
+
+  .desktop-nav { display: none; align-items: center; gap: var(--space-2); }
+  .nav-list { display: flex; gap: var(--space-1); list-style: none; padding: 0; margin: 0; }
+  .nav-item { position: relative; margin: 0; }
+  .nav-group summary { list-style: none; }
+  .nav-group summary::-webkit-details-marker { display: none; }
+  .nav-trigger {
+    display: flex; align-items: center; gap: 0.2rem; cursor: pointer; user-select: none;
+    padding: 0.55rem 0.9rem; border-radius: 999px;
+    font-family: var(--font-display); font-weight: 700; color: var(--green-900);
+  }
+  .nav-trigger:hover, .nav-group[open] .nav-trigger { background: var(--green-100); }
+  .nav-trigger.active { color: var(--green-700); box-shadow: inset 0 -3px 0 var(--gold-500); }
+  .nav-trigger :global(.chev) { transition: transform 0.2s ease; }
+  .nav-group[open] .nav-trigger :global(.chev) { transform: rotate(180deg); }
+
+  .dropdown {
+    position: absolute; top: calc(100% + 0.4rem); left: 50%; translate: -50% 0;
+    min-width: 19rem; padding: var(--space-2);
+    background: var(--white); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    animation: drop 0.16s ease-out;
+  }
+  .dropdown::before { content: ''; position: absolute; inset: -0.6rem 0 auto; height: 0.6rem; }
+  .dropdown ul { list-style: none; padding: 0; margin: 0; }
+  .dropdown li { margin: 0; }
+  .dropdown a {
+    display: flex; flex-direction: column; padding: 0.6rem 0.85rem; border-radius: var(--radius-sm);
+    text-decoration: none; color: var(--ink);
+  }
+  .dropdown a:hover, .dropdown a[aria-current='page'] { background: var(--green-100); }
+  .dropdown a[aria-current='page'] .dd-label { color: var(--green-700); }
+  .dd-label { font-weight: 800; color: var(--green-900); }
+  .dd-desc { font-size: 0.875rem; color: var(--ink-soft); }
+  @keyframes drop { from { opacity: 0; transform: translateY(-4px); } }
+
+  .nav-cta { margin-left: var(--space-2); }
+
+  .mobile-actions { display: flex; align-items: center; gap: var(--space-2); }
+  .mobile-donate { min-height: 2.75rem; padding-inline: 1.1rem; }
+  .menu-toggle {
+    display: grid; place-items: center; width: 2.875rem; height: 2.875rem;
+    border-radius: 999px; border: 2px solid var(--green-700); background: transparent; color: var(--green-700); cursor: pointer;
+  }
+  .menu-toggle :global(.icon-close) { display: none; }
+  .menu-toggle[aria-expanded='true'] { background: var(--green-700); color: var(--white); }
+  .menu-toggle[aria-expanded='true'] :global(.icon-open) { display: none; }
+  .menu-toggle[aria-expanded='true'] :global(.icon-close) { display: block; }
+
+  .mobile-menu {
+    position: fixed; inset: var(--header-h) 0 0; /* top is set from JS to sit under the header */ overflow-y: auto; overscroll-behavior: contain;
+    background: var(--paper); border-top: 1px solid var(--line);
+    padding-block: var(--space-4) var(--space-7);
+    animation: slide 0.2s ease-out;
+  }
+  @keyframes slide { from { opacity: 0; transform: translateY(-8px); } }
+  .mobile-home {
+    display: flex; align-items: center; gap: var(--space-2); padding: var(--space-3) 0;
+    font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; color: var(--green-900); text-decoration: none;
+  }
+  .mobile-group { padding-block: var(--space-3); border-top: 1px solid var(--line); }
+  .mobile-group-title {
+    font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green-500); margin-bottom: var(--space-1);
+  }
+  .mobile-group ul { list-style: none; padding: 0; margin: 0; }
+  .mobile-group li { margin: 0; }
+  .mobile-group a {
+    display: flex; align-items: center; justify-content: space-between; min-height: 3rem;
+    font-weight: 700; font-size: 1.0625rem; color: var(--ink); text-decoration: none;
+  }
+  .mobile-group a :global(svg) { color: var(--gold-500); }
+  .mobile-group a[aria-current='page'] { color: var(--green-700); }
+  .mobile-group a[aria-current='page']::before { content: '●'; color: var(--gold-500); margin-right: 0.5rem; font-size: 0.7em; }
+  .mobile-group a[aria-current='page'] { justify-content: flex-start; }
+  .mobile-group a[aria-current='page'] :global(svg) { margin-left: auto; }
+
+  .brand { min-width: 0; }
+  .brand-top, .brand-bottom { white-space: nowrap; }
+  @media (max-width: 440px) {
+    .header-inner { gap: var(--space-2); }
+    .brand { gap: var(--space-2); }
+    .brand-eagle { width: 2.6rem; }
+    .brand-top { font-size: 0.95rem; }
+    .brand-bottom { font-size: 0.66rem; }
+    .mobile-actions { gap: 0.4rem; }
+    .mobile-donate { min-height: 2.5rem; padding-inline: 0.8rem; font-size: 0.875rem; }
+    .menu-toggle { width: 2.75rem; height: 2.75rem; }
+  }
+  @media (max-width: 350px) { .brand-bottom { display: none; } }
+  @media (min-width: 1000px) {
+    .desktop-nav { display: flex; }
+    .mobile-actions, .mobile-menu { display: none !important; }
+  }
+
+  :global(html.menu-open) { overflow: hidden; }
+</style>

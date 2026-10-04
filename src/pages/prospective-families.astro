@@ -1,0 +1,46 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import mascot from '../assets/images/eagle-mascot-closeup.png';
+import { school, site } from '../data/site';
+---
+
+<BaseLayout title="Future Families" description="Kindergarten and new-student tours at Adams Elementary in Ballard, Seattle. Tours take place in January.">
+  <PageHero eyebrow="Future families" title="Welcome to the Adams flock!" intro="Kindergarten and new-student tours take place in January. Stay tuned for more info." />
+
+  <section class="section">
+    <div class="container split">
+      <div class="stack">
+        <h2>Kindergarten & new student tours</h2>
+        <p class="lead">
+          If you have a child entering Kindergarten or are looking for a new school for an older child, join us for a morning
+          or evening tour of the school.
+        </p>
+        <p>
+          You'll have the chance to ask questions, meet our principal and some Adams parents, and see what makes Adams such a
+          special place to learn.
+        </p>
+        <!-- TODO(PTA) D3: add the January tour dates and sign-up link. -->
+        <span class="badge">New family tours: January · details coming soon</span>
+      </div>
+      <aside class="card card-accent stack">
+        <Image src={mascot} alt="The Adams Eagle mascot" width={140} class="mascot" />
+        <h3>Where to find us</h3>
+        <p>
+          <a href={school.mapUrl}>
+            {school.name}<br />{school.street}<br />{school.city}, {school.state} {school.zip}
+          </a>
+        </p>
+        <p class="note"><Icon name="pin" size={18} /> {school.entranceNote}</p>
+        <p>Questions? <a href={`mailto:${site.email}`}>{site.email}</a></p>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .mascot { border-radius: 50%; box-shadow: 0 0 0 5px var(--gold-300); }
+  .note { display: flex; align-items: center; gap: var(--space-2); font-weight: 800; color: var(--green-700); }
+</style>

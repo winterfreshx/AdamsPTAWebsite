@@ -1,0 +1,133 @@
+---
+import { Image } from 'astro:assets';
+import eagle from '../assets/images/eagle-logo.png';
+import eagleHead from '../assets/images/eagle-head.jpg';
+import { site, school, bellTimes, landAcknowledgment, memorial } from '../data/site';
+import { links, mailto } from '../data/links';
+import { nav } from '../data/nav';
+import Icon from './Icon.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none"><path d="M0 60V20c240 30 480 30 720 10S1200 0 1440 20v40z" fill="currentColor"/></svg>
+  </div>
+  <div class="footer-body">
+    <div class="container footer-grid">
+      <section class="footer-brand">
+        <Image src={eagle} alt="Adams Elementary Eagles logo" width={150} class="footer-eagle" />
+        <p class="footer-tag">{site.tagline}</p>
+        <a class="btn btn-accent" href={mailto(site.email)}><Icon name="mail" /> Contact the PTA</a>
+        <div class="socials">
+          <a href={links.instagram} aria-label="Adams PTA on Instagram"><Icon name="instagram" /></a>
+          <a href={links.facebook} aria-label="Adams PTA on Facebook"><Icon name="facebook" /></a>
+          <a href={links.konstella} aria-label="Adams PTA on Konstella"><Icon name="app" /></a>
+        </div>
+      </section>
+
+      <section aria-labelledby="footer-bell">
+        <h2 id="footer-bell" class="footer-h"><Icon name="clock" size={20} /> Bell times</h2>
+        <dl class="bell-list">
+          {
+            bellTimes.map((b) => (
+              <div class:list={{ highlight: b.highlight }}>
+                <dt>{b.time}</dt>
+                <dd>{b.label}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </section>
+
+      <section aria-labelledby="footer-visit">
+        <h2 id="footer-visit" class="footer-h"><Icon name="school" size={20} /> Adams Elementary</h2>
+        <address>
+          <a href={school.mapUrl}>{school.street}<br />{school.city}, {school.state} {school.zip}</a><br />
+          <a href={`tel:${school.phone.replace(/-/g, '')}`}>{school.phone}</a><br />
+          Principal {school.principal}
+        </address>
+        <p class="small">
+          <a href={links.adamsSps}>Adams on the SPS website</a><br />
+          Adams PTA Tax ID: <strong>{site.taxId}</strong>
+        </p>
+      </section>
+
+      <nav aria-label="Footer" class="footer-links">
+        {
+          nav.map((g) => (
+            <div>
+              <h2 class="footer-h">{g.label}</h2>
+              <ul role="list">
+                {g.items.map((i) => (
+                  <li>
+                    <a href={i.href}>{i.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </nav>
+    </div>
+
+    <div class="container footer-ack">
+      <p>{landAcknowledgment}</p>
+    </div>
+
+    <div class="container footer-bottom">
+      <p class="memorial">
+        <Image src={eagleHead} alt="" width={40} class="memorial-eagle" />
+        <span>{memorial}</span>
+      </p>
+      <p>© {year} {site.name}. A nonprofit 501(c)(3) organization.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { color: #e9f3ec; margin-top: var(--space-8); }
+  .footer-wave { color: var(--green-900); line-height: 0; }
+  .footer-wave svg { width: 100%; height: 40px; }
+  .footer-body { background: var(--green-900); padding-block: var(--space-6) var(--space-5); }
+  .footer-grid { display: grid; gap: var(--space-7); grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); }
+  .footer-h {
+    display: flex; align-items: center; gap: var(--space-2);
+    font-size: 1rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-300); margin-bottom: var(--space-4);
+  }
+  .site-footer a:not(.btn) { color: var(--white); text-decoration-color: rgb(228 168 60 / 0.6); }
+  .site-footer a:not(.btn):hover { color: var(--gold-300); }
+  .footer-brand { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+  .footer-eagle { width: 9rem; filter: drop-shadow(0 6px 16px rgb(0 0 0 / 0.35)); }
+  .footer-tag { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: var(--white); }
+  .socials { display: flex; gap: var(--space-2); }
+  .socials a {
+    display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 50%;
+    background: rgb(255 255 255 / 0.08); border: 1px solid rgb(255 255 255 / 0.18);
+  }
+  .socials a:hover { background: var(--gold-500); color: var(--green-900) !important; }
+
+  .bell-list { display: grid; gap: var(--space-3); }
+  .bell-list div { display: grid; grid-template-columns: 3.25rem 1fr; gap: var(--space-3); align-items: baseline; }
+  .bell-list dt { font-family: var(--font-display); font-weight: 800; font-size: 1.125rem; color: var(--white); }
+  .bell-list dd { margin: 0; font-size: var(--fs-sm); color: #c9dccf; }
+  .bell-list .highlight dt { color: var(--gold-300); }
+  .bell-list .highlight dd { color: var(--gold-100); font-weight: 700; }
+
+  address { font-style: normal; line-height: 1.8; }
+  .small { font-size: var(--fs-sm); margin-top: var(--space-4); color: #c9dccf; }
+
+  .footer-links { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); grid-column: 1 / -1; }
+  .footer-links ul { list-style: none; padding: 0; }
+  .footer-links li { margin: 0 0 var(--space-2); font-size: var(--fs-sm); }
+
+  .footer-ack { margin-top: var(--space-7); padding-top: var(--space-5); border-top: 1px solid rgb(255 255 255 / 0.12); }
+  .footer-ack p { font-size: 0.875rem; color: #b5ccbc; max-width: 62rem; }
+  .footer-bottom {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4);
+    margin-top: var(--space-5); font-size: 0.875rem; color: #b5ccbc;
+  }
+  .memorial { display: flex; align-items: center; gap: var(--space-3); font-family: var(--font-display); font-weight: 700; color: var(--gold-100); }
+  .memorial-eagle { width: 2.5rem; border-radius: 50%; background: var(--white); padding: 2px; }
+</style>

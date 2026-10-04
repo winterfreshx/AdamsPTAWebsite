@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import { links, mailto } from '../data/links';
+
+const tiers = [
+  { name: 'Single', price: '$16', text: 'Pays for one adult membership.', href: links.membershipSingle, cta: 'Join as Single', featured: false },
+  { name: 'Dual', price: '$27', text: 'Pays for two members at a discounted rate.', href: links.membershipDual, cta: 'Join as Dual', featured: true },
+  {
+    name: 'Scholarship',
+    price: '$0',
+    text: 'Anyone may request a confidential scholarship to join.',
+    href: mailto('ptapresident@adamselementary.org', 'Scholarship Request for PTA Membership'),
+    cta: 'Request a scholarship',
+    featured: false,
+  },
+];
+---
+
+<BaseLayout title="PTA Membership" description="Join the Adams Elementary PTA: Single $16, Dual $27, or a free confidential scholarship. Memberships run July 1 – June 30.">
+  <PageHero
+    eyebrow="PTA Membership"
+    title="Become a member of the Adams PTA today!"
+    intro="By joining the Adams PTA, you're not only supporting our school but also becoming part of a larger network of state and national PTA organizations. Memberships begin July 1 and are valid through June 30."
+  />
+
+  <section class="section" aria-labelledby="tiers-title">
+    <div class="container">
+      <div class="section-head center">
+        <h2 id="tiers-title">Choose your membership</h2>
+        <p>Select a membership level below to join and pay in the WSPTA member database at Givebacks.com.</p>
+      </div>
+      <div class="tiers">
+        {
+          tiers.map((t) => (
+            <article class:list={['card', 'tier', { featured: t.featured }]}>
+              {t.featured && <span class="badge ribbon">Best value</span>}
+              <h3>{t.name}</h3>
+              <p class="price">{t.price}</p>
+              <p class="tier-text">{t.text}</p>
+              <a class:list={['btn', 'btn-block', t.featured ? 'btn-accent' : '']} href={t.href}>
+                {t.cta}
+                <Icon name={t.name === 'Scholarship' ? 'mail' : 'arrow-right'} />
+              </a>
+            </article>
+          ))
+        }
+      </div>
+      <p class="center muted coming">Coming soon: downloadable membership forms if you'd like to pay by check.</p>
+    </div>
+  </section>
+
+  <section class="section section-tint" aria-labelledby="givebacks-title">
+    <div class="container-narrow stack">
+      <p class="eyebrow">Good to know</p>
+      <h2 id="givebacks-title">What is Givebacks?</h2>
+      <p class="lead">Why does the membership link look different?</p>
+      <p>
+        WSPTA has adopted a new membership platform, so members now join directly in the member database on Givebacks.com.
+        Joining through the links above saves hundreds of volunteer hours that would otherwise go into manually entering
+        every member into the secure state database. You can also connect your membership account to a fundraising system
+        that earns money at selected retailers and even local businesses. You'll receive a digital WSPTA membership card
+        when you join.
+      </p>
+      <p>
+        WSPTA began using Givebacks in 2023/2024. Members can be confident that their personal details are secure, and the
+        system is a positive change for PTAs in Washington State, with extra features that include fundraising options.
+        It's still new to the Adams PTA, so while we learn it, we appreciate your patience with any hiccups.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .tiers { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); align-items: stretch; max-width: 60rem; margin-inline: auto; }
+  .tier { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-2); padding: var(--space-6) var(--space-5); }
+  .tier.featured { border: 3px solid var(--gold-500); box-shadow: var(--shadow); }
+  @media (min-width: 900px) { .tier.featured { transform: translateY(-0.75rem); } }
+  .ribbon { position: absolute; top: -0.8rem; background: var(--gold-500); border-color: var(--gold-500); }
+  .price { font-family: var(--font-display); font-size: 3.25rem; font-weight: 800; color: var(--green-700); line-height: 1; margin: var(--space-2) 0; }
+  .tier-text { color: var(--ink-soft); margin-bottom: var(--space-4); }
+  .tier .btn { margin-top: auto; }
+  .coming { margin-top: var(--space-6); }
+</style>

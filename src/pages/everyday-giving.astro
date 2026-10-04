@@ -1,0 +1,84 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import jar from '../assets/images/donation-jar.jpg';
+import boxTops from '../assets/images/box-tops.png';
+import fredMeyer from '../assets/images/fred-meyer-rewards.jpg';
+import qr from '../assets/images/smith-brothers-qr.jpg';
+import { links } from '../data/links';
+---
+
+<BaseLayout title="Everyday Ways to Give" description="Small, everyday ways to support Adams Elementary: direct donations, Box Tops, Fred Meyer Community Rewards and Smith Brothers Farms.">
+  <PageHero
+    eyebrow="Everyday giving"
+    title="Small things add up"
+    intro="All donations to the Adams PTA, made directly or through the programs below, support the students, teachers and staff at Adams. Supporting Adams doesn't have to take a lot of time or money."
+  />
+
+  <section class="section">
+    <div class="container ways">
+      <article class="way card">
+        <Image src={jar} alt="" width={240} class="way-img" />
+        <div class="stack">
+          <h2>Donate directly to the Adams PTA</h2>
+          <p>
+            The Adams PTA accepts donations of all sizes (cash, check or credit card) all year round. Adams PTA is a 501(c)(3)
+            nonprofit, and your donation is 100% tax deductible.
+          </p>
+          <a class="btn btn-accent" href={links.donateGeneral}><Icon name="heart" /> Donate today</a>
+        </div>
+      </article>
+
+      <article class="way card">
+        <Image src={boxTops} alt="Box Tops for Education: no more clipping, scan your receipt" width={240} class="way-img" />
+        <div class="stack">
+          <h2>Box Tops for Education</h2>
+          <p>
+            Box Tops is now digital-only. Use the Box Tops app to scan your receipt. Box Tops are still worth 10¢ each, and the
+            app finds participating products bought at any store and adds cash to our school's earnings.
+          </p>
+          <a class="btn" href={links.boxTops}>Learn more & get the app <Icon name="external" /></a>
+        </div>
+      </article>
+
+      <article class="way card">
+        <Image src={fredMeyer} alt="Fred Meyer Community Rewards" width={240} class="way-img" />
+        <div class="stack">
+          <h2>Fred Meyer Community Rewards</h2>
+          <p>
+            Link your Fred Meyer Rewards card to Adams PTA! Use code <strong class="code">91334</strong> or search for Adams
+            Elementary in the Community Rewards enrollment section. You'll still keep your own rewards points, fuel points and
+            rebates.
+          </p>
+          <a class="btn" href={links.fredMeyerRewards}>Link your card <Icon name="external" /></a>
+        </div>
+      </article>
+
+      <article class="way card">
+        <Image src={qr} alt="QR code for the Adams PTA Smith Brothers Farms sign-up" width={240} class="way-img qr" />
+        <div class="stack">
+          <h2>Smith Brothers Farms</h2>
+          <p>
+            Sign up for home grocery delivery with the code <strong class="code">ADAMSPTA</strong>. You'll get $15 off your first
+            delivery, and Adams receives a $50 donation.
+          </p>
+          <a class="btn" href={links.smithBrothers}>smithbrothersfarms.com <Icon name="external" /></a>
+        </div>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .ways { display: grid; gap: var(--space-5); }
+  .way { display: grid; gap: var(--space-5); align-items: center; padding: var(--space-6); }
+  @media (min-width: 720px) { .way { grid-template-columns: 12rem 1fr; } }
+  .way h2 { font-size: var(--fs-h3); }
+  .way .btn { justify-self: start; }
+  .way .stack { display: flex; flex-direction: column; align-items: flex-start; }
+  :global(.way-img) { width: 12rem; max-width: 100%; border-radius: var(--radius); margin-inline: auto; }
+  :global(.way-img.qr) { width: 9rem; }
+  .code { background: var(--gold-100); border: 1px dashed var(--gold-500); padding: 0.05rem 0.45rem; border-radius: 0.4rem; font-family: ui-monospace, monospace; }
+</style>

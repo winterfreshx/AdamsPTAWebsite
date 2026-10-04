@@ -1,0 +1,41 @@
+---
+import Icon from './Icon.astro';
+
+// A whole-card link with an icon, title and short description.
+interface Props {
+  href: string;
+  title: string;
+  icon: Parameters<typeof Icon>[0]['name'];
+  tone?: 'green' | 'gold';
+}
+const { href, title, icon, tone = 'green' } = Astro.props;
+---
+
+<a href={href} class:list={['action-card', tone]}>
+  <span class="ac-icon"><Icon name={icon} size={26} /></span>
+  <span class="ac-body">
+    <span class="ac-title">{title}</span>
+    <span class="ac-text"><slot /></span>
+  </span>
+  <Icon name="arrow-right" size={20} class="ac-arrow" />
+</a>
+
+<style>
+  .action-card {
+    display: flex; align-items: flex-start; gap: var(--space-4); height: 100%;
+    padding: var(--space-5); border-radius: var(--radius); text-decoration: none; color: var(--ink);
+    background: var(--white); border: 1px solid var(--line); box-shadow: var(--shadow-sm);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  .action-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--gold-300); color: var(--ink); }
+  .ac-icon {
+    flex: none; display: grid; place-items: center; width: 3.25rem; height: 3.25rem; border-radius: 0.9rem;
+    background: var(--green-100); color: var(--green-700);
+  }
+  .gold .ac-icon { background: var(--gold-100); color: #8a5a00; }
+  .ac-body { display: flex; flex-direction: column; gap: 0.2rem; flex: 1; }
+  .ac-title { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; color: var(--green-900); }
+  .ac-text { font-size: var(--fs-sm); color: var(--ink-soft); }
+  .action-card :global(.ac-arrow) { flex: none; align-self: center; color: var(--gold-500); transition: transform 0.18s ease; }
+  .action-card:hover :global(.ac-arrow) { transform: translateX(3px); }
+</style>

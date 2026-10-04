@@ -1,0 +1,16 @@
+---
+import MessageLayout from '../layouts/MessageLayout.astro';
+import { site } from '../data/site';
+---
+
+<!-- D1: this was a password-protected Wix page. Replace with a link to the shared binder once the PTA moves it. -->
+<MessageLayout title="Staff Appreciation Binder" heading="Staff Appreciation Binder">
+  <p>
+    The staff favorites binder is private to Adams families. To get access, contact your
+    <a href="/resources#grade-reps">grade rep</a>, check the school newsletter, or email
+    <a href={`mailto:${site.email}`}>{site.email}</a>.
+  </p>
+  <div class="btn-row">
+    <a class="btn btn-ghost" href="/we-appreciate-adams">Back to Staff Appreciation</a>
+  </div>
+</MessageLayout>
