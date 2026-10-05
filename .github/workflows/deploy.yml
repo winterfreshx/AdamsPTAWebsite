@@ -28,9 +28,21 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # Ask GitHub Pages where the site is served. Before the custom domain is connected that's
+      # https://winterfreshx.github.io with base_path /AdamsPTAWebsite; afterwards it's the custom domain with
+      # an empty base_path. The build, verify and audit all follow automatically (see astro.config.mjs).
+      - id: pages
+        uses: actions/configure-pages@v5
       - run: npm run build
+        env:
+          SITE_URL: ${{ steps.pages.outputs.origin }}
+          SITE_BASE: ${{ steps.pages.outputs.base_path }}
       - run: npm run verify
+        env:
+          SITE_BASE: ${{ steps.pages.outputs.base_path }}
       - run: npm run audit:contrast # rendered-color WCAG check; ubuntu-latest ships Google Chrome
+        env:
+          SITE_BASE: ${{ steps.pages.outputs.base_path }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

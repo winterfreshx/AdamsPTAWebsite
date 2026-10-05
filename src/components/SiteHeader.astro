@@ -4,8 +4,9 @@ import eagle from '../assets/images/eagle-logo.png';
 import { nav, donateCta } from '../data/nav';
 import Icon from './Icon.astro';
 import { scheduledHref } from '../data/schedule';
+import { sitePath } from '../lib/paths';
 
-const current = Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
+const current = sitePath(Astro.url.pathname);
 const isCurrent = (href: string) => href === current;
 const donateHref = scheduledHref(donateCta.window, donateCta.during, donateCta.otherwise);
 const groupIsCurrent = (items: { href: string }[]) => items.some((i) => isCurrent(i.href));

@@ -9,6 +9,8 @@ import { extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const dist = fileURLToPath(new URL('../dist/', import.meta.url));
+// Sub-folder the site was built for ("" at a domain root). Must match the SITE_BASE used for `npm run build`.
+const BASE = (process.env.SITE_BASE || '').replace(/\/$/, '');
 if (!existsSync(dist)) { console.error('dist/ not found, so run `npm run build` first.'); process.exit(1); }
 
 const chromePath = [
@@ -25,6 +27,10 @@ if (!chromePath) { console.error('Google Chrome not found; set CHROME_PATH.'); p
 const types = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.webp': 'image/webp', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.xml': 'application/xml' };
 const server = createServer((req, res) => {
   let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+  if (BASE) {
+    if (p !== BASE && !p.startsWith(BASE + '/')) { res.writeHead(404); return res.end(); } // like GitHub Pages: only the sub-folder exists
+    p = p.slice(BASE.length) || '/';
+  }
   if (p.endsWith('/')) p += 'index.html';
   let file = join(dist, p);
   if (!existsSync(file) && existsSync(file + '.html')) file += '.html';
@@ -99,7 +105,9 @@ const AUDIT = `(() => {
     checked++;
     if (r < need) fails.push({ text: text.slice(0, 50), el: el.tagName.toLowerCase() + [...el.classList].filter((c) => !c.startsWith('astro-')).map((c) => '.' + c).join(''), fg: hex(fg), bg: hex(bg), ratio: +r.toFixed(2), need });
   }
-  return { fails, checked, skips };
+  // The page background is --paper only when global.css loaded; a broken stylesheet URL would otherwise pass.
+  const stylesLoaded = getComputedStyle(document.body).backgroundColor === 'rgb(255, 253, 247)';
+  return { fails, checked, skips, stylesLoaded };
 })()`;
 
 const pages = readdirSync(dist, { recursive: true })
@@ -112,10 +120,11 @@ for (const width of [375, 1280]) {
   for (const f of pages) {
     const path = f === 'index.html' ? '/' : '/' + f.replace(/\.html$/, '');
     const loaded = once('Page.loadEventFired');
-    await send('Page.navigate', { url: base + path });
+    await send('Page.navigate', { url: base + BASE + path });
     await Promise.race([loaded, sleep(5000)]);
     const res = (await send('Runtime.evaluate', { expression: AUDIT, returnByValue: true })).result?.result?.value;
     if (!res) { console.log(`  ✗ ${path} @${width}px: audit failed to run`); failures++; continue; }
+    if (!res.stylesLoaded) { failures++; console.log(`  ✗ ${path} @${width}px: site stylesheet did not load`); }
     totalChecked += res.checked;
     totalSkipped += res.skips.length;
     if (process.env.AUDIT_VERBOSE) res.skips.forEach((x) => console.log(`  · skipped ${path} @${width}px  ${x}`));

@@ -7,6 +7,8 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const dist = join(root, 'dist');
 const crawlDir = join(root, 'designs/crawl');
+// Sub-folder the site was built for ("" at a domain root). Must match the SITE_BASE used for `npm run build`.
+const BASE = (process.env.SITE_BASE || '').replace(/\/$/, '');
 let failures = 0;
 const fail = (msg) => { failures++; console.log(`  ✗ ${msg}`); };
 const ok = (msg) => console.log(`  ✓ ${msg}`);
@@ -72,7 +74,9 @@ ok(`${crawledPaths.length} Wix paths checked`);
 // ---- 9.3 Internal links resolve --------------------------------------------------
 console.log('\n9.3 Internal links resolve');
 const internal = [...allHrefs].filter((h) => h.startsWith('/') && !h.startsWith('//'));
-for (const h of internal) {
+for (const raw of internal) {
+  if (BASE && raw !== BASE && !raw.startsWith(BASE + '/') && !raw.startsWith(BASE + '#')) { fail(`link missing the ${BASE} base path: ${raw}`); continue; }
+  const h = BASE ? raw.slice(BASE.length) || '/' : raw;
   const [path, hash] = h.split('#');
   const clean = path.replace(/\/$/, '') || '/';
   const candidates = clean === '/' ? ['index.html'] : [`${clean.slice(1)}.html`, clean.slice(1), `${clean.slice(1)}/index.html`];
@@ -80,7 +84,7 @@ for (const h of internal) {
   if (!target) { fail(`broken internal link: ${h}`); continue; }
   if (hash && pages[target] && !pages[target].includes(`id="${hash}"`)) fail(`missing anchor #${hash} on ${clean}`);
 }
-ok(`${internal.length} unique internal links checked`);
+ok(`${internal.length} unique internal links checked${BASE ? ` (base ${BASE})` : ''}`);
 
 // ---- 9.4 Images have alt -------------------------------------------------------------
 console.log('\n9.4 Every <img> has an alt attribute');
