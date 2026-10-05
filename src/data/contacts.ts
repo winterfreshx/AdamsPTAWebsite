@@ -37,16 +37,18 @@ export const ptaInboxes = [
 ];
 
 // Grade reps for the 2026/27 school year, by graduating class (K = Class of 2032 … 5th = Class of 2027).
-// Inboxes come from the Wix Resources page, which had several mailto links pointing at the wrong inbox;
-// these use the address that was displayed. A class with no known rep inbox falls back to the exec team.
-// TODO(PTA) D2: confirm 2026/27 reps. "rep2020" is probably meant to be "rep2030"; add the Class of 2032 inbox.
+// Each class's inbox follows the rep<class year>@ pattern. (The Wix site showed "rep2020@" for the Class of 2030
+// and had no Class of 2032 inbox; both were corrected to match their class year.)
+// A class without an inbox falls back to the exec team on the Resources page.
+const rep = (classOf: string) => `rep${classOf}@adamselementary.org`;
+
 export const gradeReps: { classOf: string; grade: string; email?: string; facebook?: string }[] = [
-  { classOf: '2032', grade: 'Kindergarten' },
-  { classOf: '2031', grade: '1st grade', email: 'rep2031@adamselementary.org' },
-  { classOf: '2030', grade: '2nd grade', email: 'rep2020@adamselementary.org' },
-  { classOf: '2029', grade: '3rd grade', email: 'rep2029@adamselementary.org', facebook: 'https://www.facebook.com/groups/532687575498486' },
-  { classOf: '2028', grade: '4th grade', email: 'rep2028@adamselementary.org', facebook: 'https://www.facebook.com/groups/613223476577940' },
-  { classOf: '2027', grade: '5th grade', email: 'rep2027@adamselementary.org', facebook: 'https://www.facebook.com/groups/889714471858039' },
+  { classOf: '2032', grade: 'Kindergarten', email: rep('2032') },
+  { classOf: '2031', grade: '1st grade', email: rep('2031') },
+  { classOf: '2030', grade: '2nd grade', email: rep('2030') },
+  { classOf: '2029', grade: '3rd grade', email: rep('2029'), facebook: 'https://www.facebook.com/groups/532687575498486' },
+  { classOf: '2028', grade: '4th grade', email: rep('2028'), facebook: 'https://www.facebook.com/groups/613223476577940' },
+  { classOf: '2027', grade: '5th grade', email: rep('2027'), facebook: 'https://www.facebook.com/groups/889714471858039' },
 ];
 
 export const schoolContacts = {

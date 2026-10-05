@@ -115,7 +115,7 @@ has appeared, someone has set up email on this domain, and it must be preserved.
 | ID | Decision | What the site does now |
 |----|----------|------------------------|
 | D1 | The 2024/25 directory and the Staff Appreciation Binder were password-protected Wix pages. A static site can't do real password protection. | `/school-directory` points families to the Konstella directory. The binder page explains how to get access. Put the binder in a Google Drive file shared with Adams families and paste its link into `links.staffAppreciationBinder`. |
-| D2 | Grade reps for 2026/27. The old site's list was stale and had mismatched email links. | Shows the Classes of 2027–2032 (K–5th grade). Inboxes come from the old Resources page, with the mailto bugs fixed. The Class of 2032 has no known rep inbox, so it points to the exec team for now. Please confirm the list, especially `rep2020@` (probably meant to be `rep2030@`). |
+| D2 | Grade reps for 2026/27 | Resolved: the Classes of 2027–2032 (5th grade–K) each use the `rep<class year>@adamselementary.org` inbox. The Wix site's `rep2020@` (Class of 2030) is now `rep2030@`, and `rep2032@` was added for kindergarten. Make sure those two inboxes exist. |
 | D3 | Future Families tour dates | Says "January, details coming soon." The outdated principal name was removed. |
 | D4 | Moveathon page shows the May 2026 event | Kept as last year's recap with sponsors, to be refreshed for Spring 2027. |
 | D5 | When to switch the domain from Wix | Hosting is GitHub Pages (the repo is public and Pages is enabled). The site isn't launched until the domain's DNS points at GitHub. Follow the launch-day steps under [Deploying](#deploying). |

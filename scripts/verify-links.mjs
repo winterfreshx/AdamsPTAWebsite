@@ -44,6 +44,7 @@ const ALLOW = {
   'mailto:rep2024@adamselementary.org': 'class of 2024 has graduated (stale Grade Reps page)',
   'mailto:rep2025@adamselementary.org': 'class of 2025 has graduated (stale Grade Reps page)',
   'mailto:rep2026@adamselementary.org': 'class of 2026 graduated in June 2026',
+  'mailto:rep2020@adamselementary.org': 'shown for the Class of 2030 on Wix; corrected to rep2030@ to match the class year',
   'mailto:fundraising@adamselementary.org': 'only on the retired /fundraisingold page',
   'mailto:execteam-group@adamselementary.org': 'only on the retired /fundraisingold page',
 };
