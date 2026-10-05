@@ -2,7 +2,6 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import basePath from './integrations/base-path.mjs';
-import externalLinks from './integrations/external-links.mjs';
 
 // Where the site is served. Defaults to the real domain at its root. In CI, GitHub's configure-pages
 // step supplies these: before the custom domain is connected that's https://winterfreshx.github.io
@@ -46,9 +45,8 @@ export default defineConfig({
         return !NOINDEX.includes(path);
       },
     }),
-    // These run after the pages are written. externalLinks: links to other sites open in a new tab with an icon.
-    externalLinks(),
-    // basePath: prefixes root-relative links with SITE_BASE.
+    // Runs after the pages are written: prefixes root-relative links with SITE_BASE. (External links are handled
+    // by src/middleware.ts, which also runs in the dev server.)
     basePath(),
   ],
 });

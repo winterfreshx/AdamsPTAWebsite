@@ -1,5 +1,6 @@
-// Every link to another website opens in a new tab and says so. Runs on the built HTML, so page code just writes
-// <a href="https://…"> and never has to remember target/rel or the icon.
+// Every link to another website opens in a new tab and says so. Applied to every page by src/middleware.ts (in the
+// dev server and in the static build), so page code just writes <a href="https://…"> and never has to remember
+// target/rel or the icon.
 //
 // For each external link (http/https to a different host than the site), this adds:
 // - target="_blank" rel="noopener noreferrer"
@@ -8,10 +9,6 @@
 // - hidden "(opens in a new tab)" text for screen readers. Icon-only links (e.g. the footer's Instagram circle)
 //   get it in their aria-label and no visible icon.
 // mailto:, tel: and same-site links are left alone.
-import { readdir, readFile, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 const EXTERNAL_PATH = 'M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6';
 const ARROW_PATH = 'M5 12h14M13 6l6 6-6 6';
 const NEW_TAB_TEXT = '(opens in a new tab)';
@@ -62,28 +59,4 @@ export function markExternalLinks(html, hosts) {
     if (!body.includes(NEW_TAB_TEXT)) body += SR_TEXT;
     return `<a${a}>${body}</a>`;
   });
-}
-
-export default function externalLinks() {
-  let hosts = siteHosts();
-  return {
-    name: 'adams:external-links',
-    hooks: {
-      'astro:config:done': ({ config }) => {
-        hosts = siteHosts(config.site);
-      },
-      'astro:build:done': async ({ dir, logger }) => {
-        const root = fileURLToPath(dir);
-        const files = (await readdir(root, { recursive: true })).filter((f) => f.endsWith('.html'));
-        let changed = 0;
-        for (const f of files) {
-          const p = join(root, f);
-          const html = await readFile(p, 'utf8');
-          const out = markExternalLinks(html, hosts);
-          if (out !== html) { await writeFile(p, out); changed++; }
-        }
-        logger.info(`external links open in a new tab with an icon (${changed} pages)`);
-      },
-    },
-  };
 }
