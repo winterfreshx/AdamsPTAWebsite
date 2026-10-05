@@ -28,8 +28,9 @@ Before calling any change done, run all five, in order, and fix every failure:
 npm run build && npm run verify && npm run test:links && npm run audit:contrast && npm run test:menu
 ```
 
-CI runs the same sequence before every deploy. For a sub-folder build (the GitHub Pages preview), prefix each step with
-`SITE_BASE=/AdamsPTAWebsite` (and `SITE_URL=https://winterfreshx.github.io` for the build).
+CI runs the same sequence before every deploy. Production is the domain root, so the plain commands above match it. The
+sub-folder variant (`SITE_BASE=/AdamsPTAWebsite`, plus `SITE_URL=https://winterfreshx.github.io` for the build) only
+applies if the custom domain is ever disconnected, but the base-path code still has to keep working.
 
 There is no unit-test runner or linter. `scripts/verify-links.mjs` fails if any of these break:
 - every outside link and email from the Wix crawl still appears in `dist/` (anything deliberately removed must be added to the `ALLOW` map, with a reason)
@@ -102,5 +103,5 @@ The five sections run in parallel, each in its own browser, and the whole suite 
 ## Content conventions
 
 - Search for `TODO(PTA)` to find content waiting on a PTA decision. Decisions for the PTA board are listed in the README (none open right now; D1–D6 are resolved and recorded there). New ones get the next ID (D7…), are never renumbered, and are marked in code with `TODO(PTA) Dn`. `designs/PLAN.md` §8 has the original D1–D6 list. Don't invent names, dates or addresses to fill those gaps.
-- Deployment is GitHub Pages through `.github/workflows/deploy.yml` (the repo is public). The site is **not launched yet**: until the custom domain points at GitHub it's served at `winterfreshx.github.io/AdamsPTAWebsite/`. The domain is registered and its DNS managed at Wix. Cutover steps are in the README.
+- **The site is live** at https://www.adamselementarypta.org (launched October 4, 2026) on GitHub Pages, deployed by `.github/workflows/deploy.yml` (the repo is public; Pages source = GitHub Actions). Every push to `main` deploys to production after the checks pass, so treat `main` as live. The domain and its DNS stay at Wix: A records → GitHub's IPs, `www` → `winterfreshx.github.io`. The full record list, rollback and remaining post-launch to-dos are in the README under Deploying.
 - The repo lives under `~/Documents`, and iCloud sync has created `* 2.*` duplicate copies of files before. Astro builds duplicate pages as real routes, so stage files explicitly rather than with `git add -A`.
