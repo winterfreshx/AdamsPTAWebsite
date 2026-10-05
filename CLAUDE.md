@@ -52,5 +52,5 @@ There is no test runner or linter. CI runs build → verify → audit:contrast b
 ## Content conventions
 
 - Search for `TODO(PTA)` to find content waiting on a PTA decision. Decisions D1–D6 are explained in the README and in `designs/PLAN.md` §8. Don't invent names, dates or addresses to fill those gaps.
-- Deployment is GitHub Pages through `.github/workflows/deploy.yml`. `public/CNAME` sets the custom domain, and the DNS cutover steps are in the README.
+- Deployment targets GitHub Pages through `.github/workflows/deploy.yml`, and the repo is public with Pages set to deploy from Actions. The site is **not launched yet**: until the custom domain points at GitHub, it's served under `/AdamsPTAWebsite/` on github.io, where its root-relative links and styles break. The domain is registered and its DNS managed at Wix. `public/CNAME` sets the custom domain, and the cutover steps are in the README.
 - The repo lives under `~/Documents`, and iCloud sync has created `* 2.*` duplicate copies of files before. Astro builds duplicate pages as real routes, so stage files explicitly rather than with `git add -A`.
