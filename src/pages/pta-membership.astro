@@ -6,16 +6,17 @@ import Icon from '../components/Icon.astro';
 import { links, mailto } from '../data/links';
 
 const tiers = [
-  { name: 'Single', price: '$16', text: 'Pays for one adult membership.', href: links.membershipSingle, cta: 'Join as Single' },
-  { name: 'Dual', price: '$27', text: 'Pays for two members at a discounted rate.', href: links.membershipDual, cta: 'Join as Dual' },
+  { name: 'Single', price: '$16', text: 'Pays for one adult membership.', href: links.membershipSingle, cta: 'Join as Single', icon: 'arrow-right' },
+  { name: 'Dual', price: '$27', text: 'Pays for two members at a discounted rate.', href: links.membershipDual, cta: 'Join as Dual', icon: 'arrow-right' },
   {
     name: 'Scholarship',
     price: '$0',
     text: 'Anyone may request a confidential scholarship to join.',
     href: mailto(inbox.president, 'Scholarship Request for PTA Membership'),
     cta: 'Request a scholarship',
+    icon: 'mail',
   },
-];
+] as const;
 ---
 
 <BaseLayout title="PTA Membership" description="Join the Adams Elementary PTA: Single $16, Dual $27, or a free confidential scholarship. Memberships run July 1 – June 30.">
@@ -40,7 +41,7 @@ const tiers = [
               <p class="tier-text">{t.text}</p>
               <a class="btn btn-block" href={t.href}>
                 {t.cta}
-                <Icon name={t.name === 'Scholarship' ? 'mail' : 'arrow-right'} />
+                <Icon name={t.icon} />
               </a>
             </article>
           ))
