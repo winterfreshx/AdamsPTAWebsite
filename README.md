@@ -44,9 +44,12 @@ that needs a decision or a yearly refresh.
 Every push to `main` runs `.github/workflows/deploy.yml`: build → `verify` → `audit:contrast` → deploy to GitHub Pages.
 Dated content switches over in visitors' browsers, so it doesn't depend on a rebuild.
 
-> **Current status (October 2026): the site is not live yet.** The build, verify and contrast-audit steps pass, but the
-> final *deploy* step fails because GitHub Pages isn't enabled. This repo is **private**, and GitHub Pages for private
-> repos requires a paid GitHub plan. Pick a hosting option below (decision D5) before launch.
+> **Current status (October 2026): not launched yet.** The repo is **public**, and GitHub Pages is enabled with
+> *Source = GitHub Actions*, so deploys from `main` now succeed. Until the custom domain is connected, though, GitHub
+> serves the site at `https://winterfreshx.github.io/AdamsPTAWebsite/`, under an `/AdamsPTAWebsite/` sub-folder. The
+> site is built for the root of a domain (links and styles use paths like `/about-our-pta`), so at that address the
+> styles and internal links break. It works as built once `www.adamselementarypta.org` points at GitHub Pages (see the
+> launch-day steps below).
 
 ### Hosting options
 
@@ -55,9 +58,8 @@ is to **keep the domain at Wix and host the site elsewhere.**
 
 | Option | Cost | Notes |
 |--------|------|-------|
-| **Netlify** or **Cloudflare Pages** with a private repo (recommended) | Free | Gives a preview link for every PR, so the board can review changes before merging. Needs a small config file and connecting the repo in their dashboard. |
-| **GitHub Pages**, repo made **public** | Free | The workflow is already set up. The code holds nothing secret (only the PTA's public links and email addresses). Set *Settings → Pages → Source* to **GitHub Actions**. |
-| **GitHub Pages**, repo stays private | Paid GitHub plan (Pro, Team or Enterprise) | Same as above, with the upgrade. |
+| **Netlify** or **Cloudflare Pages** | Free | Gives a preview link for every PR, so the board can review changes before merging. Needs a small config file and connecting the repo in their dashboard. |
+| **GitHub Pages** (current setup: the repo is public) | Free | Done: *Settings → Pages → Source* is **GitHub Actions**, and the workflow deploys on every push to `main`. No per-PR previews. |
 | Rebuild the design inside Wix's editor | Wix Premium plan | Stays on one platform, but loses this codebase, the automated checks and the faster mobile pages. |
 
 ### The domain and Wix (checked October 4, 2026)
@@ -107,5 +109,5 @@ has appeared, someone has set up email on this domain, and it must be preserved.
 | D2 | Grade reps for 2026/27. The old site's list was stale and had mismatched email links. | Shows the Classes of 2027–2032 (K–5th grade). Inboxes come from the old Resources page, with the mailto bugs fixed. The Class of 2032 has no known rep inbox, so it points to the exec team for now. Please confirm the list, especially `rep2020@` (probably meant to be `rep2030@`). |
 | D3 | Future Families tour dates | Says "January, details coming soon." The outdated principal name was removed. |
 | D4 | Moveathon page shows the May 2026 event | Kept as last year's recap with sponsors, to be refreshed for Spring 2027. |
-| D5 | Where to host, and when to switch the domain from Wix | Not live yet: the private repo can't use GitHub Pages on a free plan. Choose an option under [Hosting options](#hosting-options), then follow the launch-day steps. |
+| D5 | When to switch the domain from Wix | Hosting is GitHub Pages (the repo is public and Pages is enabled). The site isn't launched until the domain's DNS points at GitHub. Follow the launch-day steps under [Deploying](#deploying). |
 | D6 | Big Give live totals | Goals are shown. Update `bigGive.raised` to show progress bars. |
