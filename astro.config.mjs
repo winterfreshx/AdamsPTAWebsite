@@ -1,6 +1,13 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import basePath from './integrations/base-path.mjs';
+
+// Where the site is served. Defaults to the real domain at its root. In CI, GitHub's configure-pages
+// step supplies these: before the custom domain is connected that's https://winterfreshx.github.io
+// with base /AdamsPTAWebsite, and afterwards the custom domain with no base, with no code change needed.
+const SITE_URL = process.env.SITE_URL || 'https://www.adamselementarypta.org';
+const SITE_BASE = (process.env.SITE_BASE || '').replace(/\/$/, '');
 
 // Pages that should never show up in search results (PayPal return pages, info stubs).
 const NOINDEX = [
@@ -15,7 +22,8 @@ const NOINDEX = [
 ];
 
 export default defineConfig({
-  site: 'https://www.adamselementarypta.org',
+  site: SITE_URL,
+  base: SITE_BASE || undefined,
   // "file" output keeps the exact Wix-style URLs: /about-our-pta (no trailing slash).
   build: { format: 'file' },
   // Keep whitespace between text and inline links (compression was gluing words to links).
@@ -31,7 +39,12 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      filter: (page) => !NOINDEX.some((p) => new URL(page).pathname.replace(/\.html$/, '') === p),
+      filter: (page) => {
+        const path = new URL(page).pathname.slice(SITE_BASE.length).replace(/\.html$/, '');
+        return !NOINDEX.includes(path);
+      },
     }),
+    // Must run after the pages are written: prefixes root-relative links with SITE_BASE.
+    basePath(),
   ],
 });

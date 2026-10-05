@@ -5,6 +5,7 @@ import SiteFooter from '../components/SiteFooter.astro';
 import AnnouncementBar from '../components/AnnouncementBar.astro';
 import { site } from '../data/site';
 import { TIME_ZONE } from '../data/schedule';
+import { sitePath, withBase } from '../lib/paths';
 
 interface Props {
   title: string;
@@ -13,10 +14,10 @@ interface Props {
 }
 
 const { title, description = site.description, noindex = false } = Astro.props;
-const fullTitle = Astro.url.pathname === '/' ? `${site.name} | Seattle, WA` : `${title} | ${site.name}`;
-const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '/');
-const canonical = new URL(path, Astro.site).href;
-const ogImage = new URL('/og-image.png', Astro.site).href;
+const path = sitePath(Astro.url.pathname);
+const fullTitle = path === '/' ? `${site.name} | Seattle, WA` : `${title} | ${site.name}`;
+const canonical = new URL(withBase(path), Astro.site).href;
+const ogImage = new URL(withBase('/og-image.png'), Astro.site).href;
 ---
 
 <!doctype html>

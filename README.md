@@ -44,12 +44,20 @@ that needs a decision or a yearly refresh.
 Every push to `main` runs `.github/workflows/deploy.yml`: build → `verify` → `audit:contrast` → deploy to GitHub Pages.
 Dated content switches over in visitors' browsers, so it doesn't depend on a rebuild.
 
-> **Current status (October 2026): not launched yet.** The repo is **public**, and GitHub Pages is enabled with
-> *Source = GitHub Actions*, so deploys from `main` now succeed. Until the custom domain is connected, though, GitHub
-> serves the site at `https://winterfreshx.github.io/AdamsPTAWebsite/`, under an `/AdamsPTAWebsite/` sub-folder. The
-> site is built for the root of a domain (links and styles use paths like `/about-our-pta`), so at that address the
-> styles and internal links break. It works as built once `www.adamselementarypta.org` points at GitHub Pages (see the
-> launch-day steps below).
+> **Current status (October 2026): not launched yet.** The repo is public and GitHub Pages is enabled with
+> *Source = GitHub Actions*. Until the custom domain is connected, the site is published at
+> **https://winterfreshx.github.io/AdamsPTAWebsite/**, which works as a full preview for the PTA board. Launch means
+> pointing `www.adamselementarypta.org` at GitHub Pages (see the launch-day steps below).
+
+**Sub-folder vs. domain root:** the build adapts automatically. CI asks GitHub Pages where the site is served
+(`actions/configure-pages`) and passes that to the build as `SITE_URL` and `SITE_BASE`. Before launch that's the
+`/AdamsPTAWebsite` sub-folder; after the custom domain is set it's the domain root, with no code change. To build the
+sub-folder version locally:
+
+```sh
+SITE_URL=https://winterfreshx.github.io SITE_BASE=/AdamsPTAWebsite npm run build
+SITE_BASE=/AdamsPTAWebsite npm run verify && SITE_BASE=/AdamsPTAWebsite npm run audit:contrast
+```
 
 ### Hosting options
 
@@ -59,7 +67,7 @@ is to **keep the domain at Wix and host the site elsewhere.**
 | Option | Cost | Notes |
 |--------|------|-------|
 | **Netlify** or **Cloudflare Pages** | Free | Gives a preview link for every PR, so the board can review changes before merging. Needs a small config file and connecting the repo in their dashboard. |
-| **GitHub Pages** (current setup: the repo is public) | Free | Done: *Settings → Pages → Source* is **GitHub Actions**, and the workflow deploys on every push to `main`. No per-PR previews. |
+| **GitHub Pages** (current setup: the repo is public) | Free | Done: *Settings → Pages → Source* is **GitHub Actions**, and the workflow deploys on every push to `main`. Preview at `winterfreshx.github.io/AdamsPTAWebsite/` until launch. No per-PR previews. |
 | Rebuild the design inside Wix's editor | Wix Premium plan | Stays on one platform, but loses this codebase, the automated checks and the faster mobile pages. |
 
 ### The domain and Wix (checked October 4, 2026)
@@ -77,12 +85,13 @@ has appeared, someone has set up email on this domain, and it must be preserved.
 
 ### Launch day: moving the domain off Wix hosting
 
-1. **Set up hosting** (see the options above) and review the site at its free address (`….netlify.app`, `….pages.dev`
-   or `<user>.github.io/…`) with the PTA board. Resolve the open decisions below.
+1. **Review the site** at https://winterfreshx.github.io/AdamsPTAWebsite/ with the PTA board (or at `….netlify.app` /
+   `….pages.dev` if you switch hosts). Resolve the open decisions below.
 2. **In Wix, open Domains → `adamselementarypta.org` → Manage DNS records** and point the domain at the new host:
    - **GitHub Pages:** apex `@` → **A** records `185.199.108.153`, `185.199.109.153`, `185.199.110.153`,
      `185.199.111.153`; `www` → **CNAME** → `<github-username>.github.io`. Then in *Settings → Pages*, enter
-     `www.adamselementarypta.org` as the custom domain and turn on **Enforce HTTPS**.
+     `www.adamselementarypta.org` as the custom domain and turn on **Enforce HTTPS**. Then re-run the latest
+     deploy workflow: the next build picks up the domain root automatically, and the github.io address starts redirecting to it.
    - **Netlify / Cloudflare Pages:** add `www.adamselementarypta.org` as a custom domain in their dashboard, then copy
      the records it shows into Wix's DNS settings.
 
@@ -106,7 +115,7 @@ has appeared, someone has set up email on this domain, and it must be preserved.
 | ID | Decision | What the site does now |
 |----|----------|------------------------|
 | D1 | The 2024/25 directory and the Staff Appreciation Binder were password-protected Wix pages. A static site can't do real password protection. | `/school-directory` points families to the Konstella directory. The binder page explains how to get access. Put the binder in a Google Drive file shared with Adams families and paste its link into `links.staffAppreciationBinder`. |
-| D2 | Grade reps for 2026/27. The old site's list was stale and had mismatched email links. | Shows the Classes of 2027–2032 (K–5th grade). Inboxes come from the old Resources page, with the mailto bugs fixed. The Class of 2032 has no known rep inbox, so it points to the exec team for now. Please confirm the list, especially `rep2020@` (probably meant to be `rep2030@`). |
+| D2 | Grade reps for 2026/27 | Resolved: the Classes of 2027–2032 (5th grade–K) each use the `rep<class year>@adamselementary.org` inbox. The Wix site's `rep2020@` (Class of 2030) is now `rep2030@`, and `rep2032@` was added for kindergarten. Make sure those two inboxes exist. |
 | D3 | Future Families tour dates | Says "January, details coming soon." The outdated principal name was removed. |
 | D4 | Moveathon page shows the May 2026 event | Kept as last year's recap with sponsors, to be refreshed for Spring 2027. |
 | D5 | When to switch the domain from Wix | Hosting is GitHub Pages (the repo is public and Pages is enabled). The site isn't launched until the domain's DNS points at GitHub. Follow the launch-day steps under [Deploying](#deploying). |
