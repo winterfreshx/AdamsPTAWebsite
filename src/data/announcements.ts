@@ -13,10 +13,13 @@ export const bigGive = {
   window: { starts: '2026-10-01', expires: '2026-10-31' } satisfies DateWindow,
   dates: 'October 1–31',
   perChildAsk: 700,
-  communityGoal: 100_000,
-  corporateGoal: 50_000,
-  // TODO(PTA): update the amount raised during the campaign; it moves the progress bars on the home and Big Give pages.
-  raised: { community: 9_492.47, corporate: 0 },
+  // The goal we highlight: what we raise from our own community.
+  goal: 100_000,
+  // Corporate matching on top of the community goal; mentioned as a bonus, not part of the headline goal.
+  corporateMatchGoal: 50_000,
+  // TODO(PTA): update this ONE number during the campaign. Every page that shows Big Give progress (the home page card
+  // and the Big Give page) reads it through the BigGiveProgress component.
+  raised: 9_492.47,
 };
 
 // Gold announcement bar items. Each is shown only inside its window.

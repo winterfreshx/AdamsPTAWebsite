@@ -1,0 +1,54 @@
+---
+// The Big Give progress bar. The single source for "how much has been raised" on every page:
+// update `bigGive.raised` in src/data/announcements.ts and every use of this component follows.
+import { bigGive } from '../data/announcements';
+import { usd } from '../lib/format';
+
+interface Props {
+  /** "compact" for the home page card, "feature" for the larger version on the Big Give page. */
+  size?: 'compact' | 'feature';
+}
+const { size = 'compact' } = Astro.props;
+
+const { raised, goal, corporateMatchGoal } = bigGive;
+const pct = Math.min(100, (raised / goal) * 100);
+const label =
+  raised > 0
+    ? `${usd(raised)} raised of our ${usd(goal)} community goal`
+    : `Our community goal is ${usd(goal)}`;
+---
+
+<div class:list={['bg-progress', size]}>
+  <p class="headline">
+    {
+      raised > 0 ? (
+        <>
+          <strong class="amount">{usd(raised)}</strong> raised of our <strong>{usd(goal)}</strong> goal
+        </>
+      ) : (
+        <>
+          Help us reach our <strong class="amount">{usd(goal)}</strong> goal
+        </>
+      )
+    }
+  </p>
+  <div class="bar" role="img" aria-label={`${label}.`}>
+    <span style={`width:${raised > 0 ? Math.max(pct, 1.5).toFixed(2) : 0}%`}></span>
+  </div>
+  <p class="note">Plus a {usd(corporateMatchGoal)} corporate-match goal.</p>
+</div>
+
+<style>
+  .bg-progress { display: grid; gap: var(--space-2); }
+  .headline { margin: 0; color: var(--ink-soft); }
+  .headline strong { color: var(--green-900); }
+  .amount { font-family: var(--font-display); font-size: 1.5rem; color: var(--green-700) !important; }
+  .bar { height: 1rem; border-radius: 999px; background: var(--green-100); overflow: hidden; border: 1px solid var(--line); }
+  .bar span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--green-500), var(--gold-500)); }
+  .note { margin: 0; font-size: var(--fs-sm); color: var(--ink-soft); }
+
+  .feature { max-width: 40rem; margin-inline: auto; text-align: center; }
+  .feature .headline { font-size: var(--fs-lg); }
+  .feature .amount { font-size: clamp(2rem, 1.6rem + 1.6vw, 2.75rem); }
+  .feature .bar { height: 1.25rem; background: var(--white); }
+</style>

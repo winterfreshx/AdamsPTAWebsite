@@ -9,14 +9,10 @@ import { links } from '../data/links';
 import { bigGive } from '../data/announcements';
 import { site } from '../data/site';
 import { usd as fmt } from '../lib/format';
-
-const goals = [
-  { label: 'From our community', goal: bigGive.communityGoal, raised: bigGive.raised.community },
-  { label: 'From corporate match', goal: bigGive.corporateGoal, raised: bigGive.raised.corporate },
-];
+import BigGiveProgress from '../components/BigGiveProgress.astro';
 ---
 
-<BaseLayout title="The Big Give" description={`The Adams PTA Big Give runs ${bigGive.dates}. Help us reach ${fmt(bigGive.communityGoal)} from our community and ${fmt(bigGive.corporateGoal)} in corporate match.`}>
+<BaseLayout title="The Big Give" description={`The Adams PTA Big Give runs ${bigGive.dates}. Help us reach our ${fmt(bigGive.goal)} community goal.`}>
   <PageHero eyebrow={`The Big Give · ${bigGive.dates}`} title="Donate today!" intro="The PTA appreciates any and all amounts families and sponsors are able to contribute.">
     <div class="btn-row stack-mobile">
       <a class="btn btn-accent btn-lg" href={links.donateBigGive}><Icon name="heart" /> Donate now</a>
@@ -29,37 +25,30 @@ const goals = [
     <div class="container">
       <div class="section-head center">
         <p class="eyebrow">Our goal</p>
-        <h2 id="goal-title">{fmt(bigGive.communityGoal + bigGive.corporateGoal)} for Adams students</h2>
+        <h2 id="goal-title">{fmt(bigGive.goal)} for Adams students</h2>
         <p>
           We ask families who are able to donate <strong>{fmt(bigGive.perChildAsk)} per child</strong> to supercharge our
-          progress toward our goal of {fmt(bigGive.communityGoal)} from our community and {fmt(bigGive.corporateGoal)} from
-          corporate match.
+          progress toward our community goal of {fmt(bigGive.goal)}, with a further {fmt(bigGive.corporateMatchGoal)}
+          from corporate match.
         </p>
       </div>
 
       <div class="goals">
         <div class="goal ask">
-          <Icon name="heart" size={32} />
           <span class="goal-num">{fmt(bigGive.perChildAsk)}</span>
           <span class="goal-label">suggested gift per child</span>
+          <Icon name="heart" size={28} class="goal-icon" />
         </div>
-        {
-          goals.map((g) => (
-            <div class="goal">
-              <span class="goal-num">{fmt(g.goal)}</span>
-              <span class="goal-label">{g.label}</span>
-              {g.raised > 0 && (
-                <>
-                  <div class="meter" role="img" aria-label={`${fmt(g.raised)} raised of ${fmt(g.goal)}`}>
-                    <span style={`width:${Math.min(100, (g.raised / g.goal) * 100).toFixed(2)}%`} />
-                  </div>
-                  <small class="meter-label">{fmt(g.raised)} raised</small>
-                </>
-              )}
-            </div>
-          ))
-        }
+        <div class="goal">
+          <span class="goal-num">{fmt(bigGive.goal)}</span>
+          <span class="goal-label">our community goal</span>
+        </div>
+        <div class="goal">
+          <span class="goal-num">{fmt(bigGive.corporateMatchGoal)}</span>
+          <span class="goal-label">corporate-match goal</span>
+        </div>
       </div>
+      <div class="progress-wrap"><BigGiveProgress size="feature" /></div>
       <p class="center"><a class="btn btn-accent btn-lg" href={links.donateBigGive}><Icon name="heart" /> Donate to the Big Give</a></p>
     </div>
   </section>
@@ -87,16 +76,15 @@ const goals = [
 
 <style>
   :global(.bg-banner) { border-radius: var(--radius); box-shadow: var(--shadow-lg); width: min(100%, 26rem); }
-  .goals { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); margin-bottom: var(--space-7); }
+  .goals { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); margin-bottom: var(--space-6); }
+  .progress-wrap { margin-bottom: var(--space-6); }
   .goal {
     display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-2);
     padding: var(--space-6) var(--space-5); border-radius: var(--radius-lg); background: var(--green-100); border: 1px solid #bcd9c6;
   }
   .goal.ask { background: var(--gold-100); border-color: var(--gold-300); color: var(--green-700); }
+  .goals :global(.goal-icon) { color: var(--green-700); margin-top: var(--space-1); }
   .goal-num { font-family: var(--font-display); font-weight: 800; font-size: clamp(2.25rem, 1.8rem + 2vw, 3.25rem); color: var(--green-700); line-height: 1; }
   .goal-label { font-weight: 800; color: var(--ink-soft); }
-  .meter { width: 100%; margin-top: var(--space-3); height: 0.9rem; border-radius: 999px; background: var(--white); overflow: hidden; position: relative; }
-  .meter span { display: block; height: 100%; background: linear-gradient(90deg, var(--green-500), var(--gold-500)); }
-  .meter-label { font-weight: 700; color: var(--ink-soft); }
   .card :global(.i) { color: var(--green-500); margin-bottom: var(--space-3); }
 </style>
