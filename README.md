@@ -100,8 +100,6 @@ SITE_BASE=/AdamsPTAWebsite npm run verify && SITE_BASE=/AdamsPTAWebsite npm run 
 
 - [ ] **Cancel the Wix Premium site plan** about a week after launch (around October 11, 2026). Keep the **domain** in
       the Wix account with **auto-renew on** and a current payment method, or it will lapse.
-- [ ] Confirm the `rep2030@adamselementary.org` and `rep2032@adamselementary.org` grade-rep inboxes exist in Google
-      Workspace. They were added to match their class years and weren't on the old site.
 - [ ] Make one real PayPal donation (any amount) and check that it returns to `/donationthanks` on the new site.
 
 ### Optional: transferring the domain away from Wix
@@ -125,7 +123,7 @@ and set up DNS at the new provider **before** the transfer, so the site never go
 | ID | Decision | Outcome |
 |----|----------|---------|
 | D1 | Password-protected Wix pages (old directory, Staff Appreciation Binder) | The directory is the current school year's directory on Konstella. The binder was removed: nobody had the password, and a static site can't password-protect a page. Its old URL redirects to Staff Appreciation. |
-| D2 | Grade-rep inboxes | Each class uses `rep<class year>@adamselementary.org`. |
+| D2 | Grade-rep inboxes | Each class uses `rep<class year>@adamselementary.org` (all confirmed to exist, including the new `rep2030@` and `rep2032@`). |
 | D3 | Future Families tour dates | Added to the page when they're announced. |
 | D4 | Moveathon page | Shows the most recent event until the next one is ready. |
 | D5 | Hosting | GitHub Pages with DNS at Wix. Launched at `www.adamselementarypta.org` on October 4, 2026. |
