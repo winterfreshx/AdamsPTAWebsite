@@ -101,12 +101,17 @@ const groupIsCurrent = (items: { href: string }[]) => items.some((i) => isCurren
     toggle.setAttribute('aria-expanded', String(open));
     if (open && header) menu.style.top = `${Math.max(0, header.getBoundingClientRect().bottom)}px`;
     menu.hidden = !open;
-    document.documentElement.classList.toggle('menu-open', open);
+    document.body.classList.toggle('menu-open', open);
     if (label) label.textContent = open ? 'Close menu' : 'Open menu';
-    if (open) menu.querySelector<HTMLAnchorElement>('a')?.focus();
+    if (open) menu.querySelector<HTMLAnchorElement>('a')?.focus({ preventScroll: true });
   };
 
   toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+
+  // Following any menu link closes the menu. Same-page links like /#calendar would otherwise leave it open and the page locked.
+  menu?.addEventListener('click', (e) => {
+    if ((e.target as Element).closest('a')) setMenu(false);
+  });
 
   // Only one desktop dropdown open at a time.
   dropdowns.forEach((d) =>
@@ -156,13 +161,14 @@ const groupIsCurrent = (items: { href: string }[]) => items.some((i) => isCurren
 </script>
 
 <style>
+  /* Solid background on purpose. Don't add backdrop-filter, filter or transform here: in Safari they make the header
+     the containing block for the position:fixed mobile menu, which squeezed the menu to the header's height
+     (one visible row on iPhone). scripts/test-menu.mjs checks this. */
   .site-header {
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgb(255 253 247 / 0.92);
-    backdrop-filter: saturate(1.4) blur(10px);
-    -webkit-backdrop-filter: saturate(1.4) blur(10px);
+    background: var(--paper);
     border-bottom: 1px solid transparent;
     transition: box-shadow 0.2s ease, border-color 0.2s ease;
   }
@@ -263,11 +269,15 @@ const groupIsCurrent = (items: { href: string }[]) => items.some((i) => isCurren
     .mobile-donate { min-height: 2.5rem; padding-inline: 0.8rem; font-size: 0.875rem; }
     .menu-toggle { width: 2.75rem; height: 2.75rem; }
   }
-  @media (max-width: 350px) { .brand-bottom { display: none; } }
+  /* Very narrow phones (e.g. the original 320px iPhone SE): the eagle alone, so the Donate and menu buttons fit
+     on screen. The brand link keeps its aria-label. */
+  @media (max-width: 359px) { .brand-text { display: none; } }
   @media (min-width: 1000px) {
     .desktop-nav { display: flex; }
     .mobile-actions, .mobile-menu { display: none !important; }
   }
 
-  :global(html.menu-open) { overflow: hidden; }
+  /* Scroll lock goes on <body>, never <html>: overflow on <html> stops body's overflow from applying to the viewport,
+     body becomes its own scroll box, and the sticky header stops sticking. */
+  :global(body.menu-open) { overflow: hidden; }
 </style>

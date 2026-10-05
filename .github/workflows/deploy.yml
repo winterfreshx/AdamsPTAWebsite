@@ -43,6 +43,22 @@ jobs:
       - run: npm run audit:contrast # rendered-color WCAG check; ubuntu-latest ships Google Chrome
         env:
           SITE_BASE: ${{ steps.pages.outputs.base_path }}
+      # Menu tests in WebKit (Safari's engine, for iPhone) and Chromium. The browsers are cached per Playwright
+      # version; on a cache hit only the system libraries are installed.
+      - id: playwright
+        run: echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+      - id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
+      - if: steps.pw-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium webkit
+      - if: steps.pw-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium webkit
+      - run: npm run test:menu
+        env:
+          SITE_BASE: ${{ steps.pages.outputs.base_path }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

@@ -78,7 +78,9 @@ h3 { font-size: var(--fs-h3); font-weight: 700; }
 h4 { font-size: 1.0625rem; font-weight: 700; }
 p { text-wrap: pretty; }
 p + p { margin-top: var(--space-4); }
-a { color: var(--green-700); text-decoration-thickness: 2px; text-underline-offset: 3px; text-decoration-color: var(--gold-500); }
+/* Links hold the long unbreakable strings (email addresses, URLs); let them wrap rather than widen the page on 320px
+   phones. Scoped to links so ordinary words elsewhere never split mid-letter. */
+a { overflow-wrap: anywhere; color: var(--green-700); text-decoration-thickness: 2px; text-underline-offset: 3px; text-decoration-color: var(--gold-500); }
 a:hover { color: var(--green-500); text-decoration-color: var(--green-500); }
 strong { font-weight: 800; }
 ul, ol { padding-left: 1.25em; }

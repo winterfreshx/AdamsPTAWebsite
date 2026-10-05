@@ -5,6 +5,8 @@ import type { DateWindow } from './schedule';
 // the hero button and the Donate button (see schedule.ts). Update the dates each year.
 
 export const spiritWear = {
+  // Shown on the home page card. Update with the store link (links.spiritWearStore) and deadline each season.
+  label: '2027 Adams Eagles Spirit Wear',
   window: { expires: '2026-10-09' } satisfies DateWindow,
   orderDeadline: 'October 9, 2026',
 };
