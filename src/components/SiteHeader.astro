@@ -108,6 +108,11 @@ const groupIsCurrent = (items: { href: string }[]) => items.some((i) => isCurren
 
   toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
 
+  // Following any menu link closes the menu. Same-page links like /#calendar would otherwise leave it open and the page locked.
+  menu?.addEventListener('click', (e) => {
+    if ((e.target as Element).closest('a')) setMenu(false);
+  });
+
   // Only one desktop dropdown open at a time.
   dropdowns.forEach((d) =>
     d.addEventListener('toggle', () => {

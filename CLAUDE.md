@@ -43,10 +43,10 @@ There is no unit-test runner or linter. `scripts/verify-links.mjs` fails if any 
 - **Mobile menu** (on `/` and `/about-our-pta`, opened from mid-page):
   - the header fits the screen
   - the menu opens and fills the screen from just under the header to the bottom, showing several links rather than one row
-  - the header stays pinned and its logo is visible on screen (checked from screenshot pixels)
+  - the header stays pinned and its eagle logo is still on screen (its screenshot pixels match the menu-closed state)
   - opening the menu doesn't move the page, and the last link can be reached by scrolling the menu
   - the close button closes it and unlocks scrolling at the same page position, and the header is still sticky afterwards
-  - tapping a link navigates, and Escape closes the menu
+  - tapping a link navigates; a same-page link (PTA Calendar → `/#calendar`) closes the menu and scrolls to the section; Escape closes the menu
 - **Every page** fits a 320px screen with no sideways scrolling.
 - **Desktop dropdowns:**
   - click opens one group at a time
@@ -57,6 +57,9 @@ There is no unit-test runner or linter. `scripts/verify-links.mjs` fails if any 
 Run it after **any** change to the header, nav, layout, global CSS or page content, since long text can widen a page at 320px. Two things it guards against:
 - **Safari (iPhone) behaves differently from Chrome here.** Desktop Chrome checks alone are not enough, so use WebKit.
 - **Playwright's element `tap()`/`click()` scrolls the page first**, which hides scroll bugs. The script taps at screen coordinates instead. Keep it that way.
+- **Waits are conditions, never fixed delays** (`waitForFunction`, and `settle()` waits for finite CSS animations, capped at 2s).
+
+The five sections run in parallel, each in its own browser, and the whole suite takes about 5 seconds. `scripts/lib/serve-dist.mjs` is the GitHub-Pages-like static server shared by `test-menu.mjs` and `audit-contrast.mjs`.
 
 `scripts/audit-contrast.mjs` checks the colors the browser actually renders. It loads every page at 375 and 1280 px and compares each text element's color with the background painted behind it. Text over a gradient or image with no solid base color is skipped, so give such sections a solid fallback color (`AUDIT_VERBOSE=1` lists the skipped elements).
 

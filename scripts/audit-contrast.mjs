@@ -2,11 +2,11 @@
 // element's computed color against the background actually painted behind it (WCAG AA: 4.5:1, or 3:1
 // for large text). Run after `npm run build`. Needs Google Chrome; set CHROME_PATH if it isn't found.
 import { spawn } from 'node:child_process';
-import { createServer } from 'node:http';
-import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { extname, join } from 'node:path';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { serveDist } from './lib/serve-dist.mjs';
 
 const dist = fileURLToPath(new URL('../dist/', import.meta.url));
 // Sub-folder the site was built for ("" at a domain root). Must match the SITE_BASE used for `npm run build`.
@@ -23,23 +23,9 @@ const chromePath = [
 ].find((p) => p && existsSync(p));
 if (!chromePath) { console.error('Google Chrome not found; set CHROME_PATH.'); process.exit(1); }
 
-// ---- Static server that mimics GitHub Pages (/about-our-pta → about-our-pta.html) ----
-const types = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.webp': 'image/webp', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.xml': 'application/xml' };
-const server = createServer((req, res) => {
-  let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
-  if (BASE) {
-    if (p !== BASE && !p.startsWith(BASE + '/')) { res.writeHead(404); return res.end(); } // like GitHub Pages: only the sub-folder exists
-    p = p.slice(BASE.length) || '/';
-  }
-  if (p.endsWith('/')) p += 'index.html';
-  let file = join(dist, p);
-  if (!existsSync(file) && existsSync(file + '.html')) file += '.html';
-  if (!existsSync(file) || statSync(file).isDirectory()) { res.writeHead(404); return res.end(); }
-  res.writeHead(200, { 'content-type': types[extname(file)] ?? 'application/octet-stream' });
-  res.end(readFileSync(file));
-});
-await new Promise((r) => server.listen(0, '127.0.0.1', r));
-const base = `http://127.0.0.1:${server.address().port}`;
+// ---- Static server that mimics GitHub Pages ----
+const server = await serveDist(dist, BASE);
+const base = server.origin;
 
 // ---- Chrome over the DevTools protocol (no dependencies; Node 22+ has WebSocket) ----
 const profile = mkdtempSync(join(tmpdir(), 'contrast-'));
