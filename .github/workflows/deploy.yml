@@ -43,6 +43,11 @@ jobs:
       - run: npm run audit:contrast # rendered-color WCAG check; ubuntu-latest ships Google Chrome
         env:
           SITE_BASE: ${{ steps.pages.outputs.base_path }}
+      # Menu tests in WebKit (Safari's engine, for iPhone) and Chromium.
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run test:menu
+        env:
+          SITE_BASE: ${{ steps.pages.outputs.base_path }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

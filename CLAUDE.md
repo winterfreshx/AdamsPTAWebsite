@@ -15,10 +15,22 @@ npm run dev       # dev server, http://localhost:4321
 npm run build     # static build → dist/
 npm run verify    # static checks on dist/; run after build
 npm run audit:contrast  # rendered-color WCAG check of every page in headless Chrome (needs Chrome; CHROME_PATH to override)
+npm run test:menu # menu + mobile layout tests in WebKit (iPhone) and Chromium; one-time setup: npx playwright install chromium webkit
 npm run preview   # serve dist/ (Astro 7 runs it as a daemon; stop with `npx astro preview stop`)
 ```
 
-There is no test runner or linter. CI runs build → verify → audit:contrast before every deploy. `scripts/verify-links.mjs` fails if any of these break:
+## Verifying changes
+
+Before calling any change done, run all four, in order, and fix every failure:
+
+```sh
+npm run build && npm run verify && npm run audit:contrast && npm run test:menu
+```
+
+CI runs the same sequence before every deploy. For a sub-folder build (the GitHub Pages preview), prefix each step with
+`SITE_BASE=/AdamsPTAWebsite` (and `SITE_URL=https://winterfreshx.github.io` for the build).
+
+There is no unit-test runner or linter. `scripts/verify-links.mjs` fails if any of these break:
 - every outside link and email from the Wix crawl still appears in `dist/` (anything deliberately removed must be added to the `ALLOW` map, with a reason)
 - every old Wix URL has a page or redirect
 - internal links and `#anchors` resolve
@@ -26,6 +38,25 @@ There is no test runner or linter. CI runs build → verify → audit:contrast b
 - each page has exactly one `<h1>`, a unique `<title>` and a meta description
 - no words are glued to inline links
 - the brand color pairs meet WCAG AA contrast
+
+`scripts/test-menu.mjs` tests the navigation menu in real browser engines, on WebKit iPhone 15 and iPhone SE (320px), Chromium Pixel 7 and Chromium desktop:
+- **Mobile menu** (on `/` and `/about-our-pta`, opened from mid-page):
+  - the header fits the screen
+  - the menu opens and fills the screen from just under the header to the bottom, showing several links rather than one row
+  - the header stays pinned and its logo is visible on screen (checked from screenshot pixels)
+  - opening the menu doesn't move the page, and the last link can be reached by scrolling the menu
+  - the close button closes it and unlocks scrolling at the same page position, and the header is still sticky afterwards
+  - tapping a link navigates, and Escape closes the menu
+- **Every page** fits a 320px screen with no sideways scrolling.
+- **Desktop dropdowns:**
+  - click opens one group at a time
+  - Escape closes
+  - a click after hovering keeps the dropdown open
+  - every menu link opens a real page
+
+Run it after **any** change to the header, nav, layout, global CSS or page content, since long text can widen a page at 320px. Two things it guards against:
+- **Safari (iPhone) behaves differently from Chrome here.** Desktop Chrome checks alone are not enough, so use WebKit.
+- **Playwright's element `tap()`/`click()` scrolls the page first**, which hides scroll bugs. The script taps at screen coordinates instead. Keep it that way.
 
 `scripts/audit-contrast.mjs` checks the colors the browser actually renders. It loads every page at 375 and 1280 px and compares each text element's color with the background painted behind it. Text over a gradient or image with no solid base color is skipped, so give such sections a solid fallback color (`AUDIT_VERBOSE=1` lists the skipped elements).
 
@@ -50,6 +81,7 @@ There is no test runner or linter. CI runs build → verify → audit:contrast b
 - **Big Give progress** has one source: `bigGive.raised` in `announcements.ts`, rendered only through `components/BigGiveProgress.astro` (`size="compact"` on the home card, `"feature"` on /big-give). Don't compute or display the raised amount anywhere else. The headline goal is the community `goal`; `corporateMatchGoal` is shown as a secondary note.
 - **Money** is formatted with `usd()` from `src/lib/format.ts` (whole dollars without cents, otherwise two decimals).
 - **Images** go in `src/assets/images/` and are rendered with `astro:assets` `<Image>`. `eagle-logo.png` is the transparent brand eagle, used in the hero, the header, the footer, the favicon and the OG image.
+- **Header and mobile menu rules (learned from an iPhone bug):** never put `backdrop-filter`, `filter` or `transform` on `.site-header`. In Safari they trap the `position: fixed` mobile menu inside the header, which showed one row on iPhone. Put the menu's scroll lock on `<body>` (`body.menu-open`), never on `<html>`. Overflow on `<html>` makes `<body>` its own scroll box and the sticky header stops sticking. Long strings wrap through `overflow-wrap: anywhere` on `body`, so 320px phones don't scroll sideways.
 - **The site works at a domain root or in a sub-folder.** `SITE_URL`/`SITE_BASE` env vars set Astro's `site`/`base` (CI gets them from `actions/configure-pages`; locally they default to the real domain at its root). Source code always writes root-relative links (`/about-our-pta`); `integrations/base-path.mjs` prefixes the base into the built HTML after each build, including `data-href-in`/`data-href-out`, meta-refresh redirects and same-site absolute URLs. Code that *compares* the current URL must use `sitePath()` from `src/lib/paths.ts`, and code that builds an absolute URL must use `withBase()`. `verify` and `audit:contrast` read `SITE_BASE` too; `verify` fails on any root-relative link missing the base, and the audit fails if the stylesheet didn't load.
 - **`compressHTML: false` is deliberate.** With compression on, Astro removed the whitespace before inline links. Don't turn it back on.
 

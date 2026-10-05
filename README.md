@@ -18,6 +18,7 @@ npm run dev        # http://localhost:4321 with live reload
 npm run build      # production build into dist/
 npm run verify     # link-parity, accessibility and quality checks against dist/
 npm run audit:contrast  # renders every page in headless Chrome and checks text contrast (needs Google Chrome)
+npm run test:menu  # tests the menu on iPhone (WebKit), Android and desktop (Chromium); first run: npx playwright install chromium webkit
 npm run preview    # serve dist/ locally
 ```
 

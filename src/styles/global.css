@@ -62,6 +62,8 @@ body {
   background: var(--paper);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  /* Long unbreakable strings (email addresses, URLs) may wrap rather than widen the page on 320px phones. */
+  overflow-wrap: anywhere;
 }
 img, svg, video, iframe { display: block; max-width: 100%; }
 img { height: auto; }
