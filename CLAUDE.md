@@ -38,6 +38,7 @@ There is no unit-test runner or linter. `scripts/verify-links.mjs` fails if any 
 - each page has exactly one `<h1>`, a unique `<title>` and a meta description
 - no words are glued to inline links
 - the brand color pairs meet WCAG AA contrast
+- every external link opens in a new tab with `rel="noopener"`, shows the external icon, and has "(opens in a new tab)" for screen readers
 
 `scripts/test-menu.mjs` tests the navigation menu in real browser engines, on WebKit iPhone 15 and iPhone SE (320px), Chromium Pixel 7 and Chromium desktop:
 - **Mobile menu** (on `/` and `/about-our-pta`, opened from mid-page):
@@ -85,6 +86,7 @@ The five sections run in parallel, each in its own browser, and the whole suite 
 - **Money** is formatted with `usd()` from `src/lib/format.ts` (whole dollars without cents, otherwise two decimals).
 - **Images** go in `src/assets/images/` and are rendered with `astro:assets` `<Image>`. `eagle-logo.png` is the transparent brand eagle, used in the hero, the header, the footer, the favicon and the OG image.
 - **Header and mobile menu rules (learned from an iPhone bug):** never put `backdrop-filter`, `filter` or `transform` on `.site-header`. In Safari they trap the `position: fixed` mobile menu inside the header, which showed one row on iPhone. Put the menu's scroll lock on `<body>` (`body.menu-open`), never on `<html>`. Overflow on `<html>` makes `<body>` its own scroll box and the sticky header stops sticking. Long strings wrap through `overflow-wrap: anywhere` on `body`, so 320px phones don't scroll sideways.
+- **External links are handled at build time.** `integrations/external-links.mjs` gives every link to another site `target="_blank" rel="noopener noreferrer"`, the external-link icon (an existing trailing arrow is swapped for it, and it stays on the line with the last word) and hidden "(opens in a new tab)" text. Icon-only links get the text in their `aria-label` and no visible icon. So write plain `<a href="https://…">` in pages; don't add `target`, `rel` or the icon by hand. `verify` (check 9.8) fails on any external link that's missing one of these.
 - **The site works at a domain root or in a sub-folder.** `SITE_URL`/`SITE_BASE` env vars set Astro's `site`/`base` (CI gets them from `actions/configure-pages`; locally they default to the real domain at its root). Source code always writes root-relative links (`/about-our-pta`); `integrations/base-path.mjs` prefixes the base into the built HTML after each build, including `data-href-in`/`data-href-out`, meta-refresh redirects and same-site absolute URLs. Code that *compares* the current URL must use `sitePath()` from `src/lib/paths.ts`, and code that builds an absolute URL must use `withBase()`. `verify` and `audit:contrast` read `SITE_BASE` too; `verify` fails on any root-relative link missing the base, and the audit fails if the stylesheet didn't load.
 - **`compressHTML: false` is deliberate.** With compression on, Astro removed the whitespace before inline links. Don't turn it back on.
 

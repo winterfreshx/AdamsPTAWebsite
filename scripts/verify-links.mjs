@@ -144,12 +144,28 @@ for (const [name, fg, bg] of pairs) {
   r >= 4.5 ? ok(`${name}: ${r.toFixed(2)}:1`) : fail(`${name}: ${r.toFixed(2)}:1`);
 }
 
-// ---- 9.8 target=_blank safety --------------------------------------------------------------------
-console.log('\n9.8 target="_blank" links use rel="noopener"');
+// ---- 9.8 External links open in a new tab, safely, and say so ----------------------------------------
+console.log('\n9.8 External links: new tab + rel="noopener", external icon, "(opens in a new tab)" for screen readers');
+const EXTERNAL_ICON = 'M15 3h6v6';
+let externalCount = 0;
 for (const [f, html] of Object.entries(pages)) {
-  for (const m of html.matchAll(/<a\b[^>]*target="_blank"[^>]*>/g)) if (!/noopener/.test(m[0])) fail(`${f}: ${m[0].slice(0, 80)}`);
+  for (const m of html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)) {
+    const [, attrs, inner] = m;
+    const href = attrs.match(/\shref="([^"]*)"/)?.[1] ?? '';
+    if (/target="_blank"/.test(attrs) && !/noopener/.test(attrs)) fail(`${f}: target="_blank" without noopener: ${href}`);
+    if (!/^https?:\/\//.test(href) || /(^|\.)adamselementarypta\.org\//.test(href.replace(/^https?:\/\//, '') + '/')) continue;
+    if (process.env.SITE_URL && href.startsWith(new URL(process.env.SITE_URL).origin + '/')) continue; // same-site absolute URL
+    externalCount++;
+    const iconOnly = !inner.replace(/<[^>]+>/g, '').replace('(opens in a new tab)', '').trim();
+    const problems = [];
+    if (!/target="_blank"/.test(attrs)) problems.push('no target="_blank"');
+    if (!/rel="[^"]*noopener/.test(attrs)) problems.push('no rel=noopener');
+    if (!inner.includes('(opens in a new tab)') && !/aria-label="[^"]*\(opens in a new tab\)/.test(attrs)) problems.push('no "(opens in a new tab)"');
+    if (!iconOnly && inner.split(EXTERNAL_ICON).length - 1 !== 1) problems.push(`${inner.split(EXTERNAL_ICON).length - 1} external icons`);
+    if (problems.length) fail(`${f}: ${href.slice(0, 60)}: ${problems.join(', ')}`);
+  }
 }
-ok('checked');
+ok(`${externalCount} external links checked`);
 
 console.log(failures ? `\n${failures} problem(s) found.` : '\nAll checks passed.');
 process.exit(failures ? 1 : 0);
