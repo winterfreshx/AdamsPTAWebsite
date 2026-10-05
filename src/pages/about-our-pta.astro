@@ -4,21 +4,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
 import eagle from '../assets/images/eagle-logo.png';
-import octopus from '../assets/images/mural-octopus.jpg';
-import unicorn from '../assets/images/mural-unicorn.jpg';
-import giraffe from '../assets/images/mural-giraffe.jpg';
-import owl from '../assets/images/mural-owl.jpg';
 import { execBoard } from '../data/contacts';
 import { schoolYear } from '../data/schoolYear';
 import { links } from '../data/links';
 import { site } from '../data/site';
 
-const murals = [
-  { src: octopus, alt: 'Octopus mural with swirling blue waves' },
-  { src: unicorn, alt: 'Mural of a unicorn rowing a boat beneath snowy mountains' },
-  { src: giraffe, alt: 'Giraffe mural against a swirly blue background' },
-  { src: owl, alt: 'Big-eyed owl mural' },
-];
 const initials = (n: string) => n.split(' ').map((p) => p[0]).join('');
 ---
 
@@ -119,22 +109,6 @@ const initials = (n: string) => n.split(' ').map((p) => p[0]).join('');
       </div>
     </div>
   </section>
-
-  <section class="section section-gold" aria-labelledby="murals-title">
-    <div class="container">
-      <div class="section-head">
-        <p class="eyebrow">Around our school</p>
-        <h2 id="murals-title">The murals of Adams</h2>
-      </div>
-      <div class="murals">
-        {murals.map((m) => (
-          <div class="photo">
-            <Image src={m.src} alt={m.alt} widths={[400, 700]} sizes="(min-width: 860px) 25vw, 50vw" />
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
 </BaseLayout>
 
 <style>
@@ -157,7 +131,4 @@ const initials = (n: string) => n.split(' ').map((p) => p[0]).join('');
   .email { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.875rem; }
   .board-note { margin-top: var(--space-5); }
   .card :global(.inv-icon) { color: var(--green-500); margin-bottom: var(--space-3); }
-  .murals { display: grid; gap: var(--space-4); grid-template-columns: repeat(2, 1fr); }
-  @media (min-width: 860px) { .murals { grid-template-columns: repeat(4, 1fr); } }
-  .murals .photo { aspect-ratio: 1; }
 </style>
