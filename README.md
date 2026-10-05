@@ -87,9 +87,11 @@ has appeared, someone has set up email on this domain, and it must be preserved.
 
 1. **Review the site** at https://winterfreshx.github.io/AdamsPTAWebsite/ with the PTA board (or at `….netlify.app` /
    `….pages.dev` if you switch hosts). Resolve the open decisions below.
+   Also confirm the `rep2030@adamselementary.org` and `rep2032@adamselementary.org` grade-rep inboxes exist in Google
+   Workspace. They were added to match their class years and weren't on the old site.
 2. **In Wix, open Domains → `adamselementarypta.org` → Manage DNS records** and point the domain at the new host:
    - **GitHub Pages:** apex `@` → **A** records `185.199.108.153`, `185.199.109.153`, `185.199.110.153`,
-     `185.199.111.153`; `www` → **CNAME** → `<github-username>.github.io`. Then in *Settings → Pages*, enter
+     `185.199.111.153`; `www` → **CNAME** → `winterfreshx.github.io`. Then in *Settings → Pages*, enter
      `www.adamselementarypta.org` as the custom domain and turn on **Enforce HTTPS**. Then re-run the latest
      deploy workflow: the next build picks up the domain root automatically, and the github.io address starts redirecting to it.
    - **Netlify / Cloudflare Pages:** add `www.adamselementarypta.org` as a custom domain in their dashboard, then copy
@@ -112,11 +114,12 @@ has appeared, someone has set up email on this domain, and it must be preserved.
 
 ## Open decisions for the PTA board
 
+IDs match the `TODO(PTA) Dn` comments in the code, so search for one to find where it's handled. Resolved decisions
+are removed from this list (D2, grade-rep inboxes, and D5, hosting, are done).
+
 | ID | Decision | What the site does now |
 |----|----------|------------------------|
 | D1 | The 2024/25 directory and the Staff Appreciation Binder were password-protected Wix pages. A static site can't do real password protection. | `/school-directory` points families to the Konstella directory. The binder page explains how to get access. Put the binder in a Google Drive file shared with Adams families and paste its link into `links.staffAppreciationBinder`. |
-| D2 | Grade reps for 2026/27 | Resolved: the Classes of 2027–2032 (5th grade–K) each use the `rep<class year>@adamselementary.org` inbox. The Wix site's `rep2020@` (Class of 2030) is now `rep2030@`, and `rep2032@` was added for kindergarten. Make sure those two inboxes exist. |
 | D3 | Future Families tour dates | Says "January, details coming soon." The outdated principal name was removed. |
 | D4 | Moveathon page shows the May 2026 event | Kept as last year's recap with sponsors, to be refreshed for Spring 2027. |
-| D5 | When to switch the domain from Wix | Hosting is GitHub Pages (the repo is public and Pages is enabled). The site isn't launched until the domain's DNS points at GitHub. Follow the launch-day steps under [Deploying](#deploying). |
 | D6 | Big Give live totals | Goals are shown. Update `bigGive.raised` to show progress bars. |
