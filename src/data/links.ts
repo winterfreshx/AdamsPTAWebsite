@@ -80,9 +80,6 @@ export const links = {
   // Social
   instagram: 'https://www.instagram.com/adams.pta.seattle/',
   facebook: 'https://www.facebook.com/Adams.Elementary.PTA/',
-
-  // TODO(PTA) D1: replace with a Google Drive link shared with Adams families (was a Wix password page).
-  staffAppreciationBinder: '',
 } as const;
 
 export const mailto = (email: string, subject?: string, body?: string) => {

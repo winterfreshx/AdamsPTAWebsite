@@ -17,7 +17,6 @@ const NOINDEX = [
   '/readerboard-confirmation',
   '/school-directory',
   '/student-directory',
-  '/we-appreciate-adams-web-list',
   '/404',
 ];
 
@@ -36,6 +35,8 @@ export default defineConfig({
     '/fundraisingold': '/fundraising',
     '/copy-of-fundraising': '/fundraising',
     '/biggiveold': '/big-give',
+    // The password-protected Staff Appreciation Binder; removed because nobody maintains it.
+    '/we-appreciate-adams-web-list': '/we-appreciate-adams',
   },
   integrations: [
     sitemap({

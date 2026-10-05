@@ -112,12 +112,17 @@ has appeared, someone has set up email on this domain, and it must be preserved.
 - **Optional:** to leave Wix entirely, transfer the domain to another registrar (such as Cloudflare or Namecheap) from Wix's
   Domains page. Do this after launch, not on the same day, so a DNS problem and a transfer problem can't happen at once.
 
-## Open decisions for the PTA board
+## Decisions for the PTA board
 
-IDs match the `D1`-style comments in the code. Resolved decisions are removed from this list: D2 (grade-rep inboxes),
-D3 (tour dates go up when announced), D4 (last year's Moveathon stays until the next one), D5 (hosting) and
-D6 (Big Give totals are kept in `src/data/announcements.ts`).
+**None open right now.** For the record, here is how the original decisions (D1–D6) were settled:
 
-| ID | Decision | What the site does now |
-|----|----------|------------------------|
-| D1 | The Staff Appreciation Binder (teachers' favorite treats, drinks, stores and so on) was a password-protected Wix page. A static site can't do real password protection. | The "Online Staff Appreciation Binder" button opens an info page telling families to ask their grade rep. To link the binder directly, put it in a Google Drive file shared only with Adams families and paste its link into `links.staffAppreciationBinder` in `src/data/links.ts`. Or remove the button if the binder isn't used. |
+| ID | Decision | Outcome |
+|----|----------|---------|
+| D1 | Password-protected Wix pages (old directory, Staff Appreciation Binder) | The directory is the 2026/27 one on Konstella. The binder was removed: nobody had the password, and a static site can't password-protect a page. Its old URL redirects to Staff Appreciation. |
+| D2 | Grade-rep inboxes | Each class uses `rep<class year>@adamselementary.org`. |
+| D3 | Future Families tour dates | Added to the page when they're announced. |
+| D4 | Moveathon page | Shows the most recent event until the next one is ready. |
+| D5 | Hosting | GitHub Pages; the domain switch from Wix follows the launch-day steps above. |
+| D6 | Big Give totals | Kept up to date in `src/data/announcements.ts` → `bigGive.raised`. |
+
+New decisions can be added here with the next ID (D7…), and marked in the code with a `TODO(PTA) Dn` comment.
