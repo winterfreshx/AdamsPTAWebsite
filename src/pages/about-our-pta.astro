@@ -3,7 +3,7 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
-import takeCare from '../assets/images/eagle-take-care.png';
+import eagle from '../assets/images/eagle-logo.png';
 import octopus from '../assets/images/mural-octopus.jpg';
 import unicorn from '../assets/images/mural-unicorn.jpg';
 import giraffe from '../assets/images/mural-giraffe.jpg';
@@ -51,7 +51,10 @@ const initials = (n: string) => n.split(' ').map((p) => p[0]).join('');
           </p>
         </div>
       </div>
-      <Image src={takeCare} alt="Adams Elementary PTA eagle sailing a Viking ship: We take care of each other" widths={[400, 700]} sizes="(min-width: 860px) 28rem, 90vw" class="take-care" />
+      <div class="about-eagle">
+        <div class="sun" aria-hidden="true"></div>
+        <Image src={eagle} alt="The Adams Elementary Eagle with wings spread" widths={[400, 700]} sizes="(min-width: 860px) 26rem, 80vw" class="eagle" />
+      </div>
     </div>
   </section>
 
@@ -135,7 +138,13 @@ const initials = (n: string) => n.split(' ').map((p) => p[0]).join('');
 </BaseLayout>
 
 <style>
-  .take-care { width: min(100%, 28rem); margin-inline: auto; border-radius: var(--radius-lg); }
+  .about-eagle { position: relative; display: grid; place-items: center; width: min(100%, 26rem); margin-inline: auto; }
+  .about-eagle .sun {
+    position: absolute; width: 82%; aspect-ratio: 1; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, var(--gold-300), var(--gold-500) 60%, #c98b1f);
+    box-shadow: 0 0 0 12px rgb(228 168 60 / 0.18), var(--shadow);
+  }
+  .about-eagle :global(.eagle) { position: relative; width: 100%; height: auto; filter: drop-shadow(0 12px 22px rgb(0 0 0 / 0.25)); }
   .person { text-align: center; display: flex; flex-direction: column; align-items: center; gap: var(--space-2); }
   .avatar {
     display: grid; place-items: center; width: 4.5rem; height: 4.5rem; border-radius: 50%;

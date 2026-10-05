@@ -28,7 +28,7 @@ Most updates are one-line edits in `src/data/`:
 | To change… | Edit |
 |---|---|
 | Announcement bar, and the dates for Spirit Wear and the Big Give. Each date window turns the announcement, the home-page card and the Donate button on and off automatically, in Seattle time, with no rebuild needed. **Update the dates each year.** | `src/data/announcements.ts` |
-| Big Give goals and the amount raised so far (moves the progress bars) | `src/data/announcements.ts` → `bigGive` |
+| **Big Give amount raised:** change the one number `bigGive.raised` (for example `raised: 9_492.47,`). The home page card and the Big Give page both update from it. The community `goal` and `corporateMatchGoal` are next to it. | `src/data/announcements.ts` → `bigGive` |
 | Exec board, every PTA email address, grade reps | `src/data/contacts.ts` |
 | Bell times, address, principal, Tax ID, land acknowledgment | `src/data/site.ts` |
 | The school year shown on directory and exec-board labels. **Update each summer**, and shift the grade-rep grade labels in `contacts.ts` to match. | `src/data/schoolYear.ts` |

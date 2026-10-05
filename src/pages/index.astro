@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ActionCard from '../components/ActionCard.astro';
+import BigGiveProgress from '../components/BigGiveProgress.astro';
 import Icon from '../components/Icon.astro';
 import eagle from '../assets/images/eagle-logo.png';
 import bigGiveLogo from '../assets/images/big-give-logo.png';
@@ -13,15 +14,6 @@ import { scheduled } from '../data/schedule';
 import { usd as fmt } from '../lib/format';
 import { site, school, bellTimes } from '../data/site';
 
-const totalGoal = bigGive.communityGoal + bigGive.corporateGoal;
-const totalRaised = bigGive.raised.community + bigGive.raised.corporate;
-const pct = Math.min(100, Math.round((totalRaised / totalGoal) * 100));
-// Screen-reader text for the progress bar; mentions the amount raised only when the visible "raised so far" line shows.
-const goalBreakdown = `${fmt(bigGive.communityGoal)} from our community and ${fmt(bigGive.corporateGoal)} in corporate match`;
-const progressLabel =
-  totalRaised > 0
-    ? `${fmt(totalRaised)} raised toward a ${fmt(totalGoal)} goal: ${goalBreakdown}.`
-    : `Goal: ${fmt(totalGoal)} — ${goalBreakdown}.`;
 ---
 
 <BaseLayout title="Home">
@@ -110,14 +102,7 @@ const progressLabel =
             The Big Give funds tutors, playground and lunch staff, SEL programs, classroom supplies and more. Families who
             are able are asked to give <strong>{fmt(bigGive.perChildAsk)} per child</strong>. Every amount makes a difference.
           </p>
-          <div class="progress" role="img" aria-label={progressLabel}>
-            {totalRaised > 0 && <p class="raised"><strong>{fmt(totalRaised)}</strong> raised so far</p>}
-            <div class="progress-bar"><span style={`width:${Math.max(pct, 2)}%`}></span></div>
-            <div class="progress-legend">
-              <span><strong>{fmt(bigGive.communityGoal)}</strong> community goal</span>
-              <span><strong>+ {fmt(bigGive.corporateGoal)}</strong> corporate match</span>
-            </div>
-          </div>
+          <BigGiveProgress />
           <div class="btn-row">
             <a class="btn btn-accent" href={links.donateBigGive}><Icon name="heart" /> Donate now</a>
             <a class="btn btn-ghost" href="/big-give">Learn more</a>
@@ -292,12 +277,6 @@ const progressLabel =
   }
   .homeroom-logo { width: 10rem; }
 
-  .raised { margin-bottom: var(--space-2); color: var(--ink-soft); }
-  .raised strong { font-family: var(--font-display); font-size: 1.5rem; color: var(--green-700); }
-  .progress-bar { height: 1rem; border-radius: 999px; background: var(--green-100); overflow: hidden; border: 1px solid var(--line); }
-  .progress-bar span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--green-500), var(--gold-500)); }
-  .progress-legend { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2); margin-top: var(--space-2); font-size: var(--fs-sm); color: var(--ink-soft); }
-  .progress-legend strong { color: var(--green-900); }
 
   /* ---------- Calendar ---------- */
   .cal-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-5); }
