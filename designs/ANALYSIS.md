@@ -67,7 +67,7 @@ Raw per-page extracts (text, links, images) are in [`crawl/`](crawl/), and every
 | "We take care of each other" Viking-ship eagle (PTA art) | `4eadb3_9c98f4…png` | About page / Big Give thanks |
 | Eagle head icon | `4eadb3_3b907c…jpg` (120×93) | Ms. Timmi memorial |
 | Eagle mascot costume photo | `360af2_f209a9…jpg` | Donation thanks page, community imagery |
-| School mural photos (octopus etc., 4 large JPGs) | `360af2_116e29…`, `…49ee01…`, `…cc2104…`, `…dbfce7…`, `…7588c1…` | About page gallery / section backgrounds |
+| School mural photos (octopus etc., 4 large JPGs) | `360af2_116e29…`, `…49ee01…`, `…cc2104…`, `…dbfce7…`, `…7588c1…` | Not used. Not confirmed as Adams murals, so they were removed from the redesign |
 | Big Give logo + banner | `360af2_4b6c54…png`, `4eadb3_a45e9d…jpg` | Big Give + Fundraising |
 | Moveathon art + 13 sponsor logos | `4eadb3_*` | Moveathon page |
 | Readerboard photo, school supplies photo, PNO banner, staff appreciation photo, Konstella icon, Box Tops / Fred Meyer / QR | various | Respective pages |

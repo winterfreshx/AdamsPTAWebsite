@@ -97,7 +97,8 @@ li + li { margin-top: var(--space-2); }
 .ext-icon {
   display: inline-block; width: 0.85em; height: 0.85em; margin-left: 0.25em; vertical-align: -0.05em; flex: none;
 }
-.btn .ext-icon { margin-left: 0; }
+/* The external link's trailing text is one element (.ext-label) so flex buttons never split it into columns;
+   its last word + icon (.ext-nowrap) never wrap apart. Both added by src/lib/external-links.mjs. */
 .ext-nowrap { white-space: nowrap; }
 .visually-hidden {
   position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
