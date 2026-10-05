@@ -63,7 +63,7 @@ Legend: `[ ]` to do · `[x]` done and verified · `[~]` done with a caveat (see 
   - Verify: every link from the old home page is present (`npm run verify`)
 
 ## Phase 7 — Content pages (same URLs as Wix)
-- [x] 7.1 `/about-our-pta`: who / what / why (SCPTSA, WSPTA, National PTA links), exec board cards with mailtos, "How to get involved" ×3, mural gallery
+- [x] 7.1 `/about-our-pta`: who / what / why (SCPTSA, WSPTA, National PTA links), exec board cards with mailtos, "How to get involved" ×3 (the mural gallery was later removed because the photos aren't confirmed as Adams murals)
 - [x] 7.2 `/volunteering`: FAQ jump-links that work, SPS registration steps, SPS portal, Ms. Patti contact, most-needed roles, Konstella committees, both Google Docs, limited-time list
 - [x] 7.3 `/pta-membership`: 3 price cards (Single $16, Dual $27 → Givebacks; Scholarship $0 → mailto), Givebacks explainer
 - [x] 7.4 `/fundraising`: quick links (Readerboard, Donate PayPal), annual fundraisers (Big Give, Moveathon), what funds support, corporate-match CTA, everyday giving link

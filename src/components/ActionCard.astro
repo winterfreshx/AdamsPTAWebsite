@@ -38,4 +38,6 @@ const { href, title, icon, tone = 'green' } = Astro.props;
   .ac-text { font-size: var(--fs-sm); color: var(--ink-soft); }
   .action-card :global(.ac-arrow) { flex: none; align-self: center; color: var(--gold-500); transition: transform 0.18s ease; }
   .action-card:hover :global(.ac-arrow) { transform: translateX(3px); }
+  /* External cards: the arrow is swapped for the diagonal external icon, so nudge it diagonally instead. */
+  .action-card:hover :global(.ac-arrow.ext-swapped) { transform: translate(2px, -2px); }
 </style>

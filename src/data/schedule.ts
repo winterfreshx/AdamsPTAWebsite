@@ -32,11 +32,18 @@ export const scheduled = (w: DateWindow, { invert = false } = {}) => ({
 });
 
 /** A link whose href depends on the window: `<a {...scheduledHref(window, '/in', '/out')}>`. */
-export const scheduledHref = (w: DateWindow, inside: string, outside: string) => ({
-  href: inWindow(w) ? inside : outside,
-  'data-schedule-href': '',
-  'data-starts': w.starts,
-  'data-expires': w.expires,
-  'data-href-in': inside,
-  'data-href-out': outside,
-});
+// Internal paths only: the browser swaps the href after the page loads, but whether a link opens in a new tab (and
+// gets the external icon) is decided when the page is rendered. An external URL here would get it wrong.
+export const scheduledHref = (w: DateWindow, inside: string, outside: string) => {
+  for (const p of [inside, outside]) {
+    if (!p.startsWith('/') || p.startsWith('//')) throw new Error(`scheduledHref only supports same-site paths like "/big-give", got "${p}"`);
+  }
+  return {
+    href: inWindow(w) ? inside : outside,
+    'data-schedule-href': '',
+    'data-starts': w.starts,
+    'data-expires': w.expires,
+    'data-href-in': inside,
+    'data-href-out': outside,
+  };
+};

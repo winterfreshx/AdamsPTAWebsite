@@ -45,7 +45,8 @@ export default defineConfig({
         return !NOINDEX.includes(path);
       },
     }),
-    // Must run after the pages are written: prefixes root-relative links with SITE_BASE.
+    // Runs after the pages are written: prefixes root-relative links with SITE_BASE. (External links are handled
+    // by src/middleware.ts, which also runs in the dev server.)
     basePath(),
   ],
 });

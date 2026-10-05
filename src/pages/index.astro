@@ -7,7 +7,6 @@ import Icon from '../components/Icon.astro';
 import eagle from '../assets/images/eagle-logo.png';
 import bigGiveLogo from '../assets/images/big-give-logo.png';
 import homeroomLogo from '../assets/images/homeroom-logo.png';
-import mural from '../assets/images/mural-octopus.jpg';
 import { links } from '../data/links';
 import { bigGive, spiritWear } from '../data/announcements';
 import { scheduled } from '../data/schedule';
@@ -195,19 +194,14 @@ import { site, school, bellTimes } from '../data/site';
           }
         </ol>
       </div>
-      <div class="visit">
-        <div class="photo visit-photo">
-          <Image src={mural} alt="The colorful octopus mural painted on the side of Adams Elementary" widths={[480, 800]} sizes="(min-width: 860px) 30rem, 100vw" />
-        </div>
-        <div class="card visit-card">
-          <h3>Visit Adams Elementary</h3>
-          <ul class="visit-list" role="list">
-            <li><Icon name="pin" /><a href={school.mapUrl}>{school.street}, {school.city}, {school.state} {school.zip}</a></li>
-            <li><Icon name="phone" /><a href={`tel:${school.phone.replace(/-/g, '')}`}>{school.phone}</a></li>
-            <li><Icon name="school" /><span>Principal {school.principal}</span></li>
-            <li><Icon name="mail" /><a href={`mailto:${site.email}`}>{site.email}</a></li>
-          </ul>
-        </div>
+      <div class="card visit-card">
+        <h3>Visit Adams Elementary</h3>
+        <ul class="visit-list" role="list">
+          <li><Icon name="pin" /><a href={school.mapUrl}>{school.street}, {school.city}, {school.state} {school.zip}</a></li>
+          <li><Icon name="phone" /><a href={`tel:${school.phone.replace(/-/g, '')}`}>{school.phone}</a></li>
+          <li><Icon name="school" /><span>Principal {school.principal}</span></li>
+          <li><Icon name="mail" /><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        </ul>
       </div>
     </div>
   </section>
@@ -298,9 +292,7 @@ import { site, school, bellTimes } from '../data/site';
   .timeline .highlight .tl-time { background: var(--gold-500); color: var(--green-900); }
   .timeline .highlight .tl-label { font-weight: 800; color: var(--green-900); }
 
-  .visit { display: grid; gap: var(--space-4); }
-  .visit-photo { aspect-ratio: 16 / 9; }
-  .visit-card { margin-top: calc(-1 * var(--space-7)); margin-inline: var(--space-4); position: relative; box-shadow: var(--shadow); }
+  .visit-card { box-shadow: var(--shadow); }
   .visit-list { list-style: none; padding: 0; margin-top: var(--space-3); display: grid; gap: var(--space-3); }
   .visit-list li { display: flex; gap: var(--space-3); align-items: flex-start; margin: 0; }
   .visit-list :global(svg) { flex: none; color: var(--green-500); margin-top: 0.2rem; width: 1.25rem; height: 1.25rem; }

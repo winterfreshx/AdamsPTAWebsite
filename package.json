@@ -10,7 +10,8 @@
     "preview": "astro preview",
     "verify": "node scripts/verify-links.mjs",
     "audit:contrast": "node scripts/audit-contrast.mjs",
-    "test:menu": "node scripts/test-menu.mjs"
+    "test:menu": "node scripts/test-menu.mjs",
+    "test:links": "node scripts/test-external-links.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

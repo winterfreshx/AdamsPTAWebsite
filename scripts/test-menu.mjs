@@ -190,6 +190,7 @@ async function testAllPagesFit() {
     .map(String)
     .filter((f) => f.endsWith('.html') && !/http-equiv="refresh"/.test(readFileSync(join(dist, f), 'utf8')));
   const wide = [];
+  const split = [];
   for (const f of pages) {
     const path = f === 'index.html' ? '/' : '/' + f.replace(/\.html$/, '').replace(/\/index$/, '/');
     await page.goto(url(path));
@@ -200,8 +201,20 @@ async function testAllPagesFit() {
       return { width: document.documentElement.scrollWidth, W, culprit: inner ? `${inner.tagName.toLowerCase()} "${(inner.textContent || '').trim().slice(0, 30)}"` : '' };
     });
     if (r.width > r.W) wide.push(`${path} is ${r.width}px wide (${r.culprit})`);
+    // Buttons and other row-flex links: their visible text must be ONE flex item, or it splits into side-by-side
+    // columns ("Open the / directory on" next to "Konstella↗"). Column-flex links (stacked label/email) are fine.
+    const splitLinks = await page.evaluate(() =>
+      [...document.querySelectorAll('a')].filter((a) => {
+        const cs = getComputedStyle(a);
+        if (!/flex/.test(cs.display) || cs.flexDirection.startsWith('column') || !a.getClientRects().length) return false;
+        const items = [...a.childNodes].filter((n) =>
+          n.nodeType === 3 ? n.textContent.trim() : n.nodeType === 1 && n.tagName.toLowerCase() !== 'svg' && !n.classList.contains('visually-hidden') && n.textContent.trim());
+        return items.length > 1;
+      }).map((a) => a.textContent.trim().replace(/\s+/g, ' ').slice(0, 40)));
+    for (const t of splitLinks) split.push(`${path}: "${t}"`);
   }
   check(`all ${pages.length} pages fit a 320px screen`, wide.length === 0, wide.join('; '));
+  check('no button or flex link splits its text into columns', split.length === 0, split.slice(0, 6).join('; '));
   await browser.close();
   return report;
 }

@@ -3,6 +3,7 @@
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isExternalHref, siteHosts, withoutProtectedRegions } from '../src/lib/external-links.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const dist = join(root, 'dist');
@@ -144,12 +145,33 @@ for (const [name, fg, bg] of pairs) {
   r >= 4.5 ? ok(`${name}: ${r.toFixed(2)}:1`) : fail(`${name}: ${r.toFixed(2)}:1`);
 }
 
-// ---- 9.8 target=_blank safety --------------------------------------------------------------------
-console.log('\n9.8 target="_blank" links use rel="noopener"');
+// ---- 9.8 External links open in a new tab, safely, and say so ----------------------------------------
+console.log('\n9.8 External links: new tab + rel="noopener", external icon, "(opens in a new tab)" for screen readers');
+// Same "is it external?" rule as the site itself (src/lib/external-links.mjs), so the two can't disagree.
+const EXTERNAL_ICON = 'M15 3h6v6';
+const hosts = siteHosts(process.env.SITE_URL || 'https://www.adamselementarypta.org');
+let externalCount = 0;
 for (const [f, html] of Object.entries(pages)) {
-  for (const m of html.matchAll(/<a\b[^>]*target="_blank"[^>]*>/g)) if (!/noopener/.test(m[0])) fail(`${f}: ${m[0].slice(0, 80)}`);
+  for (const m of withoutProtectedRegions(html).matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)) {
+    const [, attrs, inner] = m;
+    const href = attrs.match(/\shref="([^"]*)"/)?.[1] ?? '';
+    if (/target="_blank"/.test(attrs) && !/noopener/.test(attrs)) fail(`${f}: target="_blank" without noopener: ${href}`);
+    if (!isExternalHref(href, hosts)) continue;
+    const target = attrs.match(/\starget="([^"]*)"/)?.[1];
+    if (/\sdata-same-tab(\s|=|$)/.test(attrs) || (target && target !== '_blank')) continue; // deliberate same-tab opt-out
+    externalCount++;
+    const visible = inner.replace(/<span class="visually-hidden">[\s\S]*?<\/span>/g, '').replace(/<[^>]+>/g, '').trim();
+    const announced = /aria-label="[^"]*\(opens in a new tab\)/.test(attrs) || (!/\saria-label="/.test(attrs) && inner.includes('(opens in a new tab)'));
+    const icons = inner.split(EXTERNAL_ICON).length - 1;
+    const problems = [];
+    if (target !== '_blank') problems.push('no target="_blank"');
+    if (!/rel="[^"]*noopener/.test(attrs)) problems.push('no rel=noopener');
+    if (!announced) problems.push('no "(opens in a new tab)" for screen readers');
+    if (visible && icons !== 1) problems.push(`${icons} external icons`);
+    if (problems.length) fail(`${f}: ${href.slice(0, 60)}: ${problems.join(', ')}`);
+  }
 }
-ok('checked');
+ok(`${externalCount} external links checked`);
 
 console.log(failures ? `\n${failures} problem(s) found.` : '\nAll checks passed.');
 process.exit(failures ? 1 : 0);
