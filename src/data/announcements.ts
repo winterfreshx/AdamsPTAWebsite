@@ -15,7 +15,7 @@ export const bigGive = {
   perChildAsk: 700,
   communityGoal: 100_000,
   corporateGoal: 50_000,
-  // Amount raised so far; update during the campaign to move the progress bars on the home and Big Give pages.
+  // TODO(PTA): update the amount raised during the campaign; it moves the progress bars on the home and Big Give pages.
   raised: { community: 9_492.47, corporate: 0 },
 };
 

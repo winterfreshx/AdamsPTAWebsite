@@ -88,7 +88,7 @@ astro.config.mjs
 | `/fundraisingold`, `/copy-of-fundraising` | Redirect → `/fundraising` |
 | `/biggiveold` | Redirect → `/big-give` |
 | `/school-directory`, `/student-directory` | Info page: "The family directory now lives in Konstella" + link (see Open Decision D1) |
-| `/we-appreciate-adams-web-list` | Info page explaining how to get the binder (see D1) |
+| `/we-appreciate-adams-web-list` | Redirect → `/we-appreciate-adams` (the binder was removed; see D1 in the README) |
 | anything else | Custom branded 404 |
 
 ## 6. Home page wireframe

@@ -14,7 +14,6 @@ const goals = [
   { label: 'From our community', goal: bigGive.communityGoal, raised: bigGive.raised.community },
   { label: 'From corporate match', goal: bigGive.corporateGoal, raised: bigGive.raised.corporate },
 ];
-const showRaised = bigGive.raised.community + bigGive.raised.corporate > 0;
 ---
 
 <BaseLayout title="The Big Give" description={`The Adams PTA Big Give runs ${bigGive.dates}. Help us reach ${fmt(bigGive.communityGoal)} from our community and ${fmt(bigGive.corporateGoal)} in corporate match.`}>
@@ -49,7 +48,7 @@ const showRaised = bigGive.raised.community + bigGive.raised.corporate > 0;
             <div class="goal">
               <span class="goal-num">{fmt(g.goal)}</span>
               <span class="goal-label">{g.label}</span>
-              {showRaised && (
+              {g.raised > 0 && (
                 <>
                   <div class="meter" role="img" aria-label={`${fmt(g.raised)} raised of ${fmt(g.goal)}`}>
                     <span style={`width:${Math.min(100, (g.raised / g.goal) * 100).toFixed(2)}%`} />

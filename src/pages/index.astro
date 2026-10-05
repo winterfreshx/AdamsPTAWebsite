@@ -16,6 +16,12 @@ import { site, school, bellTimes } from '../data/site';
 const totalGoal = bigGive.communityGoal + bigGive.corporateGoal;
 const totalRaised = bigGive.raised.community + bigGive.raised.corporate;
 const pct = Math.min(100, Math.round((totalRaised / totalGoal) * 100));
+// Screen-reader text for the progress bar; mentions the amount raised only when the visible "raised so far" line shows.
+const goalBreakdown = `${fmt(bigGive.communityGoal)} from our community and ${fmt(bigGive.corporateGoal)} in corporate match`;
+const progressLabel =
+  totalRaised > 0
+    ? `${fmt(totalRaised)} raised toward a ${fmt(totalGoal)} goal: ${goalBreakdown}.`
+    : `Goal: ${fmt(totalGoal)} — ${goalBreakdown}.`;
 ---
 
 <BaseLayout title="Home">
@@ -104,7 +110,7 @@ const pct = Math.min(100, Math.round((totalRaised / totalGoal) * 100));
             The Big Give funds tutors, playground and lunch staff, SEL programs, classroom supplies and more. Families who
             are able are asked to give <strong>{fmt(bigGive.perChildAsk)} per child</strong>. Every amount makes a difference.
           </p>
-          <div class="progress" role="img" aria-label={`${fmt(totalRaised)} raised toward a ${fmt(totalGoal)} goal: ${fmt(bigGive.communityGoal)} from our community and ${fmt(bigGive.corporateGoal)} in corporate match.`}>
+          <div class="progress" role="img" aria-label={progressLabel}>
             {totalRaised > 0 && <p class="raised"><strong>{fmt(totalRaised)}</strong> raised so far</p>}
             <div class="progress-bar"><span style={`width:${Math.max(pct, 2)}%`}></span></div>
             <div class="progress-legend">

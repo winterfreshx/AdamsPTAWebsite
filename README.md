@@ -31,6 +31,7 @@ Most updates are one-line edits in `src/data/`:
 | Big Give goals and the amount raised so far (moves the progress bars) | `src/data/announcements.ts` → `bigGive` |
 | Exec board, every PTA email address, grade reps | `src/data/contacts.ts` |
 | Bell times, address, principal, Tax ID, land acknowledgment | `src/data/site.ts` |
+| The school year shown on directory and exec-board labels. **Update each summer**, and shift the grade-rep grade labels in `contacts.ts` to match. | `src/data/schoolYear.ts` |
 | PayPal / Givebacks / Konstella / form / calendar links | `src/data/links.ts` |
 | Corporate matching employers (keep them alphabetical) | `src/data/corporateMatching.ts` |
 | Moveathon sponsors (logo files go in `src/assets/images/sponsors/`) | `src/data/sponsors.ts` |
@@ -86,7 +87,8 @@ has appeared, someone has set up email on this domain, and it must be preserved.
 ### Launch day: moving the domain off Wix hosting
 
 1. **Review the site** at https://winterfreshx.github.io/AdamsPTAWebsite/ with the PTA board (or at `….netlify.app` /
-   `….pages.dev` if you switch hosts). Resolve the open decisions below.
+   `….pages.dev` if you switch hosts). Check [Decisions for the PTA board](#decisions-for-the-pta-board) for anything new
+   that's still open.
    Also confirm the `rep2030@adamselementary.org` and `rep2032@adamselementary.org` grade-rep inboxes exist in Google
    Workspace. They were added to match their class years and weren't on the old site.
 2. **In Wix, open Domains → `adamselementarypta.org` → Manage DNS records** and point the domain at the new host:
@@ -118,7 +120,7 @@ has appeared, someone has set up email on this domain, and it must be preserved.
 
 | ID | Decision | Outcome |
 |----|----------|---------|
-| D1 | Password-protected Wix pages (old directory, Staff Appreciation Binder) | The directory is the 2026/27 one on Konstella. The binder was removed: nobody had the password, and a static site can't password-protect a page. Its old URL redirects to Staff Appreciation. |
+| D1 | Password-protected Wix pages (old directory, Staff Appreciation Binder) | The directory is the current school year's directory on Konstella. The binder was removed: nobody had the password, and a static site can't password-protect a page. Its old URL redirects to Staff Appreciation. |
 | D2 | Grade-rep inboxes | Each class uses `rep<class year>@adamselementary.org`. |
 | D3 | Future Families tour dates | Added to the page when they're announced. |
 | D4 | Moveathon page | Shows the most recent event until the next one is ready. |
