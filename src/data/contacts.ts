@@ -1,5 +1,6 @@
 // People and inboxes. Update each school year.
 // Pages must import addresses from here, never type them inline, so a change lands everywhere at once.
+import { schoolYear } from './schoolYear';
 
 export const inbox = {
   execTeam: 'execteam@adamselementary.org',
@@ -16,7 +17,7 @@ export const inbox = {
 } as const;
 
 export const execBoard = {
-  year: '2026/27',
+  year: schoolYear,
   members: [
     { name: 'Kerry Lynd', role: 'PTA President', email: inbox.president },
     { name: 'Jaclyn Callahan', role: 'PTA Vice President', email: inbox.vicePresident },
@@ -36,7 +37,9 @@ export const ptaInboxes = [
   { label: 'Treasurer & corporate matching', email: inbox.treasurer },
 ];
 
-// Grade reps for the 2026/27 school year, by graduating class (K = Class of 2032 … 5th = Class of 2027).
+// Grade reps by graduating class. The grade labels are tied to the school year: when `schoolYear` changes,
+// shift them (in 2026/27, K = Class of 2032 … 5th = Class of 2027), add the new kindergarten class, and drop
+// the class that graduated.
 // Each class's inbox follows the rep<class year>@ pattern. (The Wix site showed "rep2020@" for the Class of 2030
 // and had no Class of 2032 inbox; both were corrected to match their class year.)
 // A class without an inbox falls back to the exec team on the Resources page.

@@ -73,7 +73,7 @@ Legend: `[ ]` to do · `[x]` done and verified · `[~]` done with a caveat (see 
 - [x] 7.8 `/corporate-matching`: 3 steps, Tax ID with copy button, **searchable** list of 50 employers (A–Z), treasurer contact
 - [x] 7.9 `/moveathon`: Pledge (99pledges) + Volunteer (Konstella), T-shirt winner, description, schedule table, 12 sponsor logos
 - [x] 7.10 `/resources`: quick buttons, contacts grid, grade reps (`#grade-reps`), newsletter sign-ups, communications, enrichment, child care, SPS links, PTA orgs, middle schools, Facebook/Instagram, Special Ed PTSA, National PTA (merges `/keep-connected` + `/grade-reps-groups`)
-- [x] 7.11 `/we-appreciate-adams`: explainer, binder link, call for leads, contribution contact
+- [x] 7.11 `/we-appreciate-adams`: explainer, call for leads, contribution contact (binder link later removed: D1)
 - [x] 7.12 `/prospective-families`: tours (January), address (enter on 62nd St), description
 - [x] 7.13 `/parent-night-out`: description, Konstella PNO sales link, "stay tuned"
 - [x] 7.14 `/communications-app`: Konstella explainer + join link
@@ -82,7 +82,7 @@ Legend: `[ ]` to do · `[x]` done and verified · `[~]` done with a caveat (see 
 
 ## Phase 8 — Transactional, legacy & error pages
 - [x] 8.1 `/donationthanks`, `/biggivethanks`, `/pno-confirmation`, `/readerboard-confirmation` (`.org` fixed), all `noindex`
-- [x] 8.2 `/school-directory`, `/student-directory`, `/we-appreciate-adams-web-list` info pages (D1), `noindex`
+- [x] 8.2 `/school-directory`, `/student-directory` info pages (D1), `noindex`; `/we-appreciate-adams-web-list` later became a redirect to `/we-appreciate-adams`
 - [x] 8.3 Redirects: `/keep-connected`, `/grade-reps-groups`, `/fundraisingold`, `/copy-of-fundraising`, `/biggiveold`
 - [x] 8.4 Branded `404.astro` with the eagle and links home
   - Verify: `dist/` contains every path from PLAN §5
@@ -105,7 +105,7 @@ Legend: `[ ]` to do · `[x]` done and verified · `[~]` done with a caveat (see 
 
 ## Phase 11 — Launch (PTA-owned, after review)
 - [ ] 11.1 PTA board reviews the preview URL
-- [ ] 11.2 Resolve open decisions D1–D6
+- [x] 11.2 Resolve open decisions D1–D6 (outcomes recorded in the README)
 - [ ] 11.3 Confirm PayPal return URLs still land on the thank-you pages
 - [ ] 11.4 Point DNS to GitHub Pages; enable HTTPS
 - [ ] 11.5 Cancel the Wix plan only after a week of stable traffic on the new site

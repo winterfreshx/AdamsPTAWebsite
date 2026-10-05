@@ -15,7 +15,8 @@ export const bigGive = {
   perChildAsk: 700,
   communityGoal: 100_000,
   corporateGoal: 50_000,
-  raised: { community: 0, corporate: 0 }, // TODO(PTA) D6: update weekly during the campaign
+  // TODO(PTA): update the amount raised during the campaign; it moves the progress bars on the home and Big Give pages.
+  raised: { community: 9_492.47, corporate: 0 },
 };
 
 // Gold announcement bar items. Each is shown only inside its window.

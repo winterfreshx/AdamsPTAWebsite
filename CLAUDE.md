@@ -37,6 +37,7 @@ There is no test runner or linter. CI runs build → verify → audit:contrast b
   - `links.ts`: every outside URL (PayPal, Givebacks, Konstella, forms, calendar), plus the `mailto()` helper.
   - `contacts.ts`: people and inboxes. Every PTA address is in the `inbox` map; pages import it rather than typing addresses.
   - `site.ts`: address, bell times, Tax ID, land acknowledgment.
+  - `schoolYear.ts`: the current school year (one import path; directory and exec-board labels and the About description use it).
   - `nav.ts`: the grouped menu, used by both the header and the footer.
   - `corporateMatching.ts`, `sponsors.ts`, `announcements.ts`: those lists and the Big Give numbers.
 
@@ -46,12 +47,13 @@ There is no test runner or linter. CI runs build → verify → audit:contrast b
 - **Layouts:** `BaseLayout` has the page head and SEO tags, the announcement bar, the header and the footer. `MessageLayout` wraps it into a centered eagle-and-message page, used for the thank-you pages, the directory info pages (both through `DirectoryMoved.astro`) and the 404. Inner pages start with `PageHero`.
 - **Styling:** design tokens (the green and gold scales, type and spacing) and shared classes (`.btn`, `.card`, `.section`, `.grid-*`, `.split`, `.steps`, `.check-list`, `.callout`) are in `src/styles/global.css`. Use those before writing page-scoped `<style>`. Cards and buttons are CSS classes, not components. Icons come from `Icon.astro`, a fixed set of inline SVGs; to add one, add a path to its `paths` map.
 - **JavaScript is a progressive enhancement.** The desktop dropdowns are `<details>` elements. On hover devices, hovering opens them and a mouse click won't toggle an open one shut (keyboard activation still toggles). The mobile menu's `<noscript>` fallback in `BaseLayout` shows it inline and makes the header non-sticky below 1000px. The only scripts are the header menu, the schedule script, and the corporate-matching search and copy button.
+- **Money** is formatted with `usd()` from `src/lib/format.ts` (whole dollars without cents, otherwise two decimals).
 - **Images** go in `src/assets/images/` and are rendered with `astro:assets` `<Image>`. `eagle-logo.png` is the transparent brand eagle, used in the hero, the header, the footer, the favicon and the OG image.
 - **The site works at a domain root or in a sub-folder.** `SITE_URL`/`SITE_BASE` env vars set Astro's `site`/`base` (CI gets them from `actions/configure-pages`; locally they default to the real domain at its root). Source code always writes root-relative links (`/about-our-pta`); `integrations/base-path.mjs` prefixes the base into the built HTML after each build, including `data-href-in`/`data-href-out`, meta-refresh redirects and same-site absolute URLs. Code that *compares* the current URL must use `sitePath()` from `src/lib/paths.ts`, and code that builds an absolute URL must use `withBase()`. `verify` and `audit:contrast` read `SITE_BASE` too; `verify` fails on any root-relative link missing the base, and the audit fails if the stylesheet didn't load.
 - **`compressHTML: false` is deliberate.** With compression on, Astro removed the whitespace before inline links. Don't turn it back on.
 
 ## Content conventions
 
-- Search for `TODO(PTA)` to find content waiting on a PTA decision. Decisions D1–D6 are explained in the README and in `designs/PLAN.md` §8. Don't invent names, dates or addresses to fill those gaps.
+- Search for `TODO(PTA)` to find content waiting on a PTA decision. Decisions for the PTA board are listed in the README (none open right now; D1–D6 are resolved and recorded there). New ones get the next ID (D7…), are never renumbered, and are marked in code with `TODO(PTA) Dn`. `designs/PLAN.md` §8 has the original D1–D6 list. Don't invent names, dates or addresses to fill those gaps.
 - Deployment is GitHub Pages through `.github/workflows/deploy.yml` (the repo is public). The site is **not launched yet**: until the custom domain points at GitHub it's served at `winterfreshx.github.io/AdamsPTAWebsite/`. The domain is registered and its DNS managed at Wix. Cutover steps are in the README.
 - The repo lives under `~/Documents`, and iCloud sync has created `* 2.*` duplicate copies of files before. Astro builds duplicate pages as real routes, so stage files explicitly rather than with `git add -A`.
