@@ -4,7 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
 import { links, mailto } from '../data/links';
 import { ptaInboxes, gradeReps, schoolContacts, inbox } from '../data/contacts';
-import { site } from '../data/site';
+import { site, schoolYear } from '../data/site';
 
 const quick = [
   { label: 'Join Konstella', href: links.konstella, icon: 'app' },
@@ -100,10 +100,10 @@ const linkGroups = [
           <Icon name="users" size={30} class="i" />
           <h3>Family directory</h3>
           <p>
-            Families opt in to be listed; sign-up begins mid-September. The current <a href={links.konstellaDirectory}>family directory</a>
+            Families opt in to be listed; sign-up begins mid-September. The {schoolYear} <a href={links.konstellaDirectory}>family directory</a>
             is on Konstella. For edits or removal, email <a href={`mailto:${inbox.familyDirectory}`}>{inbox.familyDirectory}</a>.
           </p>
-          <a class="btn btn-ghost" href="/school-directory">Looking for the 2024/25 directory?</a>
+          <a class="btn btn-ghost" href={links.konstellaDirectory}>Open the {schoolYear} directory</a>
         </article>
         <article class="card">
           <Icon name="megaphone" size={30} class="i" />

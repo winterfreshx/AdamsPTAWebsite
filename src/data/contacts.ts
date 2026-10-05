@@ -1,4 +1,5 @@
 // People and inboxes. Update each school year.
+import { schoolYear } from './schoolYear';
 // Pages must import addresses from here, never type them inline, so a change lands everywhere at once.
 
 export const inbox = {
@@ -16,7 +17,7 @@ export const inbox = {
 } as const;
 
 export const execBoard = {
-  year: '2026/27',
+  year: schoolYear,
   members: [
     { name: 'Kerry Lynd', role: 'PTA President', email: inbox.president },
     { name: 'Jaclyn Callahan', role: 'PTA Vice President', email: inbox.vicePresident },

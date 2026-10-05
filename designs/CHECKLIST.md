@@ -105,7 +105,7 @@ Legend: `[ ]` to do · `[x]` done and verified · `[~]` done with a caveat (see 
 
 ## Phase 11 — Launch (PTA-owned, after review)
 - [ ] 11.1 PTA board reviews the preview URL
-- [ ] 11.2 Resolve open decisions D1, D3, D4, D6 (D2 grade-rep inboxes and D5 hosting are resolved)
+- [ ] 11.2 Resolve open decision D1 (D2–D6 are resolved)
 - [ ] 11.3 Confirm PayPal return URLs still land on the thank-you pages
 - [ ] 11.4 Point DNS to GitHub Pages; enable HTTPS
 - [ ] 11.5 Cancel the Wix plan only after a week of stable traffic on the new site

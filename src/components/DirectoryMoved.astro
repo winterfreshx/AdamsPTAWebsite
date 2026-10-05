@@ -4,6 +4,7 @@
 import MessageLayout from '../layouts/MessageLayout.astro';
 import { links } from '../data/links';
 import { inbox } from '../data/contacts';
+import { schoolYear } from '../data/site';
 
 interface Props {
   title: string;
@@ -12,9 +13,9 @@ const { title } = Astro.props;
 ---
 
 <MessageLayout title={title} heading="The family directory has moved to Konstella">
-  <p>The current Adams family directory is available to Adams families in the Konstella app.</p>
+  <p>The {schoolYear} Adams family directory is available to Adams families in the Konstella app.</p>
   <p>
-    Looking for an older directory, or need to update your listing? Email
+    Need to update your listing? Email
     <a href={`mailto:${inbox.familyDirectory}`}>{inbox.familyDirectory}</a> or ask your
     <a href="/resources#grade-reps">grade rep</a>.
   </p>

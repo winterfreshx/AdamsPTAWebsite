@@ -8,8 +8,8 @@ import banner from '../assets/images/big-give-banner.jpg';
 import { links } from '../data/links';
 import { bigGive } from '../data/announcements';
 import { site } from '../data/site';
+import { usd as fmt } from '../lib/format';
 
-const fmt = (n: number) => `$${n.toLocaleString('en-US')}`;
 const goals = [
   { label: 'From our community', goal: bigGive.communityGoal, raised: bigGive.raised.community },
   { label: 'From corporate match', goal: bigGive.corporateGoal, raised: bigGive.raised.corporate },
@@ -50,10 +50,12 @@ const showRaised = bigGive.raised.community + bigGive.raised.corporate > 0;
               <span class="goal-num">{fmt(g.goal)}</span>
               <span class="goal-label">{g.label}</span>
               {showRaised && (
-                <div class="meter" role="img" aria-label={`${fmt(g.raised)} raised of ${fmt(g.goal)}`}>
-                  <span style={`width:${Math.min(100, (g.raised / g.goal) * 100)}%`} />
-                  <small>{fmt(g.raised)} raised</small>
-                </div>
+                <>
+                  <div class="meter" role="img" aria-label={`${fmt(g.raised)} raised of ${fmt(g.goal)}`}>
+                    <span style={`width:${Math.min(100, (g.raised / g.goal) * 100).toFixed(2)}%`} />
+                  </div>
+                  <small class="meter-label">{fmt(g.raised)} raised</small>
+                </>
               )}
             </div>
           ))
@@ -96,6 +98,6 @@ const showRaised = bigGive.raised.community + bigGive.raised.corporate > 0;
   .goal-label { font-weight: 800; color: var(--ink-soft); }
   .meter { width: 100%; margin-top: var(--space-3); height: 0.9rem; border-radius: 999px; background: var(--white); overflow: hidden; position: relative; }
   .meter span { display: block; height: 100%; background: linear-gradient(90deg, var(--green-500), var(--gold-500)); }
-  .meter small { display: block; margin-top: var(--space-2); }
+  .meter-label { font-weight: 700; color: var(--ink-soft); }
   .card :global(.i) { color: var(--green-500); margin-bottom: var(--space-3); }
 </style>

@@ -52,6 +52,6 @@ There is no test runner or linter. CI runs build → verify → audit:contrast b
 
 ## Content conventions
 
-- Search for `TODO(PTA)` to find content waiting on a PTA decision. Open decisions (D1, D3, D4, D6) are listed in the README; resolved ones are removed from it, and IDs are never renumbered because the `TODO(PTA) Dn` comments refer to them. `designs/PLAN.md` §8 has the original D1–D6 list. Don't invent names, dates or addresses to fill those gaps.
+- Search for `TODO(PTA)` to find content waiting on a PTA decision. Open decisions (currently only D1) are listed in the README; resolved ones are removed from it, and IDs are never renumbered because the `TODO(PTA) Dn` comments refer to them. `designs/PLAN.md` §8 has the original D1–D6 list. Don't invent names, dates or addresses to fill those gaps.
 - Deployment is GitHub Pages through `.github/workflows/deploy.yml` (the repo is public). The site is **not launched yet**: until the custom domain points at GitHub it's served at `winterfreshx.github.io/AdamsPTAWebsite/`. The domain is registered and its DNS managed at Wix. Cutover steps are in the README.
 - The repo lives under `~/Documents`, and iCloud sync has created `* 2.*` duplicate copies of files before. Astro builds duplicate pages as real routes, so stage files explicitly rather than with `git add -A`.

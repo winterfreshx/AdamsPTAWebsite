@@ -1,6 +1,8 @@
 // School-wide facts shown in the header, footer and home page.
 import { inbox } from './contacts';
 
+export { schoolYear } from './schoolYear';
+
 export const site = {
   name: 'Adams Elementary PTA',
   shortName: 'Adams PTA',

@@ -114,12 +114,10 @@ has appeared, someone has set up email on this domain, and it must be preserved.
 
 ## Open decisions for the PTA board
 
-IDs match the `TODO(PTA) Dn` comments in the code, so search for one to find where it's handled. Resolved decisions
-are removed from this list (D2, grade-rep inboxes, and D5, hosting, are done).
+IDs match the `D1`-style comments in the code. Resolved decisions are removed from this list: D2 (grade-rep inboxes),
+D3 (tour dates go up when announced), D4 (last year's Moveathon stays until the next one), D5 (hosting) and
+D6 (Big Give totals are kept in `src/data/announcements.ts`).
 
 | ID | Decision | What the site does now |
 |----|----------|------------------------|
-| D1 | The 2024/25 directory and the Staff Appreciation Binder were password-protected Wix pages. A static site can't do real password protection. | `/school-directory` points families to the Konstella directory. The binder page explains how to get access. Put the binder in a Google Drive file shared with Adams families and paste its link into `links.staffAppreciationBinder`. |
-| D3 | Future Families tour dates | Says "January, details coming soon." The outdated principal name was removed. |
-| D4 | Moveathon page shows the May 2026 event | Kept as last year's recap with sponsors, to be refreshed for Spring 2027. |
-| D6 | Big Give live totals | Goals are shown. Update `bigGive.raised` to show progress bars. |
+| D1 | The Staff Appreciation Binder (teachers' favorite treats, drinks, stores and so on) was a password-protected Wix page. A static site can't do real password protection. | The "Online Staff Appreciation Binder" button opens an info page telling families to ask their grade rep. To link the binder directly, put it in a Google Drive file shared only with Adams families and paste its link into `links.staffAppreciationBinder` in `src/data/links.ts`. Or remove the button if the binder isn't used. |
