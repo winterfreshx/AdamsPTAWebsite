@@ -1,7 +1,8 @@
 # Adams Elementary PTA Website
 
-The new website for the [Adams Elementary School PTA](https://www.adamselementarypta.org) (Ballard, Seattle), replacing the
-old Wix site. It's a fast static site in Adams green and gold, built mobile-first with [Astro](https://astro.build).
+The website for the [Adams Elementary School PTA](https://www.adamselementarypta.org) (Ballard, Seattle), live at
+https://www.adamselementarypta.org since October 4, 2026, when it replaced the old Wix site. It's a fast static site in Adams
+green and gold, built mobile-first with [Astro](https://astro.build).
 
 - **Design docs:** [`designs/ANALYSIS.md`](designs/ANALYSIS.md) (audit of the old site) ·
   [`designs/PLAN.md`](designs/PLAN.md) (design system, sitemap, URL map) ·
@@ -44,77 +45,78 @@ that needs a decision or a yearly refresh.
 
 ## Deploying
 
-Every push to `main` runs `.github/workflows/deploy.yml`: build → `verify` → `audit:contrast` → deploy to GitHub Pages.
-Dated content switches over in visitors' browsers, so it doesn't depend on a rebuild.
+**The site is live at https://www.adamselementarypta.org** (launched October 4, 2026), hosted on GitHub Pages.
 
-> **Current status (October 2026): not launched yet.** The repo is public and GitHub Pages is enabled with
-> *Source = GitHub Actions*. Until the custom domain is connected, the site is published at
-> **https://winterfreshx.github.io/AdamsPTAWebsite/**, which works as a full preview for the PTA board. Launch means
-> pointing `www.adamselementarypta.org` at GitHub Pages (see the launch-day steps below).
+Every push to `main` runs `.github/workflows/deploy.yml`: build → `verify` → `test:links` → `audit:contrast` →
+`test:menu` → deploy. A failing check stops the deploy, so the live site keeps its last good version. Dated content
+(announcements, the Big Give card, the Donate button) switches over in visitors' browsers, so it doesn't depend on a rebuild.
 
-**Sub-folder vs. domain root:** the build adapts automatically. CI asks GitHub Pages where the site is served
-(`actions/configure-pages`) and passes that to the build as `SITE_URL` and `SITE_BASE`. Before launch that's the
-`/AdamsPTAWebsite` sub-folder; after the custom domain is set it's the domain root, with no code change. To build the
-sub-folder version locally:
+### How it's hosted
+
+| | |
+|---|---|
+| Host | **GitHub Pages**. The repo is public; *Settings → Pages → Source* = **GitHub Actions** |
+| Custom domain | `www.adamselementarypta.org`, with **Enforce HTTPS** on (certificate covers `www` and the bare domain) |
+| Redirects | `http://…`, `adamselementarypta.org` (without `www`) and the old preview `winterfreshx.github.io/AdamsPTAWebsite/…` all redirect (301) to `https://www.adamselementarypta.org/…` |
+| Cost | Free. The only ongoing cost is the domain renewal at Wix. |
+
+### The domain and its DNS (at Wix)
+
+The domain was bought through Wix (registrar: Tucows) and its DNS stays at Wix (`ns14.wixdns.net`, `ns15.wixdns.net`).
+It's paid through **August 15, 2028**. It has **no email**: PTA email addresses are `@adamselementary.org`, a different
+domain on Google Workspace.
+
+Records set in **Wix → Domains → `adamselementarypta.org` → ⋯ → Manage DNS Records**:
+
+| Type | Host | Value | Purpose |
+|------|------|-------|---------|
+| A | `@` | `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153` | GitHub Pages |
+| CNAME | `www` | `winterfreshx.github.io` | GitHub Pages |
+| TXT | `_github-pages-challenge-winterfreshx` | (value from GitHub) | Verifies the domain in GitHub, so no one else's GitHub site can claim it |
+
+Check them any time with `dig A adamselementarypta.org` and `dig CNAME www.adamselementarypta.org`.
+
+**Rollback** (if ever needed): set the A records back to Wix's `185.230.63.107`, `185.230.63.171`, `185.230.63.186`
+and `www` back to `cdn1.wixdns.net`, reconnect the domain to the Wix site in Wix, and clear the custom domain in GitHub
+*Settings → Pages*. That only works while the Wix Premium plan is still active.
+
+**Domain root vs. sub-folder:** the build adapts on its own. CI asks GitHub Pages where the site is served
+(`actions/configure-pages`) and passes that as `SITE_URL`/`SITE_BASE`. With the custom domain that's the domain root.
+If the domain were ever disconnected, GitHub would serve the site under `/AdamsPTAWebsite/` on `winterfreshx.github.io`,
+and the next deploy would build for that sub-folder with no code change. To test that variant locally:
 
 ```sh
 SITE_URL=https://winterfreshx.github.io SITE_BASE=/AdamsPTAWebsite npm run build
 SITE_BASE=/AdamsPTAWebsite npm run verify && SITE_BASE=/AdamsPTAWebsite npm run audit:contrast
 ```
 
-### Hosting options
+**Housekeeping notes:**
+- The `CNAME` file in the repo root was created by GitHub when the custom domain was saved. It duplicates
+  `public/CNAME`, which is what the build uses. Either can stay.
+- Saving the custom domain once triggered GitHub's built-in "pages-build-deployment" (Jekyll) run, which failed. That's
+  expected for an Astro site and harmless, because Pages deploys from our workflow.
 
-Wix can't host this site. Wix only serves sites built in its own editor, so you can't upload your own code to it. The plan
-is to **keep the domain at Wix and host the site elsewhere.**
+### After launch: remaining to-dos
 
-| Option | Cost | Notes |
-|--------|------|-------|
-| **Netlify** or **Cloudflare Pages** | Free | Gives a preview link for every PR, so the board can review changes before merging. Needs a small config file and connecting the repo in their dashboard. |
-| **GitHub Pages** (current setup: the repo is public) | Free | Done: *Settings → Pages → Source* is **GitHub Actions**, and the workflow deploys on every push to `main`. Preview at `winterfreshx.github.io/AdamsPTAWebsite/` until launch. No per-PR previews. |
-| Rebuild the design inside Wix's editor | Wix Premium plan | Stays on one platform, but loses this codebase, the automated checks and the faster mobile pages. |
+- [ ] **Cancel the Wix Premium site plan** about a week after launch (around October 11, 2026). Keep the **domain** in
+      the Wix account with **auto-renew on** and a current payment method, or it will lapse.
+- [ ] Confirm the `rep2030@adamselementary.org` and `rep2032@adamselementary.org` grade-rep inboxes exist in Google
+      Workspace. They were added to match their class years and weren't on the old site.
+- [ ] Make one real PayPal donation (any amount) and check that it returns to `/donationthanks` on the new site.
 
-### The domain and Wix (checked October 4, 2026)
+### Optional: transferring the domain away from Wix
 
-| | |
-|---|---|
-| Domain | `adamselementarypta.org` |
-| Bought through | **Wix** (registrar: Tucows, the company Wix uses for domains) |
-| DNS managed by | **Wix** (`ns14.wixdns.net`, `ns15.wixdns.net`) |
-| Paid through | **August 15, 2028** |
-| Email on this domain | **None.** PTA email addresses are `@adamselementary.org`, a *different* domain on Google Workspace. Changing `adamselementarypta.org` does not affect anyone's email. |
+Not required, since the site works with DNS at Wix. If you do, transfer **after** the site has been stable for a while,
+and set up DNS at the new provider **before** the transfer, so the site never goes down:
 
-Re-check before cutover with `dig NS adamselementarypta.org` and `dig MX adamselementarypta.org`. If an `MX` record
-has appeared, someone has set up email on this domain, and it must be preserved.
-
-### Launch day: moving the domain off Wix hosting
-
-1. **Review the site** at https://winterfreshx.github.io/AdamsPTAWebsite/ with the PTA board (or at `….netlify.app` /
-   `….pages.dev` if you switch hosts). Check [Decisions for the PTA board](#decisions-for-the-pta-board) for anything new
-   that's still open.
-   Also confirm the `rep2030@adamselementary.org` and `rep2032@adamselementary.org` grade-rep inboxes exist in Google
-   Workspace. They were added to match their class years and weren't on the old site.
-2. **In Wix, open Domains → `adamselementarypta.org` → Manage DNS records** and point the domain at the new host:
-   - **GitHub Pages:** apex `@` → **A** records `185.199.108.153`, `185.199.109.153`, `185.199.110.153`,
-     `185.199.111.153`; `www` → **CNAME** → `winterfreshx.github.io`. Then in *Settings → Pages*, enter
-     `www.adamselementarypta.org` as the custom domain and turn on **Enforce HTTPS**. Then re-run the latest
-     deploy workflow: the next build picks up the domain root automatically, and the github.io address starts redirecting to it.
-   - **Netlify / Cloudflare Pages:** add `www.adamselementarypta.org` as a custom domain in their dashboard, then copy
-     the records it shows into Wix's DNS settings.
-
-   Delete Wix's existing `A` and `www` `CNAME` records for the site, but leave any other records (for example `TXT`
-   verification records) alone.
-3. **Wait for DNS to update.** This usually takes minutes to a few hours. The new host issues the HTTPS certificate on its own.
-4. **Test the PayPal "return to site" pages:** `/donationthanks`, `/biggivethanks`, `/readerboard-confirmation`,
-   `/pno-confirmation`. They keep their exact Wix URLs, so the PayPal buttons don't need changes.
-5. **Keep the Wix Premium site plan for about a week**, until traffic on the new site looks normal, then cancel it.
-
-### After launch: what stays at Wix
-
-- **The domain stays in the Wix account** and renews on its own yearly domain fee, separate from the Premium site plan.
-  Keep auto-renew on, and keep the payment method current, or the domain will lapse.
-- **Hosting cost drops to $0** on the free options; the domain renewal becomes the only ongoing cost.
-- **Optional:** to leave Wix entirely, transfer the domain to another registrar (such as Cloudflare or Namecheap) from Wix's
-  Domains page. Do this after launch, not on the same day, so a DNS problem and a transfer problem can't happen at once.
+1. Pick a registrar (Cloudflare is at-cost and requires its DNS; Namecheap and Porkbun also work). Add the domain there and
+   recreate the DNS records in the table above. On Cloudflare, set them to "DNS only" (grey cloud).
+2. In Wix, change the domain's nameservers to the new provider's, and wait until the site loads normally.
+3. In Wix, turn off the transfer (registrar) lock, turn off DNSSEC if on, and request the authorization (EPP) code. It's
+   emailed to the domain owner. Don't change the owner's contact details first, which can trigger a 60-day lock.
+4. Start the transfer at the new registrar with the code, pay (usually adds a year), and approve the confirmation emails.
+   It takes up to about 5–7 days.
+5. Turn on auto-renew at the new registrar, then remove the domain from Wix.
 
 ## Decisions for the PTA board
 
@@ -126,7 +128,7 @@ has appeared, someone has set up email on this domain, and it must be preserved.
 | D2 | Grade-rep inboxes | Each class uses `rep<class year>@adamselementary.org`. |
 | D3 | Future Families tour dates | Added to the page when they're announced. |
 | D4 | Moveathon page | Shows the most recent event until the next one is ready. |
-| D5 | Hosting | GitHub Pages; the domain switch from Wix follows the launch-day steps above. |
+| D5 | Hosting | GitHub Pages with DNS at Wix. Launched at `www.adamselementarypta.org` on October 4, 2026. |
 | D6 | Big Give totals | Kept up to date in `src/data/announcements.ts` → `bigGive.raised`. |
 
 New decisions can be added here with the next ID (D7…), and marked in the code with a `TODO(PTA) Dn` comment.
