@@ -6,7 +6,8 @@ green and gold, built mobile-first with [Astro](https://astro.build).
 
 - **Design docs:** [`designs/ANALYSIS.md`](designs/ANALYSIS.md) (audit of the old site) ·
   [`designs/PLAN.md`](designs/PLAN.md) (design system, sitemap, URL map) ·
-  [`designs/CHECKLIST.md`](designs/CHECKLIST.md) (build and verification checklist)
+  [`designs/CHECKLIST.md`](designs/CHECKLIST.md) (build and verification checklist) ·
+  [`designs/DECISIONS.md`](designs/DECISIONS.md) (decisions for the PTA board)
 - **Crawl of the old site:** [`designs/crawl/`](designs/crawl/)
 
 ## Run it locally
@@ -39,6 +40,28 @@ Most updates are one-line edits in `src/data/`:
 | Corporate matching employers (keep them alphabetical) | `src/data/corporateMatching.ts` |
 | Moveathon sponsors (logo files go in `src/assets/images/sponsors/`) | `src/data/sponsors.ts` |
 | Menu items | `src/data/nav.ts` |
+
+### How dated content turns itself on and off
+
+The Spirit Wear and Big Give items each have a date window in `src/data/announcements.ts`, such as
+`window: { starts: '2026-10-01', expires: '2026-10-31' }`. Both dates are Seattle dates and both are included: the item
+appears on `starts` and disappears after `expires`. Either can be left out (no `starts` means "from now", no `expires`
+means "until further notice").
+
+A window controls everything tied to that campaign:
+
+| Window | What it switches |
+|---|---|
+| `spiritWear.window` | the Spirit Wear announcement and the home-page Spirit Wear card |
+| `bigGive.window` | the Big Give announcement; on the home page, the Big Give card and hero button (outside the window, a "Support Adams all year long" card and a "Ways to give" button); and the header's **Donate** button (`/big-give` during the window, `/fundraising` otherwise) |
+
+Every item is written into every page when the site is built. A small script on each page then checks today's date in
+Seattle each time someone opens the page, and hides whatever is outside its window. So an announcement clears itself
+on the morning after its `expires` date, with no rebuild or push. When no announcement is showing, the gold bar
+disappears. A nightly rebuild (13:00 UTC, about 5–6 am in Seattle) also refreshes what visitors without JavaScript, and search engines, see.
+
+To add a new announcement, add an entry to the `announcements` list in the same file with its own `window`. Nothing is
+ever deleted automatically, so tidy up expired entries when you set up next year's dates.
 
 Page text lives in `src/pages/<page-name>.astro`, one file per URL. Search the code for `TODO(PTA)` to find content
 that needs a decision or a yearly refresh.
@@ -118,15 +141,6 @@ and set up DNS at the new provider **before** the transfer, so the site never go
 
 ## Decisions for the PTA board
 
-**None open right now.** For the record, here is how the original decisions (D1–D6) were settled:
-
-| ID | Decision | Outcome |
-|----|----------|---------|
-| D1 | Password-protected Wix pages (old directory, Staff Appreciation Binder) | The directory is the current school year's directory on Konstella. The binder was removed: nobody had the password, and a static site can't password-protect a page. Its old URL redirects to Staff Appreciation. |
-| D2 | Grade-rep inboxes | Each class uses `rep<class year>@adamselementary.org` (all confirmed to exist, including the new `rep2030@` and `rep2032@`). |
-| D3 | Future Families tour dates | Added to the page when they're announced. |
-| D4 | Moveathon page | Shows the most recent event until the next one is ready. |
-| D5 | Hosting | GitHub Pages with DNS at Wix. Launched at `www.adamselementarypta.org` on October 4, 2026. |
-| D6 | Big Give totals | Kept up to date in `src/data/announcements.ts` → `bigGive.raised`. |
-
-New decisions can be added here with the next ID (D7…), and marked in the code with a `TODO(PTA) Dn` comment.
+Website questions that need a board decision are tracked in [`designs/DECISIONS.md`](designs/DECISIONS.md), with
+IDs D1, D2, … and the outcome of each. **None are open right now.** To raise a new one, add it there with the next ID and
+mark the affected code with a `TODO(PTA) Dn` comment.

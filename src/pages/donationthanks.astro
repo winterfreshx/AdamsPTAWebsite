@@ -1,10 +1,9 @@
 ---
 import MessageLayout from '../layouts/MessageLayout.astro';
-import mascot from '../assets/images/eagle-mascot.jpg';
 import { site } from '../data/site';
 ---
 
-<MessageLayout title="Thank You" heading="Thank you so much for your donation to Adams Elementary!" image={mascot} imageAlt="The Adams Eagle mascot in front of a green and blue balloon arch">
+<MessageLayout title="Thank You" heading="Thank you so much for your donation to Adams Elementary!">
   <p>Your generosity supports every student, teacher and staff member at Adams.</p>
   <p>Adams Elementary PTA Tax ID: <strong>{site.taxId}</strong></p>
   <div class="btn-row">

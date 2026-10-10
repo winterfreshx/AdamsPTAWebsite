@@ -88,7 +88,7 @@ astro.config.mjs
 | `/fundraisingold`, `/copy-of-fundraising` | Redirect → `/fundraising` |
 | `/biggiveold` | Redirect → `/big-give` |
 | `/school-directory`, `/student-directory` | Info page: "The family directory now lives in Konstella" + link (see Open Decision D1) |
-| `/we-appreciate-adams-web-list` | Redirect → `/we-appreciate-adams` (the binder was removed; see D1 in the README) |
+| `/we-appreciate-adams-web-list` | Redirect → `/we-appreciate-adams` (the binder was removed; see D1 in [`DECISIONS.md`](DECISIONS.md)) |
 | anything else | Custom branded 404 |
 
 ## 6. Home page wireframe
@@ -130,6 +130,8 @@ pointed at the Google Calendar, Volunteer FAQ buttons turned into in-page anchor
 Stale content stays but is flagged with `TODO(PTA)` comments in the data files. See Open Decisions.
 
 ## 8. Open decisions for the PTA (does not block the build)
+
+The defaults below were taken at build time. The board's final outcomes are in [`DECISIONS.md`](DECISIONS.md).
 
 | ID | Decision | Default taken in the build |
 |----|----------|----------------------------|
