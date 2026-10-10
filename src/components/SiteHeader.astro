@@ -192,8 +192,9 @@ const groupIsCurrent = (items: { href: string }[]) => items.some((i) => isCurren
     padding: 0.55rem 0.9rem; border-radius: 999px;
     font-family: var(--font-display); font-weight: 700; color: var(--green-900);
   }
+  /* Gold marks the current page's group; hovering or opening any group (including the current one) shows green. */
+  .nav-trigger.active { color: var(--green-700); background: var(--gold-200); }
   .nav-trigger:hover, .nav-group[open] .nav-trigger { background: var(--green-100); }
-  .nav-trigger.active { color: var(--green-700); box-shadow: inset 0 -3px 0 var(--gold-500); }
   .nav-trigger :global(.chev) { transition: transform 0.2s ease; }
   .nav-group[open] .nav-trigger :global(.chev) { transform: rotate(180deg); }
 
@@ -211,7 +212,8 @@ const groupIsCurrent = (items: { href: string }[]) => items.some((i) => isCurren
     display: flex; flex-direction: column; padding: 0.6rem 0.85rem; border-radius: var(--radius-sm);
     text-decoration: none; color: var(--ink);
   }
-  .dropdown a:hover, .dropdown a[aria-current='page'] { background: var(--green-100); }
+  .dropdown a[aria-current='page'] { background: var(--gold-200); }
+  .dropdown a:hover { background: var(--green-100); }
   .dropdown a[aria-current='page'] .dd-label { color: var(--green-700); }
   .dd-label { font-weight: 800; color: var(--green-900); }
   .dd-desc { font-size: 0.875rem; color: var(--ink-soft); }

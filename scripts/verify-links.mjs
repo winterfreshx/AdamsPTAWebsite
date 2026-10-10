@@ -139,6 +139,7 @@ const pairs = [
   ['gold-300 on green-900 (footer headings)', '#f5cd6e', '#0b3d27'],
   ['white on green-500 (hover)', '#ffffff', '#1f7a4d'],
   ['green-900 on gold-100', '#0b3d27', '#fdf4dc'],
+  ['green-700 on gold-200 (current nav group)', '#105838', '#fbeac0'],
 ];
 for (const [name, fg, bg] of pairs) {
   const r = ratio(fg, bg);
