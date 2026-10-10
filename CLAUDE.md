@@ -76,7 +76,7 @@ The five sections run in parallel, each in its own browser, and the whole suite 
   - `site.ts`: address, bell times, Tax ID, land acknowledgment.
   - `schoolYear.ts`: the current school year (one import path; directory and exec-board labels and the About description use it).
   - `nav.ts`: the grouped menu, used by both the header and the footer.
-  - `corporateMatching.ts`, `sponsors.ts`, `announcements.ts`: those lists and the Big Give numbers.
+  - `corporateMatching.ts`, `sponsors.ts`, `announcements.ts`: those lists and the Big Give numbers. Sponsor websites (`bigGiveSupporters`) live with their sponsor in `sponsors.ts`, not in `links.ts`.
 
   Pages import from these files. Add new outside URLs to `links.ts` rather than hard-coding them.
 - **Date-based content is decided in the browser, in Seattle time.** `src/data/schedule.ts` defines date windows. `scheduled(window)` and `scheduledHref(window, in, out)` add data attributes plus a build-time default to an element, and an inline script in `BaseLayout` re-evaluates them on every page load. So content switches on the right day without a rebuild (the nightly rebuild only refreshes defaults for no-JS visitors). The windows live in `announcements.ts` (`spiritWear.window`, `bigGive.window`) and drive the announcement bar, the home-page cards and hero button, and the header's Donate link (`donateCta` in `nav.ts` reuses `bigGive.window`). Windows are inclusive Seattle dates; `AnnouncementBar` hides the whole bar via CSS `:has()` when no item is visible. Expired entries are never removed automatically. Use `scheduled(w, { invert: true })` for fallback content shown outside a window. Never compare dates with `new Date()`/`toISOString()` (that's UTC); use `seattleToday()`.
