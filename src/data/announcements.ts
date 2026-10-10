@@ -15,6 +15,8 @@ export const bigGive = {
   window: { starts: '2026-10-01', expires: '2026-10-31' } satisfies DateWindow,
   dates: 'October 1–31',
   perChildAsk: 700,
+  // The flyer with the pledge form. Replace the file in public/ each year (same name, so the link keeps working).
+  pledgeForm: '/big-give-pledge-form.pdf',
   // The goal we highlight: what we raise from our own community.
   goal: 100_000,
   // Corporate matching on top of the community goal; mentioned as a bonus, not part of the headline goal.
