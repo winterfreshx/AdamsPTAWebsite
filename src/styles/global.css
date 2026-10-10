@@ -10,6 +10,7 @@
   --green-100: #e6f2ea;
   --gold-500: #e4a83c;
   --gold-300: #f5cd6e;
+  --gold-200: #fbeac0; /* 40% gold-300 on paper: the "you are here" fill, as strong as green-100 is for hover */
   --gold-100: #fdf4dc;
   --ink: #14231b;
   --ink-soft: #3e5246;
