@@ -4,8 +4,8 @@ import sitemap from '@astrojs/sitemap';
 import basePath from './integrations/base-path.mjs';
 
 // Where the site is served. Defaults to the real domain at its root. In CI, GitHub's configure-pages
-// step supplies these: before the custom domain is connected that's https://winterfreshx.github.io
-// with base /AdamsPTAWebsite, and afterwards the custom domain with no base, with no code change needed.
+// step supplies these: the custom domain with no base. If the domain were ever disconnected, it would supply
+// https://winterfreshx.github.io with base /AdamsPTAWebsite instead, with no code change needed.
 const SITE_URL = process.env.SITE_URL || 'https://www.adamselementarypta.org';
 const SITE_BASE = (process.env.SITE_BASE || '').replace(/\/$/, '');
 

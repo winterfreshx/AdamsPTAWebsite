@@ -28,9 +28,9 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      # Ask GitHub Pages where the site is served. Before the custom domain is connected that's
-      # https://winterfreshx.github.io with base_path /AdamsPTAWebsite; afterwards it's the custom domain with
-      # an empty base_path. The build, verify and audit all follow automatically (see astro.config.mjs).
+      # Ask GitHub Pages where the site is served: the custom domain with an empty base_path. If the domain were
+      # ever disconnected, it would be https://winterfreshx.github.io with base_path /AdamsPTAWebsite, and the
+      # build, verify and audit would follow automatically (see astro.config.mjs).
       - id: pages
         uses: actions/configure-pages@v5
       - run: npm run build

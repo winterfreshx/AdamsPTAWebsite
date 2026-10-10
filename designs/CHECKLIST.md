@@ -104,10 +104,10 @@ Legend: `[ ]` to do · `[x]` done and verified · `[~]` done with a caveat (see 
 - [x] 10.4 Open decisions D1–D6 recorded in README for the PTA board
 
 ## Phase 11 — Launch (PTA-owned, after review)
-- [ ] 11.1 PTA board reviews the preview URL
-- [x] 11.2 Resolve open decisions D1–D6 (outcomes recorded in the README)
+- [x] 11.1 PTA board reviews the preview URL
+- [x] 11.2 Resolve open decisions D1–D6 (outcomes recorded in `designs/DECISIONS.md`, originally in the README)
 - [ ] 11.3 Confirm PayPal return URLs still land on the thank-you pages
-- [ ] 11.4 Point DNS to GitHub Pages; enable HTTPS
+- [x] 11.4 Point DNS to GitHub Pages; enable HTTPS (live October 4, 2026)
 - [ ] 11.5 Cancel the Wix plan only after a week of stable traffic on the new site
 
 ---
@@ -137,7 +137,7 @@ Legend: `[ ]` to do · `[x]` done and verified · `[~]` done with a caveat (see 
 - The first link check had dropped the Class of 2027/2028/2029 Facebook groups. Those students are still at Adams, so the groups were restored on the grade-rep cards.
 
 ### Still open (Phase 11, owned by the PTA)
-Board review, decisions D1–D6 (see README), the PayPal return-URL test, DNS cutover, and cancelling Wix.
+Board review, decisions D1–D6 (now in `DECISIONS.md`), the PayPal return-URL test, DNS cutover, and cancelling Wix.
 
 ---
 
