@@ -134,8 +134,9 @@ import { bigGiveSupporters } from '../data/sponsors';
   .info-cards { grid-template-columns: 1fr; }
   @media (min-width: 720px) { .info-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .card address { font-style: normal; margin-top: var(--space-2); }
-  .sponsors { list-style: none; padding: 0; display: grid; gap: var(--space-3); grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .sponsors li { margin: 0; display: flex; }
+  /* Centered rows, so a short last row sits in the middle instead of hanging left. */
+  .sponsors { --cols: 2; --gap: var(--space-3); list-style: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap); }
+  .sponsors li { margin: 0; display: flex; flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols)); min-width: 0; }
   .sponsors a {
     flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: var(--space-3);
     padding: var(--space-4) var(--space-3); text-align: center; text-decoration: none; line-height: 1.25;
@@ -147,7 +148,7 @@ import { bigGiveSupporters } from '../data/sponsors';
   /* The name stays plain text so the external-link middleware keeps it and its icon together in one .ext-label. */
   .sponsors :global(.logo) { flex: none; height: 4rem; width: 100%; object-fit: contain; mix-blend-mode: multiply; }
   @media (min-width: 720px) {
-    .sponsors { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); }
+    .sponsors { --cols: 3; --gap: var(--space-4); }
     .sponsors a { padding: var(--space-5) var(--space-4); font-size: 1rem; }
     .sponsors :global(.logo) { height: 5.5rem; }
   }

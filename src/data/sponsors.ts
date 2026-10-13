@@ -15,6 +15,7 @@ import digs from '../assets/images/sponsors/digs.png';
 import majesticBay from '../assets/images/sponsors/majestic-bay-theatres.png';
 import rosellinis from '../assets/images/sponsors/rosellinis.png';
 import seattleGymnastics from '../assets/images/sponsors/seattle-gymnastics-academy.svg';
+import secretGarden from '../assets/images/sponsors/secret-garden-books.png';
 import sunnyHill from '../assets/images/sponsors/sunny-hill.png';
 import sweetMickeys from '../assets/images/sponsors/sweet-mickeys.png';
 import townAndCountry from '../assets/images/sponsors/town-and-country-markets.png';
@@ -42,6 +43,7 @@ export const bigGiveSupporters: { name: string; url: string; logo?: ImageMetadat
   { name: 'Majestic Bay Theatres', url: 'https://www.majesticbay.com/', logo: majesticBay },
   { name: "Rosellini's", url: 'https://rosellinis.com/', logo: rosellinis },
   { name: 'Seattle Gymnastics Academy', url: 'https://seattlegymnastics.com/locations/ballard/', logo: seattleGymnastics },
+  { name: 'Secret Garden Books', url: 'https://secretgardenbooks.com/', logo: secretGarden },
   { name: 'Sunny Hill', url: 'https://sunnyhillseattle.com/', logo: sunnyHill },
   { name: "Sweet Mickey's", url: 'https://www.sweetmickeys.com/', logo: sweetMickeys },
   { name: 'Town & Country Markets', url: 'https://townandcountrymarkets.com/markets/ballard', logo: townAndCountry },
