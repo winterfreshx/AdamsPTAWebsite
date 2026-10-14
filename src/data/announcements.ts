@@ -23,7 +23,7 @@ export const bigGive = {
   corporateMatchGoal: 50_000,
   // TODO(PTA): update this ONE number during the campaign. Every page that shows Big Give progress (the home page card
   // and the Big Give page) reads it through the BigGiveProgress component.
-  raised: 24_913.69,
+  raised: 28_116.61,
 };
 
 // Gold announcement bar items. Each is shown only inside its window.
