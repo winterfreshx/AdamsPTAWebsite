@@ -1,8 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import eagle from '../assets/images/eagle-logo.png';
-import eagleHead from '../assets/images/eagle-head.jpg';
-import { site, school, bellTimes, landAcknowledgment, memorial } from '../data/site';
+import { site, school, bellTimes, landAcknowledgment } from '../data/site';
 import { links, mailto } from '../data/links';
 import { nav } from '../data/nav';
 import Icon from './Icon.astro';
@@ -77,11 +76,7 @@ const year = new Date().getFullYear();
     </div>
 
     <div class="container footer-bottom">
-      <p class="memorial">
-        <Image src={eagleHead} alt="" width={40} class="memorial-eagle" />
-        <span>{memorial}</span>
-      </p>
-      <p>© {year} {site.name}. A nonprofit 501(c)(3) organization.</p>
+      <p>© {year} {site.name}. A nonprofit <span class="nowrap">501(c)(3)</span> organization.</p>
     </div>
   </div>
 </footer>
@@ -128,6 +123,5 @@ const year = new Date().getFullYear();
     display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4);
     margin-top: var(--space-5); font-size: 0.875rem; color: #b5ccbc;
   }
-  .memorial { display: flex; align-items: center; gap: var(--space-3); font-family: var(--font-display); font-weight: 700; color: var(--gold-100); }
-  .memorial-eagle { width: 2.5rem; border-radius: 50%; background: var(--white); padding: 2px; }
+  .nowrap { white-space: nowrap; }
 </style>
