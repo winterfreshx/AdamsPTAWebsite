@@ -19,6 +19,7 @@ import secretGarden from '../assets/images/sponsors/secret-garden-books.png';
 import sunnyHill from '../assets/images/sponsors/sunny-hill.png';
 import sweetMickeys from '../assets/images/sponsors/sweet-mickeys.png';
 import townAndCountry from '../assets/images/sponsors/town-and-country-markets.png';
+import traderJoes from '../assets/images/sponsors/trader-joes.svg';
 import tumbles from '../assets/images/sponsors/tumbles.png';
 
 export const moveathonSponsors: { name: string; logo: ImageMetadata }[] = [
@@ -47,5 +48,6 @@ export const bigGiveSupporters: { name: string; url: string; logo?: ImageMetadat
   { name: 'Sunny Hill', url: 'https://sunnyhillseattle.com/', logo: sunnyHill },
   { name: "Sweet Mickey's", url: 'https://www.sweetmickeys.com/', logo: sweetMickeys },
   { name: 'Town & Country Markets', url: 'https://townandcountrymarkets.com/markets/ballard', logo: townAndCountry },
+  { name: "Trader Joe's", url: 'https://locations.traderjoes.com/wa/seattle/147/', logo: traderJoes },
   { name: 'Tumbles', url: 'https://seattleballard.tumbles.net/', logo: tumbles },
 ];
