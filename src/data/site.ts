@@ -34,5 +34,3 @@ export const bellTimes = [
 
 export const landAcknowledgment =
   'The Adams PTA acknowledges that Adams Elementary School is located on the traditional land of the first people of Seattle, the Duwamish. We acknowledge the descendants that have become part of the Duwamish, Muckleshoot, Puyallup, Tulalip, Suquamish and Lummi Tribes, who continue to celebrate their cultures while striving for recognition and resources in our region today. We acknowledge and lament our place in longstanding systems of colonization and oppression.';
-
-export const memorial = 'Ms. Timmi – Always In Our Hearts';
