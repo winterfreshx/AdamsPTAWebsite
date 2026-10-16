@@ -1,17 +1,20 @@
 ---
 import Icon from './Icon.astro';
+import { scheduled, type DateWindow } from '../data/schedule';
 
 // A whole-card link with an icon, title and short description.
+// `window` (optional) shows the card only inside that date window (see src/data/schedule.ts).
 interface Props {
   href: string;
   title: string;
   icon: Parameters<typeof Icon>[0]['name'];
   tone?: 'green' | 'gold';
+  window?: DateWindow;
 }
-const { href, title, icon, tone = 'green' } = Astro.props;
+const { href, title, icon, tone = 'green', window } = Astro.props;
 ---
 
-<a href={href} class:list={['action-card', tone]}>
+<a href={href} class:list={['action-card', tone]} {...(window ? scheduled(window) : {})}>
   <span class="ac-icon"><Icon name={icon} size={26} /></span>
   <span class="ac-body">
     <span class="ac-title">{title}</span>

@@ -26,6 +26,22 @@ export const bigGive = {
   raised: 28_116.61,
 };
 
+export const fallFest = {
+  // Home page "News & happenings" card. Shown through the day of the event, then hidden.
+  // Update the details, poster (src/assets/images/fall-fest-<year>.png) and window for next year's event.
+  date: 'Friday, October 23',
+  time: '6–8 PM',
+  window: { expires: '2026-10-23' } satisfies DateWindow,
+};
+
+export const afterSchoolEnrollment = {
+  // The home page's "After-School Enrollment" news card (Homeroom sign-up + scholarship form) and its
+  // "After-School Programs" quick-link card.
+  // Fall 2026 enrollment closed October 14, 2026, so the card is hidden but kept for next year.
+  // TODO(PTA): when next year's enrollment opens, set `starts` and `expires` to the new dates (both inclusive).
+  window: { expires: '2026-10-14' } satisfies DateWindow,
+};
+
 // Gold announcement bar items. Each is shown only inside its window.
 export type Announcement = {
   id: string;

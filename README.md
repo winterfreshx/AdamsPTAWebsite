@@ -31,7 +31,7 @@ Most updates are one-line edits in `src/data/`:
 
 | To change… | Edit |
 |---|---|
-| Announcement bar, and the dates for Spirit Wear and the Big Give. Each date window turns the announcement, the home-page card and the Donate button on and off automatically, in Seattle time, with no rebuild needed. **Update the dates each year.** | `src/data/announcements.ts` |
+| Announcement bar, and the dates for Spirit Wear, the Big Give, Fall Fest and after-school enrollment. Each date window turns the announcement, the home-page card and the Donate button on and off automatically, in Seattle time, with no rebuild needed. **Update the dates each year.** | `src/data/announcements.ts` |
 | **Big Give amount raised:** change the one number `bigGive.raised` (for example `raised: 9_492.47,`). The home page card and the Big Give page both update from it. The community `goal` and `corporateMatchGoal` are next to it. | `src/data/announcements.ts` → `bigGive` |
 | **Big Give pledge form (flyer PDF):** replace the file each year, keeping the same name | `public/big-give-pledge-form.pdf` |
 | Exec board, every PTA email address, grade reps | `src/data/contacts.ts` |
@@ -54,6 +54,8 @@ A window controls everything tied to that campaign:
 | Window | What it switches |
 |---|---|
 | `spiritWear.window` | the Spirit Wear announcement and the home-page Spirit Wear card |
+| `fallFest.window` | the home-page Fall Fest card, shown through the day of the event. Update its date, time, poster and window for next year's event. |
+| `afterSchoolEnrollment.window` | on the home page, the "After-School Enrollment" news card (Homeroom sign-up and scholarship form) and the "After-School Programs" quick link. **Set new dates when enrollment reopens each year.** |
 | `bigGive.window` | the Big Give announcement; on the home page, the Big Give card and hero button (outside the window, a "Support Adams all year long" card and a "Ways to give" button); and the header's **Donate** button (`/big-give` during the window, `/fundraising` otherwise) |
 
 Every item is written into every page when the site is built. A small script on each page then checks today's date in
