@@ -1,4 +1,5 @@
 import { links } from './links';
+import type Icon from '../components/Icon.astro';
 import type { DateWindow } from './schedule';
 
 // Seasonal campaigns. Their date windows drive the announcement bar, the home-page cards,
@@ -48,6 +49,7 @@ export type Announcement = {
   text: string;
   cta: { label: string; href: string };
   window: DateWindow;
+  icon?: Parameters<typeof Icon>[0]['name']; // defaults to the megaphone
 };
 
 export const announcements: Announcement[] = [
@@ -62,5 +64,12 @@ export const announcements: Announcement[] = [
     text: `The Big Give is happening ${bigGive.dates}. Every gift helps!`,
     cta: { label: 'Give today', href: '/big-give' },
     window: bigGive.window,
+  },
+  {
+    id: 'fall-fest-2026',
+    text: `Fall Fest is on Friday 10/23. Volunteers are needed!`,
+    cta: { label: 'Sign up', href: links.fallFestVolunteerSignup },
+    window: fallFest.window,
+    icon: 'leaf',
   },
 ];
