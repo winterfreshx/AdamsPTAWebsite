@@ -3,6 +3,8 @@ import { inbox } from '../data/contacts';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import LogoGrid from '../components/LogoGrid.astro';
+import EmailLink from '../components/EmailLink.astro';
 import Icon from '../components/Icon.astro';
 import banner from '../assets/images/big-give-banner.jpg';
 import { links } from '../data/links';
@@ -60,14 +62,14 @@ import { bigGiveSupporters } from '../data/sponsors';
     <div class="container grid info-cards">
       <article class="card">
         <div class="card-head">
-          <Icon name="briefcase" size={30} class="i" />
+          <Icon name="briefcase" size={30} class="card-icon" />
           <h3>Double it with a match</h3>
         </div>
         <p>Many employers match donations. Search our <a href="/corporate-matching">corporate matching list</a> and use Tax ID <strong>{site.taxId}</strong>.</p>
       </article>
       <article class="card">
         <div class="card-head">
-          <Icon name="dollar" size={30} class="i" />
+          <Icon name="dollar" size={30} class="card-icon" />
           <h3>Paying by check?</h3>
         </div>
         <p>
@@ -78,17 +80,17 @@ import { bigGiveSupporters } from '../data/sponsors';
       </article>
       <article class="card">
         <div class="card-head">
-          <Icon name="sparkles" size={30} class="i" />
+          <Icon name="sparkles" size={30} class="card-icon" />
           <h3>What it funds</h3>
         </div>
         <p>Tutors, playground and lunch staff, SEL programming, classroom supplies, assemblies and community events. <a href="/fundraising">See more</a>.</p>
       </article>
       <article class="card">
         <div class="card-head">
-          <Icon name="mail" size={30} class="i" />
+          <Icon name="mail" size={30} class="card-icon" />
           <h3>Questions?</h3>
         </div>
-        <p>For questions about corporate matches, email <a href={`mailto:${inbox.treasurer}`}>{inbox.treasurer}</a>.</p>
+        <p>For questions about corporate matches, email <EmailLink to={inbox.treasurer} />.</p>
       </article>
     </div>
   </section>
@@ -100,16 +102,7 @@ import { bigGiveSupporters } from '../data/sponsors';
           <p class="eyebrow">With gratitude</p>
           <h2 id="sponsors-title">Thank you to our business supporters of the Big Give</h2>
         </div>
-        <ul class="sponsors" role="list">
-          {bigGiveSupporters.map((s) => (
-            <li>
-              <a href={s.url}>
-                {s.logo && <Image src={s.logo} alt="" width={320} class="logo" />}
-                {s.name}
-              </a>
-            </li>
-          ))}
-        </ul>
+        <LogoGrid items={bigGiveSupporters} />
       </div>
     </section>
   )}
@@ -127,30 +120,8 @@ import { bigGiveSupporters } from '../data/sponsors';
   .goals :global(.goal-icon) { color: var(--green-700); margin-top: var(--space-1); }
   .goal-num { font-family: var(--font-display); font-weight: 800; font-size: clamp(2.25rem, 1.8rem + 2vw, 3.25rem); color: var(--green-700); line-height: 1; }
   .goal-label { font-weight: 800; color: var(--ink-soft); }
-  .card :global(.i) { color: var(--green-500); flex: none; }
-  .card-head { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3); }
-  .card-head h3 { margin: 0; }
   /* 2 × 2 on tablet and desktop, so the four cards never leave one alone on a row. */
   .info-cards { grid-template-columns: 1fr; }
   @media (min-width: 720px) { .info-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .card address { font-style: normal; margin-top: var(--space-2); }
-  /* Centered rows, so a short last row sits in the middle instead of hanging left. */
-  .sponsors { --cols: 2; --gap: var(--space-3); list-style: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap); }
-  .sponsors li { margin: 0; display: flex; flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols)); min-width: 0; }
-  .sponsors a {
-    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: var(--space-3);
-    padding: var(--space-4) var(--space-3); text-align: center; text-decoration: none; line-height: 1.25;
-    font-family: var(--font-display); font-weight: 800; font-size: 0.9375rem; color: var(--green-700);
-    background: var(--white); border: 1px solid var(--line); border-radius: var(--radius);
-    transition: border-color 0.15s ease, background-color 0.15s ease;
-  }
-  .sponsors a:hover { background: var(--green-100); border-color: var(--green-200); }
-  /* The name stays plain text so the external-link middleware keeps it and its icon together in one .ext-label. */
-  .sponsors :global(.logo) { flex: none; height: 4rem; width: 100%; object-fit: contain; mix-blend-mode: multiply; }
-  @media (min-width: 720px) {
-    .sponsors { --cols: 3; --gap: var(--space-4); }
-    .sponsors a { padding: var(--space-5) var(--space-4); font-size: 1rem; }
-    .sponsors :global(.logo) { height: 5.5rem; }
-  }
-  @media (min-width: 1100px) { .sponsors { --cols: 5; } }
 </style>

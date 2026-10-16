@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import EmailLink from '../components/EmailLink.astro';
 import Icon from '../components/Icon.astro';
 import mascot from '../assets/images/eagle-mascot-closeup.png';
 import { school, site } from '../data/site';
@@ -34,7 +35,7 @@ import { school, site } from '../data/site';
           </a>
         </p>
         <p class="note"><Icon name="pin" size={18} /> {school.entranceNote}</p>
-        <p>Questions? <a href={`mailto:${site.email}`}>{site.email}</a></p>
+        <p>Questions? <EmailLink to={site.email} /></p>
       </aside>
     </div>
   </section>

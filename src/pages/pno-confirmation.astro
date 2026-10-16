@@ -1,12 +1,13 @@
 ---
 import MessageLayout from '../layouts/MessageLayout.astro';
+import EmailLink from '../components/EmailLink.astro';
 import { schoolContacts } from '../data/contacts';
 const { name, email } = schoolContacts.parentNightOut;
 ---
 
 <MessageLayout title="Parent Night Out Confirmation" heading="Thank you for signing up for Parent Night Out!">
-  <p>Please forward a copy of your receipt to {name} at <a href={`mailto:${email}`}>{email}</a>.</p>
+  <p>Please forward a copy of your receipt to {name} at <EmailLink to={email} />.</p>
   <Fragment slot="actions">
-    <a class="btn" href={`mailto:${email}?subject=Parent%20Night%20Out%20receipt`}>Email {name}</a>
+    <EmailLink class="btn" to={email} subject="Parent Night Out receipt">Email {name}</EmailLink>
   </Fragment>
 </MessageLayout>

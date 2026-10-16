@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import EmailLink from '../components/EmailLink.astro';
 import Icon from '../components/Icon.astro';
 import { employers } from '../data/corporateMatching';
 import { site } from '../data/site';
@@ -46,7 +47,7 @@ const groups = Object.entries(
         <p class="tax-note">
           Many companies allow employees to request a match for donations made within the last year, so it may not be too
           late to get a match for an earlier gift! Questions? Email
-          <a href={`mailto:${inbox.treasurer}`}>{inbox.treasurer}</a>.
+          <EmailLink to={inbox.treasurer} />.
         </p>
       </aside>
     </div>
@@ -85,7 +86,7 @@ const groups = Object.entries(
       </div>
       <p class="empty" data-empty hidden>
         No match in our list, but your employer may still have a program! Ask your HR team, or email
-        <a href={`mailto:${inbox.treasurer}`}>{inbox.treasurer}</a>.
+        <EmailLink to={inbox.treasurer} />.
       </p>
     </div>
   </section>

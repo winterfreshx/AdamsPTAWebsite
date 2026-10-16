@@ -167,6 +167,10 @@ li + li { margin-top: var(--space-2); }
   padding: var(--space-5); box-shadow: var(--shadow-sm);
 }
 .card h3 { margin-bottom: var(--space-2); }
+.card-icon { color: var(--green-500); flex: none; }
+/* Icon beside the card title. */
+.card-head { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3); }
+.card-head h3 { margin: 0; }
 .card-accent { border-top: 5px solid var(--gold-500); }
 .card-green { background: var(--green-700); color: var(--white); border-color: var(--green-700); }
 .card-green h2, .card-green h3 { color: var(--white); }

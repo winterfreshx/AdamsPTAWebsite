@@ -39,7 +39,7 @@ import { links } from '../data/links';
             Box Tops is now digital-only. Use the Box Tops app to scan your receipt. Box Tops are still worth 10¢ each, and the
             app finds participating products bought at any store and adds cash to our school's earnings.
           </p>
-          <a class="btn" href={links.boxTops}>Learn more & get the app <Icon name="external" /></a>
+          <a class="btn" href={links.boxTops}>Learn more & get the app</a>
         </div>
       </article>
 
@@ -52,7 +52,7 @@ import { links } from '../data/links';
             Elementary in the Community Rewards enrollment section. You'll still keep your own rewards points, fuel points and
             rebates.
           </p>
-          <a class="btn" href={links.fredMeyerRewards}>Link your card <Icon name="external" /></a>
+          <a class="btn" href={links.fredMeyerRewards}>Link your card</a>
         </div>
       </article>
 
@@ -64,7 +64,7 @@ import { links } from '../data/links';
             Sign up for home grocery delivery with the code <strong class="code">ADAMSPTA</strong>. You'll get $15 off your first
             delivery, and Adams receives a $50 donation.
           </p>
-          <a class="btn" href={links.smithBrothers}>smithbrothersfarms.com <Icon name="external" /></a>
+          <a class="btn url-btn" href={links.smithBrothers}>smithbrothersfarms.com</a>
         </div>
       </article>
     </div>
@@ -78,6 +78,8 @@ import { links } from '../data/links';
   .way h2 { font-size: var(--fs-h3); }
   .way .btn { justify-self: start; }
   .way .stack { display: flex; flex-direction: column; align-items: flex-start; }
+  /* The label is one long word; let it break on 320px phones instead of staying on one line with its icon. */
+  .url-btn :global(.ext-nowrap) { white-space: normal; }
   :global(.way-img) { width: 12rem; max-width: 100%; border-radius: var(--radius); margin-inline: auto; }
   :global(.way-img.qr) { width: 9rem; }
   .code { background: var(--gold-100); border: 1px dashed var(--gold-500); padding: 0.05rem 0.45rem; border-radius: 0.4rem; font-family: ui-monospace, monospace; }

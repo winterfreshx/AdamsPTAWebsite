@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ActionCard from '../components/ActionCard.astro';
 import BigGiveProgress from '../components/BigGiveProgress.astro';
+import EmailLink from '../components/EmailLink.astro';
 import Icon from '../components/Icon.astro';
 import eagle from '../assets/images/eagle-logo.png';
 import bigGiveLogo from '../assets/images/big-give-logo.png';
@@ -153,7 +154,7 @@ import { site, school, bellTimes } from '../data/site';
             The {spiritWear.label} shop is open! Gear up for the season with brand-new apparel. The store is
             open for a limited time. <strong>All orders must be placed by {spiritWear.orderDeadline}.</strong>
           </p>
-          <a class="btn" href={links.spiritWearStore}>Shop the store <Icon name="external" /></a>
+          <a class="btn" href={links.spiritWearStore}>Shop the store</a>
         </article>
 
         <!-- Shown only while after-school enrollment is open (afterSchoolEnrollment.window in announcements.ts). -->
@@ -164,7 +165,7 @@ import { site, school, bellTimes } from '../data/site';
             Browse and enroll in after-school enrichment on the Adams Homeroom page. For scholarship and financial aid
             information, <a href={links.afterSchoolScholarshipForm}>read and complete this form</a> before enrolling.
           </p>
-          <a class="btn" href={links.homeroomEnrichment}>Adams Homeroom page <Icon name="external" /></a>
+          <a class="btn" href={links.homeroomEnrichment}>Adams Homeroom page</a>
         </article>
       </div>
     </div>
@@ -220,7 +221,7 @@ import { site, school, bellTimes } from '../data/site';
           <li><Icon name="pin" /><a href={school.mapUrl}>{school.street}, {school.city}, {school.state} {school.zip}</a></li>
           <li><Icon name="phone" /><a href={`tel:${school.phone.replace(/-/g, '')}`}>{school.phone}</a></li>
           <li><Icon name="school" /><span>Principal {school.principal}</span></li>
-          <li><Icon name="mail" /><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><Icon name="mail" /><EmailLink to={site.email} /></li>
         </ul>
       </div>
     </div>
