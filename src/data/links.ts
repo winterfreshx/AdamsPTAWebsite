@@ -43,8 +43,6 @@ export const links = {
   // Newsletters
   newsletterSignup:
     'https://visitor.r20.constantcontact.com/manage/optin?v=001te_v6vSd9jsq8LBnJTdiJNlwnwFuicA9LD3QYNjzQV2xVppxprXN4W3StYRXDa4uFN4mebNvwAIFtfq6H-2KT2lcELLKg_CLWIB1BBDVUKU%3D',
-  spsSchoolBeatSignup:
-    'https://visitor.r20.constantcontact.com/manage/optin?v=001jarSHX2McaTQkE0XaFSaUsqarpeqA-MZ10rAh-21JWr8a8y2Xmj0j8j8vb4sONQcqKQPauXCJK6kwVqLAcbtBsECKb2mgbraAjV-aLEQtfQjUY3O-P32BUfLS3zh5_bZH08yNdFI0Sm7YtUKPSVdDTQGU14gjDnn3SftQ2gcGCM%3D',
 
   // Volunteering
   spsVolunteerSite: 'http://www.seattleschools.org/volunteer',
