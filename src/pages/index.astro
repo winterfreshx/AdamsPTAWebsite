@@ -7,8 +7,9 @@ import Icon from '../components/Icon.astro';
 import eagle from '../assets/images/eagle-logo.png';
 import bigGiveLogo from '../assets/images/big-give-logo.png';
 import homeroomLogo from '../assets/images/homeroom-logo.png';
+import fallFestPoster from '../assets/images/fall-fest-2026.png';
 import { links } from '../data/links';
-import { bigGive, spiritWear } from '../data/announcements';
+import { bigGive, spiritWear, afterSchoolEnrollment, fallFest } from '../data/announcements';
 import { scheduled } from '../data/schedule';
 import { usd as fmt } from '../lib/format';
 import { site, school, bellTimes } from '../data/site';
@@ -70,7 +71,7 @@ import { site, school, bellTimes } from '../data/site';
         <ActionCard href="/pta-membership" title="Become a Member" icon="users" tone="gold">
           $16 single, $27 dual, or free with a confidential scholarship.
         </ActionCard>
-        <ActionCard href={links.homeroomEnrichment} title="After-School Programs" icon="sparkles">
+        <ActionCard href={links.homeroomEnrichment} title="After-School Programs" icon="sparkles" window={afterSchoolEnrollment.window}>
           Enroll in enrichment classes on the Adams Homeroom page.
         </ActionCard>
         <ActionCard href="/corporate-matching" title="Corporate Matching" icon="briefcase" tone="gold">
@@ -127,6 +128,24 @@ import { site, school, bellTimes } from '../data/site';
           </div>
         </article>
 
+        <article class="card fall-fest" {...scheduled(fallFest.window)}>
+          <Image
+            src={fallFestPoster}
+            alt="Fall Fest poster: Friday, October 23, 6 to 8 PM. Games, crafts, bake sale, face paint, cookie decorating and pizza slices."
+            width={480}
+            class="ff-poster"
+          />
+          <div class="ff-body">
+            <span class="badge">{fallFest.date} · {fallFest.time}</span>
+            <h3>Fall Fest</h3>
+            <p>
+              Join the fall fun! Games, crafts, a bake sale, face painting, cookie decorating and pizza slices for the
+              whole Adams community.
+            </p>
+            <p><strong>Adult supervision required.</strong> Please stay with your student.</p>
+          </div>
+        </article>
+
         <article class="card card-accent" {...scheduled(spiritWear.window)}>
           <span class="news-icon"><Icon name="shirt" size={28} /></span>
           <h3>Eagles Spirit Wear</h3>
@@ -137,7 +156,8 @@ import { site, school, bellTimes } from '../data/site';
           <a class="btn" href={links.spiritWearStore}>Shop the store <Icon name="external" /></a>
         </article>
 
-        <article class="card card-accent">
+        <!-- Shown only while after-school enrollment is open (afterSchoolEnrollment.window in announcements.ts). -->
+        <article class="card card-accent" {...scheduled(afterSchoolEnrollment.window)}>
           <Image src={homeroomLogo} alt="Homeroom" width={180} class="homeroom-logo" />
           <h3>After-School Enrollment</h3>
           <p>
@@ -254,11 +274,8 @@ import { site, school, bellTimes } from '../data/site';
   .hero-wave { position: absolute; bottom: -1px; left: 0; width: 100%; height: 60px; color: var(--paper); }
 
   /* ---------- What's happening ---------- */
+  /* One column: the main (Big Give or year-round giving) card first, the other news cards stacked below it. */
   .happening { display: grid; gap: var(--space-5); }
-  @media (min-width: 900px) {
-    .happening { grid-template-columns: 1fr 1fr; }
-    .feature-card { grid-row: span 2; }
-  }
   .happening .card { display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-6); }
   .happening .card > .btn, .happening .card > .btn-row { margin-top: auto; }
   .happening .card > .btn { align-self: flex-start; }
@@ -270,6 +287,13 @@ import { site, school, bellTimes } from '../data/site';
     background: var(--gold-100); color: var(--green-700);
   }
   .homeroom-logo { width: 10rem; }
+  .fall-fest .ff-poster { width: min(100%, 16rem); height: auto; align-self: center; border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); }
+  .ff-body { display: flex; flex-direction: column; gap: var(--space-3); align-items: flex-start; }
+  .ff-body p { margin: 0; }
+  @media (min-width: 640px) {
+    .happening .fall-fest { flex-direction: row; align-items: center; gap: var(--space-6); }
+    .fall-fest .ff-poster { flex: none; width: 13rem; }
+  }
 
 
   /* ---------- Calendar ---------- */
