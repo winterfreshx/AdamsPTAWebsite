@@ -4,7 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import EmailLink from '../components/EmailLink.astro';
 import Icon from '../components/Icon.astro';
 import { links } from '../data/links';
-import { ptaInboxes, gradeReps, schoolContacts, inbox } from '../data/contacts';
+import { ptaInboxes, gradeReps, inbox } from '../data/contacts';
 import { site } from '../data/site';
 import { schoolYear } from '../data/schoolYear';
 
@@ -106,12 +106,6 @@ const linkGroups = [
             is on Konstella. For edits or removal, email <EmailLink to={inbox.familyDirectory} />.
           </p>
           <a class="btn btn-ghost" href={links.konstellaDirectory}>Open the {schoolYear} directory</a>
-        </article>
-        <article class="card">
-          <Icon name="megaphone" size={30} class="card-icon" />
-          <h3>SPS School Beat newsletter</h3>
-          <p>District news about academic initiatives and the accomplishments of students and teachers. Story tips: <EmailLink to={schoolContacts.spsGoodNews} />.</p>
-          <a class="btn btn-ghost" href={links.spsSchoolBeatSignup}>Subscribe</a>
         </article>
         <article class="card">
           <Icon name="instagram" size={30} class="card-icon" />

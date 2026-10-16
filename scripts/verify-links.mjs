@@ -46,6 +46,8 @@ const ALLOW = {
   'mailto:rep2020@adamselementary.org': 'shown for the Class of 2030 on Wix; corrected to rep2030@ to match the class year',
   'mailto:fundraising@adamselementary.org': 'only on the retired /fundraisingold page',
   'mailto:execteam-group@adamselementary.org': 'only on the retired /fundraisingold page',
+  'visitor.r20.constantcontact.com/manage/optin?v=001jarSHX2McaTQkE0XaFSaUsqarpeqA': 'SPS School Beat newsletter sign-up; the newsletter was discontinued (removed October 2026)',
+  'mailto:GoodNews@seattleschools.org': 'School Beat story-tips inbox; removed with the discontinued newsletter (October 2026)',
 };
 const allowedReason = (link) => Object.entries(ALLOW).find(([k]) => link.toLowerCase().includes(k.toLowerCase()))?.[1];
 

@@ -57,5 +57,4 @@ export const gradeReps: { classOf: string; grade: string; email?: string; facebo
 export const schoolContacts = {
   volunteerOffice: { name: 'Ms. Patti', email: 'pjroche@seattleschools.org' },
   parentNightOut: { name: 'Mr. Kellum', email: 'gskellum@seattleschools.org' },
-  spsGoodNews: 'GoodNews@seattleschools.org',
 };
