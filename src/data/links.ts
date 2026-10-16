@@ -20,6 +20,7 @@ export const links = {
   konstella: 'https://www.konstella.com/',
   konstellaCommittees:
     'https://www.konstella.com/school/Adams%20Elementary%20School/6670c0d91b5c044b1b121cb5/committees.html',
+  fallFestVolunteerSignup: 'https://www.konstella.com/app/school/6670c0d91b5c044b1b121cb5/signups/6ac55e2e321a35eecaceae78',
   konstellaDirectory:
     'https://www.konstella.com/school/Adams%20Elementary%20School/6670c0d91b5c044b1b121cb5/directory.html',
   konstellaMoveathonVolunteer: 'https://www.konstella.com/cd/hEGZYD',
