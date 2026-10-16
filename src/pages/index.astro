@@ -239,7 +239,7 @@ import { site, school, bellTimes } from '../data/site';
   }
   .hero::before {
     content: ''; position: absolute; inset: 0; opacity: 0.06; pointer-events: none;
-    background-image: repeating-linear-gradient(120deg, #fff 0 2px, transparent 2px 26px);
+    background-image: repeating-linear-gradient(120deg, var(--white) 0 2px, transparent 2px 26px);
   }
   .hero-inner { position: relative; z-index: 1; display: grid; gap: var(--space-6); align-items: center; padding-bottom: clamp(4rem, 3rem + 4vw, 7rem); }
   @media (min-width: 860px) { .hero-inner { grid-template-columns: 1.05fr 0.95fr; } }

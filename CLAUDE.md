@@ -17,6 +17,7 @@ npm run verify    # static checks on dist/; run after build
 npm run audit:contrast  # rendered-color WCAG check of every page in Playwright's Chromium (same one-time setup as test:menu)
 npm run test:links # unit tests for the external-link rule (src/lib/external-links.mjs), no browser
 npm run test:menu # menu + mobile layout tests in WebKit (iPhone) and Chromium; one-time setup: npx playwright install chromium webkit
+npm run screenshot -- <path> [--width 375] [--date 2026-10-23] [--selector .css] [--full] [--out f.png]  # PNG of a built page, optionally on a given Seattle date; default output screenshots/
 npm run preview   # serve dist/ (Astro 7 runs it as a daemon; stop with `npx astro preview stop`)
 ```
 

@@ -23,6 +23,7 @@ npm run verify     # link-parity, accessibility and quality checks against dist/
 npm run audit:contrast  # renders every page in Playwright's Chromium and checks text contrast; first run: npx playwright install chromium
 npm run test:links # unit tests for the external-link (new tab + icon) rule
 npm run test:menu  # tests the menu on iPhone (WebKit), Android and desktop (Chromium); first run: npx playwright install chromium webkit
+npm run screenshot -- /big-give --width 375 --date 2026-10-23  # screenshot a built page (see scripts/screenshot.mjs)
 npm run preview    # serve dist/ locally
 ```
 
@@ -63,6 +64,7 @@ Every item is written into every page when the site is built. A small script on 
 Seattle each time someone opens the page, and hides whatever is outside its window. So an announcement clears itself
 on the morning after its `expires` date, with no rebuild or push. When no announcement is showing, the gold bar
 disappears. A nightly rebuild (13:00 UTC, about 5–6 am in Seattle) also refreshes what visitors without JavaScript, and search engines, see.
+To see how a page will look on a given day, build the site and run `npm run screenshot -- / --date 2026-10-23` (the image is saved in `screenshots/`).
 
 To add a new announcement, add an entry to the `announcements` list in the same file with its own `window`. Nothing is
 ever deleted automatically, so tidy up expired entries when you set up next year's dates.
