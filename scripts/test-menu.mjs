@@ -8,15 +8,10 @@
 // header as visible when it wasn't on screen). Waits are condition-based, not fixed delays, so slow CI runners
 // don't cause false failures.
 import { chromium, webkit, devices } from 'playwright';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { BASE, dist, listPages, requireDist } from './lib/site.mjs';
 import { serveDist } from './lib/serve-dist.mjs';
 
-const dist = fileURLToPath(new URL('../dist/', import.meta.url));
-if (!existsSync(dist)) { console.error('dist/ not found, so run `npm run build` first.'); process.exit(1); }
-// Sub-folder the site was built for ("" at a domain root). Must match the SITE_BASE used for `npm run build`.
-const BASE = (process.env.SITE_BASE || '').replace(/\/$/, '');
+requireDist();
 const server = await serveDist(dist, BASE);
 const url = (path) => server.origin + BASE + path;
 
@@ -186,13 +181,10 @@ async function testAllPagesFit() {
   const { check } = report;
   const browser = await webkit.launch();
   const page = await (await browser.newContext({ ...devices['iPhone SE'] })).newPage();
-  const pages = readdirSync(dist, { recursive: true })
-    .map(String)
-    .filter((f) => f.endsWith('.html') && !/http-equiv="refresh"/.test(readFileSync(join(dist, f), 'utf8')));
+  const pages = listPages();
   const wide = [];
   const split = [];
-  for (const f of pages) {
-    const path = f === 'index.html' ? '/' : '/' + f.replace(/\.html$/, '').replace(/\/index$/, '/');
+  for (const path of pages) {
     await page.goto(url(path));
     const r = await page.evaluate(() => {
       const W = document.documentElement.clientWidth;

@@ -14,7 +14,7 @@ Requires Node ≥ 22.12 (Astro 7).
 npm run dev       # dev server, http://localhost:4321
 npm run build     # static build → dist/
 npm run verify    # static checks on dist/; run after build
-npm run audit:contrast  # rendered-color WCAG check of every page in headless Chrome (needs Chrome; CHROME_PATH to override)
+npm run audit:contrast  # rendered-color WCAG check of every page in Playwright's Chromium (same one-time setup as test:menu)
 npm run test:links # unit tests for the external-link rule (src/lib/external-links.mjs), no browser
 npm run test:menu # menu + mobile layout tests in WebKit (iPhone) and Chromium; one-time setup: npx playwright install chromium webkit
 npm run preview   # serve dist/ (Astro 7 runs it as a daemon; stop with `npx astro preview stop`)
@@ -62,7 +62,7 @@ Run it after **any** change to the header, nav, layout, global CSS or page conte
 - **Playwright's element `tap()`/`click()` scrolls the page first**, which hides scroll bugs. The script taps at screen coordinates instead. Keep it that way.
 - **Waits are conditions, never fixed delays** (`waitForFunction`, and `settle()` waits for finite CSS animations, capped at 2s).
 
-The five sections run in parallel, each in its own browser, and the whole suite takes about 5 seconds. `scripts/lib/serve-dist.mjs` is the GitHub-Pages-like static server shared by `test-menu.mjs` and `audit-contrast.mjs`.
+The five sections run in parallel, each in its own browser, and the whole suite takes about 5 seconds. Shared script code is in `scripts/lib/`: `serve-dist.mjs` is the GitHub-Pages-like static server used by `test-menu.mjs` and `audit-contrast.mjs`, and `site.mjs` gives all three check scripts the `dist/` path, `BASE` (from `SITE_BASE`) and `listPages()` (the built pages minus redirect stubs, as URL paths).
 
 `scripts/audit-contrast.mjs` checks the colors the browser actually renders. It loads every page at 375 and 1280 px and compares each text element's color with the background painted behind it. Text over a gradient or image with no solid base color is skipped, so give such sections a solid fallback color (`AUDIT_VERBOSE=1` lists the skipped elements).
 
