@@ -7,7 +7,8 @@ green and gold, built mobile-first with [Astro](https://astro.build).
 - **Design docs:** [`designs/ANALYSIS.md`](designs/ANALYSIS.md) (audit of the old site) ·
   [`designs/PLAN.md`](designs/PLAN.md) (design system, sitemap, URL map) ·
   [`designs/CHECKLIST.md`](designs/CHECKLIST.md) (build and verification checklist) ·
-  [`designs/DECISIONS.md`](designs/DECISIONS.md) (decisions for the PTA board)
+  [`designs/DECISIONS.md`](designs/DECISIONS.md) (decisions for the PTA board) ·
+  [`designs/CLEANUP-2026-10.md`](designs/CLEANUP-2026-10.md) (October 2026 code cleanup: proposal and decisions)
 - **Crawl of the old site:** [`designs/crawl/`](designs/crawl/)
 
 ## Run it locally

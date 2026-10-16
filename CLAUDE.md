@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A static Astro site for the Adams Elementary School PTA (Seattle). It replaces the PTA's old Wix site at adamselementarypta.org. Design intent, the old-site audit, the build checklist and the PTA board's decisions are in `designs/` (`ANALYSIS.md`, `PLAN.md`, `CHECKLIST.md`, `DECISIONS.md`). `designs/crawl/` is a snapshot of the old Wix site (one extract per page plus `external-links.txt`). The verify script reads it, so don't delete it.
+A static Astro site for the Adams Elementary School PTA (Seattle). It replaces the PTA's old Wix site at adamselementarypta.org. Design intent, the old-site audit, the build checklist and the PTA board's decisions are in `designs/` (`ANALYSIS.md`, `PLAN.md`, `CHECKLIST.md`, `DECISIONS.md`, and `CLEANUP-2026-10.md` for the October 2026 code cleanup). `designs/crawl/` is a snapshot of the old Wix site (one extract per page plus `external-links.txt`). The verify script reads it, so don't delete it.
 
 ## Commands
 
