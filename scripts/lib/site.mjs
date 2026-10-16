@@ -1,4 +1,4 @@
-// Shared setup for the check scripts (verify-links, audit-contrast, test-menu): where the build is, which
+// Shared setup for the scripts (verify-links, audit-contrast, test-menu, screenshot): where the build is, which
 // sub-folder it was built for, and which of its HTML files are real pages.
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';

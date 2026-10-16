@@ -8,10 +8,11 @@
 // --selector captures just that element, --full the whole page; otherwise the first screenful.
 // The default output is screenshots/<path>-<width>[-<date>].png. SITE_BASE must match the one used for the build.
 import { chromium } from 'playwright';
-import { existsSync, mkdirSync } from 'node:fs';
+import { mkdirSync } from 'node:fs';
 import { dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { serveDist } from './lib/serve-dist.mjs';
+import { BASE, dist, requireDist } from './lib/site.mjs';
 
 const usage = 'Usage: npm run screenshot -- <path> [--width 375] [--date 2026-10-23] [--selector .css] [--full] [--out file.png]';
 const fail = (msg) => { console.error(msg); process.exit(1); };
@@ -54,14 +55,11 @@ if (opts.date) {
 }
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const dist = root + 'dist/';
-if (!existsSync(dist)) fail('dist/ not found, so run `npm run build` first.');
+requireDist();
 const slug = path.replace(/^\/+|\/+$/g, '').replace(/[^\w.-]+/g, '-') || 'home';
 const out = opts.out ?? `${root}screenshots/${slug}-${opts.width}${opts.date ? '-' + opts.date.replace(/:/g, '') : ''}.png`;
 mkdirSync(dirname(out), { recursive: true });
 
-// Sub-folder the site was built for ("" at a domain root), as in test-menu.mjs.
-const BASE = (process.env.SITE_BASE || '').replace(/\/$/, '');
 const server = await serveDist(dist, BASE);
 const browser = await chromium.launch();
 try {
