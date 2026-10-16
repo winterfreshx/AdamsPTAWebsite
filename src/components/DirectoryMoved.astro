@@ -20,8 +20,8 @@ const { title } = Astro.props;
     <EmailLink to={inbox.familyDirectory} /> or ask your
     <a href="/resources#grade-reps">grade rep</a>.
   </p>
-  <div class="btn-row">
+  <Fragment slot="actions">
     <a class="btn btn-accent" href={links.konstellaDirectory}>Open the directory on Konstella</a>
     <a class="btn btn-ghost" href="/communications-app">New to Konstella?</a>
-  </div>
+  </Fragment>
 </MessageLayout>

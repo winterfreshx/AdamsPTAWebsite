@@ -22,7 +22,8 @@ const opts = { width: 375, full: false };
 let path;
 for (let i = 0; i < args.length; i++) {
   const a = args[i];
-  const value = () => args[++i] ?? fail(`${a} needs a value.\n${usage}`);
+  // The next argument, unless it's missing or another option (so `--out --full` errors instead of writing "--full").
+  const value = () => (args[i + 1] === undefined || args[i + 1].startsWith('--') ? fail(`${a} needs a value.\n${usage}`) : args[++i]);
   if (a === '--width') opts.width = Number(value());
   else if (a === '--date') opts.date = value();
   else if (a === '--selector') opts.selector = value();
@@ -47,11 +48,21 @@ function seattleInstant(y, mo, d, h, mi) {
   return new Date(guess - offset);
 }
 
+// Only the documented forms are accepted: anything else (seconds, a space, no offset) would be read in this
+// machine's time zone instead of Seattle's, and impossible dates like 2026-02-30 would silently roll over.
 let clock;
 if (opts.date) {
+  const bad = () => fail(`Can't read --date ${opts.date}; use YYYY-MM-DD, YYYY-MM-DDTHH:MM (Seattle time), or an ISO time with Z or an offset.`);
   const m = opts.date.match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?$/);
-  clock = m ? seattleInstant(+m[1], +m[2], +m[3], m[4] ? +m[4] : 12, m[5] ? +m[5] : 0) : new Date(opts.date);
-  if (Number.isNaN(clock.getTime())) fail(`Can't read --date ${opts.date}; use YYYY-MM-DD.`);
+  if (m) {
+    const [y, mo, d, h, mi] = [+m[1], +m[2], +m[3], m[4] ? +m[4] : 12, m[5] ? +m[5] : 0];
+    const real = new Date(Date.UTC(y, mo - 1, d));
+    if (real.getUTCFullYear() !== y || real.getUTCMonth() !== mo - 1 || real.getUTCDate() !== d || h > 23 || mi > 59) bad();
+    clock = seattleInstant(y, mo, d, h, mi);
+  } else if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:\d{2})$/.test(opts.date)) {
+    clock = new Date(opts.date);
+    if (Number.isNaN(clock.getTime())) bad();
+  } else bad();
 }
 
 const root = fileURLToPath(new URL('../', import.meta.url));

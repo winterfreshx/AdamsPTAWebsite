@@ -46,8 +46,10 @@ const visibleText = (inner) =>
   inner.replace(/<span class="visually-hidden">[\s\S]*?<\/span>/g, '').replace(/<[^>]+>/g, '').trim();
 
 // Puts the icon after the link's trailing text. The trailing text becomes ONE label element (so a flex button can't
-// split it into columns), and its last word is bound to the icon with no-wrap ("calendar ↗", never "↗" alone on a
-// new line). Very long last words (e.g. a bare URL) stay breakable so they can wrap on narrow phones.
+// split it into columns), and the icon is bound to the end of the last word with no-wrap ("calendar ↗", never "↗"
+// alone on a new line). A short last word is bound whole. For a long one (a domain like "smithbrothersfarms.com"
+// or a bare URL) only its last few characters are, so the rest can still break on narrow phones.
+const LONG_WORD = 12;
 function appendIcon(inner) {
   const trimmed = inner.replace(/\s+$/, '');
   const m = trimmed.match(/^([\s\S]*>)?([^<>]*)$/); // [1] everything up to the last tag, [2] trailing text
@@ -55,7 +57,12 @@ function appendIcon(inner) {
   const text = m?.[2] ?? '';
   if (!text.trim()) return trimmed + ICON;
   const w = text.match(/^([\s\S]*?)(\S+)$/);
-  const label = w && w[2].length <= 24 ? `${w[1]}<span class="ext-nowrap">${w[2]}${ICON}</span>` : `${text}${ICON}`;
+  if (!w) return `${lead}<span class="ext-label">${text}${ICON}</span>`;
+  const [before, word] = [w[1], w[2]];
+  // Count characters as they display: an entity like &#39; is one character and is never split.
+  const chars = word.match(/&(?:#\d+|#x[\da-f]+|\w+);|[\s\S]/gi);
+  const cut = chars.length > LONG_WORD ? chars.length - 4 : 0; // long word: keep only its last 4 characters with the icon
+  const label = `${before}${chars.slice(0, cut).join('')}<span class="ext-nowrap">${chars.slice(cut).join('')}${ICON}</span>`;
   return `${lead}<span class="ext-label">${label}</span>`;
 }
 

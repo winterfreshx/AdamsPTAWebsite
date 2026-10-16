@@ -81,3 +81,28 @@ baseline. The only differences allowed are the ones listed for that item.
 - **Delivery:** the phases touch overlapping files (`global.css`, `big-give.astro`, the README), so each phase is
   built on its own branch. They are then combined on one `codebase-cleanup` branch, with one commit per phase. The
   combined result passes all five checks and the baseline comparison before the PR opens.
+
+## Code review follow-ups (October 15, 2026)
+
+A `/code-review high` of the combined PR (#19) found nine issues. Eight were fixed in the same PR:
+
+- **The contrast audit no longer waits for the full load event.** That would have made a slow third-party embed (the
+  home page's Google Calendar iframe) fail the deploy. It now waits for the site's own stylesheets and fonts. The two
+  widths also run in parallel.
+- **Long one-word external-link labels are handled in the middleware, not page by page.** Only the last 4 characters of
+  a last word over 12 characters are bound to the icon. So "smithbrothersfarms.com" can break on a 320px phone, and the
+  icon still never sits alone on a line. That replaced a page-only rule in `everyday-giving.astro`.
+- **No page markup calls `mailto()` directly any more.** The reader board pages, the footer and the Resources contact
+  and grade-rep lists use `<EmailLink>`. The reader board request email's subject and template are defined once, as
+  `readerboardRequest` in `links.ts`. `mailto()` remains for data that needs an href string, such as the membership
+  card list.
+- **The 404 and directory pages put their buttons in `MessageLayout`'s `actions` slot**, so every message page builds
+  its button row the same way.
+- **`npm run screenshot` rejects bad input instead of guessing.** It no longer accepts `--date` values outside the
+  documented forms (they would be read in the machine's time zone) or impossible dates. It errors on an option that is
+  missing its value, instead of taking the next option as the value.
+- **Comments in `serve-dist.mjs` and CLAUDE.md** now mention that `screenshot.mjs` also uses the shared helpers.
+
+**Not changed (decided): logo image size.** The review suggested a per-page image size for `<LogoGrid>`, so the 12
+Moveathon logos would be smaller downloads. Decision: every logo grid keeps the Big Give style, including its
+320px-wide logo images, so the Moveathon and Big Give grids stay identical.

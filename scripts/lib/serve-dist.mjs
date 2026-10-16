@@ -1,5 +1,6 @@
 // A tiny static server for dist/ that behaves like GitHub Pages: "/about-our-pta" serves about-our-pta.html, and
-// with a base path only the sub-folder exists. Shared by audit-contrast.mjs and test-menu.mjs.
+// with a base path only the sub-folder exists. Shared by audit-contrast.mjs, test-menu.mjs and screenshot.mjs
+// (which relies on its 404 for missing pages).
 import { createServer } from 'node:http';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { extname, join, resolve, sep } from 'node:path';

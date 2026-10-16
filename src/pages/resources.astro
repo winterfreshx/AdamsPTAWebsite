@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import EmailLink from '../components/EmailLink.astro';
 import Icon from '../components/Icon.astro';
-import { links, mailto } from '../data/links';
+import { links } from '../data/links';
 import { ptaInboxes, gradeReps, schoolContacts, inbox } from '../data/contacts';
 import { site } from '../data/site';
 import { schoolYear } from '../data/schoolYear';
@@ -136,11 +136,11 @@ const linkGroups = [
       <div class="contacts">
         {
           ptaInboxes.map((c) => (
-            <a class="contact" href={mailto(c.email, c.subject)}>
+            <EmailLink class="contact" to={c.email} subject={c.subject}>
               <span class="c-label">{c.label}</span>
               <span class="c-email">{c.email}</span>
               {c.note && <span class="c-note">{c.note}</span>}
-            </a>
+            </EmailLink>
           ))
         }
       </div>
@@ -155,11 +155,11 @@ const linkGroups = [
         <ul class="rep-list" role="list">
           {gradeReps.map((r) => (
             <li class="rep">
-              <a href={mailto(r.email ?? inbox.execTeam, r.email ? undefined : `Class of ${r.classOf} grade rep`)}>
+              <EmailLink to={r.email ?? inbox.execTeam} subject={r.email ? undefined : `Class of ${r.classOf} grade rep`}>
                 <span class="class-of">Class of {r.classOf}</span>
                 <span class="grade">{r.grade}</span>
                 <span>{r.email ?? `Rep coming soon. Email ${inbox.execTeam}`}</span>
-              </a>
+              </EmailLink>
               {r.facebook && <a class="rep-fb" href={r.facebook}><Icon name="facebook" size={16} /> Class of {r.classOf} Facebook group</a>}
             </li>
           ))}

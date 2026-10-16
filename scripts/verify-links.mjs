@@ -120,6 +120,14 @@ for (const [f, html] of Object.entries(pages)) {
 }
 ok('checked');
 
+// ---- HTML entities cut in half by a tag (e.g. "Rosellini&#" + "<span>39;s", which shows "&#39;s" on the page) ----
+console.log('\n7.x No HTML entities split by tags');
+for (const [f, html] of Object.entries(pages)) {
+  const body = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '');
+  for (const m of body.matchAll(/&#?[\da-z]*</gi)) fail(`${f}: split entity near "${body.slice(m.index - 20, m.index + 30).replace(/\s+/g, ' ')}"`);
+}
+ok('checked');
+
 // ---- 9.5 Color contrast of token pairs -------------------------------------------------------
 console.log('\n9.5 Brand color contrast (WCAG AA ≥ 4.5:1)');
 const lum = (hex) => {

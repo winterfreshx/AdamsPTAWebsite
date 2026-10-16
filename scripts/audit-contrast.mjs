@@ -55,29 +55,41 @@ const AUDIT = `(() => {
 const pages = listPages();
 const browser = await chromium.launch();
 
-let failures = 0, totalChecked = 0, totalSkipped = 0;
-for (const width of [375, 1280]) {
+// Audits every page at one width. The two widths run in parallel, each in its own context; output is buffered
+// and printed in width order so the log reads the same every run.
+async function auditWidth(width) {
+  const out = { lines: [], failures: 0, checked: 0, skipped: 0 };
   const context = await browser.newContext({ viewport: { width, height: 900 }, deviceScaleFactor: 1, isMobile: width < 700 });
   const page = await context.newPage();
   for (const path of pages) {
     let res, error = '';
     try {
-      // Waits for the load event (stylesheets, fonts and images done), not a fixed delay.
-      await page.goto(base + BASE + path, { waitUntil: 'load', timeout: 30000 });
+      // Wait for our own HTML, stylesheets and fonts, not the full load event: that also waits for third-party
+      // embeds (the Google Calendar iframe on "/"), and a slow outside site must not fail the deploy.
+      await page.goto(base + BASE + path, { waitUntil: 'domcontentloaded', timeout: 30000 });
+      await page.waitForFunction(() => [...document.querySelectorAll('link[rel="stylesheet"]')].every((l) => l.sheet), null, { timeout: 10000 });
+      await page.evaluate(() => document.fonts.ready);
       res = await page.evaluate(AUDIT);
     } catch (e) { error = ` (${String(e.message).split('\n')[0]})`; }
-    if (!res) { console.log(`  ✗ ${path} @${width}px: audit failed to run${error}`); failures++; continue; }
-    if (!res.stylesLoaded) { failures++; console.log(`  ✗ ${path} @${width}px: site stylesheet did not load`); }
-    totalChecked += res.checked;
-    totalSkipped += res.skips.length;
-    if (process.env.AUDIT_VERBOSE) res.skips.forEach((x) => console.log(`  · skipped ${path} @${width}px  ${x}`));
+    if (!res) { out.lines.push(`  ✗ ${path} @${width}px: audit failed to run${error}`); out.failures++; continue; }
+    if (!res.stylesLoaded) { out.failures++; out.lines.push(`  ✗ ${path} @${width}px: site stylesheet did not load`); }
+    out.checked += res.checked;
+    out.skipped += res.skips.length;
+    if (process.env.AUDIT_VERBOSE) res.skips.forEach((x) => out.lines.push(`  · skipped ${path} @${width}px  ${x}`));
     for (const x of res.fails) {
-      failures++;
-      console.log(`  ✗ ${path} @${width}px  ${x.el} "${x.text}"  ${x.fg} on ${x.bg} = ${x.ratio}:1 (needs ${x.need}:1)`);
+      out.failures++;
+      out.lines.push(`  ✗ ${path} @${width}px  ${x.el} "${x.text}"  ${x.fg} on ${x.bg} = ${x.ratio}:1 (needs ${x.need}:1)`);
     }
   }
   await context.close();
+  return out;
 }
+
+const results = await Promise.all([375, 1280].map(auditWidth));
+results.forEach((r) => r.lines.forEach((l) => console.log(l)));
+const failures = results.reduce((n, r) => n + r.failures, 0);
+const totalChecked = results.reduce((n, r) => n + r.checked, 0);
+const totalSkipped = results.reduce((n, r) => n + r.skipped, 0);
 
 await browser.close();
 server.close();

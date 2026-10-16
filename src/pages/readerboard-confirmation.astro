@@ -1,14 +1,15 @@
 ---
 import { inbox } from '../data/contacts';
 import MessageLayout from '../layouts/MessageLayout.astro';
-import { mailto } from '../data/links';
+import EmailLink from '../components/EmailLink.astro';
+import { readerboardRequest } from '../data/links';
 // The Wix page showed a .com typo for this inbox; contacts.ts has the correct .org address.
 const email = inbox.readerboard;
 ---
 
 <MessageLayout title="Readerboard Confirmation" heading="Thank you for renting the Adams Readerboard!">
-  <p>Don't forget to email <a href={mailto(email)}>{email}</a> with your requested date and message!</p>
+  <p>Don't forget to email <EmailLink to={email} /> with your requested date and message!</p>
   <Fragment slot="actions">
-    <a class="btn btn-accent" href={mailto(email, 'Readerboard Request', 'Your first and last name:\nRequested date:\nMessage:\n')}>Email your request</a>
+    <EmailLink class="btn btn-accent" to={email} {...readerboardRequest}>Email your request</EmailLink>
   </Fragment>
 </MessageLayout>
