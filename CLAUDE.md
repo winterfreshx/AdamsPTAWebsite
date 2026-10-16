@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A static Astro site for the Adams Elementary School PTA (Seattle). It replaces the PTA's old Wix site at adamselementarypta.org. Design intent, the old-site audit, the build checklist and the PTA board's decisions are in `designs/` (`ANALYSIS.md`, `PLAN.md`, `CHECKLIST.md`, `DECISIONS.md`). `designs/crawl/` is a snapshot of the old Wix site (one extract per page plus `external-links.txt`). The verify script reads it, so don't delete it.
+A static Astro site for the Adams Elementary School PTA (Seattle). It replaces the PTA's old Wix site at adamselementarypta.org. Design intent, the old-site audit, the build checklist and the PTA board's decisions are in `designs/` (`ANALYSIS.md`, `PLAN.md`, `CHECKLIST.md`, `DECISIONS.md`, and `CLEANUP-2026-10.md` for the October 2026 code cleanup). `designs/crawl/` is a snapshot of the old Wix site (one extract per page plus `external-links.txt`). The verify script reads it, so don't delete it.
 
 ## Commands
 
@@ -14,9 +14,10 @@ Requires Node ≥ 22.12 (Astro 7).
 npm run dev       # dev server, http://localhost:4321
 npm run build     # static build → dist/
 npm run verify    # static checks on dist/; run after build
-npm run audit:contrast  # rendered-color WCAG check of every page in headless Chrome (needs Chrome; CHROME_PATH to override)
+npm run audit:contrast  # rendered-color WCAG check of every page in Playwright's Chromium (same one-time setup as test:menu)
 npm run test:links # unit tests for the external-link rule (src/lib/external-links.mjs), no browser
 npm run test:menu # menu + mobile layout tests in WebKit (iPhone) and Chromium; one-time setup: npx playwright install chromium webkit
+npm run screenshot -- <path> [--width 375] [--date 2026-10-23] [--selector .css] [--full] [--out f.png]  # PNG of a built page, optionally on a given Seattle date; default output screenshots/
 npm run preview   # serve dist/ (Astro 7 runs it as a daemon; stop with `npx astro preview stop`)
 ```
 
@@ -62,9 +63,9 @@ Run it after **any** change to the header, nav, layout, global CSS or page conte
 - **Playwright's element `tap()`/`click()` scrolls the page first**, which hides scroll bugs. The script taps at screen coordinates instead. Keep it that way.
 - **Waits are conditions, never fixed delays** (`waitForFunction`, and `settle()` waits for finite CSS animations, capped at 2s).
 
-The five sections run in parallel, each in its own browser, and the whole suite takes about 5 seconds. `scripts/lib/serve-dist.mjs` is the GitHub-Pages-like static server shared by `test-menu.mjs` and `audit-contrast.mjs`.
+The five sections run in parallel, each in its own browser, and the whole suite takes about 5 seconds. Shared script code is in `scripts/lib/`: `serve-dist.mjs` is the GitHub-Pages-like static server used by `test-menu.mjs`, `audit-contrast.mjs` and `screenshot.mjs`, and `site.mjs` gives those scripts and `verify-links.mjs` the `dist/` path, `BASE` (from `SITE_BASE`) and `listPages()` (the built pages minus redirect stubs, as URL paths).
 
-`scripts/audit-contrast.mjs` checks the colors the browser actually renders. It loads every page at 375 and 1280 px and compares each text element's color with the background painted behind it. Text over a gradient or image with no solid base color is skipped, so give such sections a solid fallback color (`AUDIT_VERBOSE=1` lists the skipped elements).
+`scripts/audit-contrast.mjs` checks the colors the browser actually renders. It loads every page at 375 and 1280 px and compares each text element's color with the background painted behind it. Text over a gradient or image with no solid base color is skipped, so give such sections a solid fallback color (`AUDIT_VERBOSE=1` lists the skipped elements). It waits for the site's own stylesheets and fonts, not the full load event, so a slow third-party embed (the home page's Google Calendar) can't fail a deploy.
 
 ## Architecture
 
@@ -79,17 +80,19 @@ The five sections run in parallel, each in its own browser, and the whole suite 
   - `corporateMatching.ts`, `sponsors.ts`, `announcements.ts`: those lists and the Big Give numbers. Sponsor websites (`bigGiveSupporters`) live with their sponsor in `sponsors.ts`, not in `links.ts`.
 
   Pages import from these files. Add new outside URLs to `links.ts` rather than hard-coding them.
+  Write email links as `<EmailLink to={…} />` (optional `subject`; the text is the address unless you pass a slot), never a hand-built `mailto:` (`mailto()` itself is only for data that needs an href string, like the membership card list). Sponsor and supporter logos use `<LogoGrid items={…} />`.
 - **Date-based content is decided in the browser, in Seattle time.** `src/data/schedule.ts` defines date windows. `scheduled(window)` and `scheduledHref(window, in, out)` add data attributes plus a build-time default to an element, and an inline script in `BaseLayout` re-evaluates them on every page load. So content switches on the right day without a rebuild (the nightly rebuild only refreshes defaults for no-JS visitors). The windows live in `announcements.ts` (`spiritWear.window`, `bigGive.window`, `fallFest.window`, `afterSchoolEnrollment.window`) and drive the announcement bar, the home-page cards and hero button, and the header's Donate link (`donateCta` in `nav.ts` reuses `bigGive.window`). Windows are inclusive Seattle dates; `AnnouncementBar` hides the whole bar via CSS `:has()` when no item is visible. Expired entries are never removed automatically. Use `scheduled(w, { invert: true })` for fallback content shown outside a window. Never compare dates with `new Date()`/`toISOString()` (that's UTC); use `seattleToday()`.
 - **`[hidden]` is global `display: none !important`** (in `global.css`), so scheduled and toggled elements hide even when a component sets `display`.
 - **Layouts:** `BaseLayout` has the page head and SEO tags, the announcement bar, the header and the footer. `MessageLayout` wraps it into a centered eagle-and-message page, used for the thank-you pages, the directory info pages (both through `DirectoryMoved.astro`) and the 404. Inner pages start with `PageHero`.
 - **Styling:** design tokens (the green and gold scales, type and spacing) and shared classes (`.btn`, `.card`, `.section`, `.grid-*`, `.split`, `.steps`, `.check-list`, `.callout`) are in `src/styles/global.css`. Use those before writing page-scoped `<style>`. Cards and buttons are CSS classes, not components. Icons come from `Icon.astro`, a fixed set of inline SVGs; to add one, add a path to its `paths` map.
+  A card's icon takes `class="card-icon"`; wrap icon + `<h3>` in `.card-head` to put them side by side.
 - **JavaScript is a progressive enhancement.** The desktop dropdowns are `<details>` elements. On hover devices, hovering opens them and a mouse click won't toggle an open one shut (keyboard activation still toggles). The mobile menu's `<noscript>` fallback in `BaseLayout` shows it inline and makes the header non-sticky below 1000px. The only scripts are the header menu, the schedule script, and the corporate-matching search and copy button.
 - **Big Give progress** has one source: `bigGive.raised` in `announcements.ts`, rendered only through `components/BigGiveProgress.astro` (`size="compact"` on the home card, `"feature"` on /big-give). Don't compute or display the raised amount anywhere else. The headline goal is the community `goal`; `corporateMatchGoal` is shown as a secondary note.
 - **Money** is formatted with `usd()` from `src/lib/format.ts` (whole dollars without cents, otherwise two decimals).
 - **Images** go in `src/assets/images/` and are rendered with `astro:assets` `<Image>`. `eagle-logo.png` is the transparent brand eagle, used in the hero, the header, the footer, the favicon and the OG image.
 - **Header and mobile menu rules (learned from an iPhone bug):** never put `backdrop-filter`, `filter` or `transform` on `.site-header`. In Safari they trap the `position: fixed` mobile menu inside the header, which showed one row on iPhone. Put the menu's scroll lock on `<body>` (`body.menu-open`), never on `<html>`. Overflow on `<html>` makes `<body>` its own scroll box and the sticky header stops sticking. Long strings wrap through `overflow-wrap: anywhere` on `body`, so 320px phones don't scroll sideways.
 - **External links are handled by middleware.** `src/middleware.ts` runs on every page, both in `npm run dev` and when the static build pre-renders. It applies `markExternalLinks()` from `src/lib/external-links.mjs`:
-  - **What every link to another site gets:** `target="_blank"`, plus `noopener noreferrer` added to `rel` (existing rel tokens are kept), and the external-link icon. A trailing arrow is swapped for the icon; otherwise the trailing text becomes one `.ext-label` and its last word + icon are kept together in `.ext-nowrap`, so flex buttons don't split into columns and the icon never wraps alone.
+  - **What every link to another site gets:** `target="_blank"`, plus `noopener noreferrer` added to `rel` (existing rel tokens are kept), and the external-link icon. A trailing arrow is swapped for the icon; otherwise the trailing text becomes one `.ext-label` and its last word + icon are kept together in `.ext-nowrap` (for a word over 12 characters, like a domain name, only its last 4 characters, so the rest can still break on a 320px phone), so flex buttons don't split into columns and the icon never wraps alone.
   - **Screen readers:** "(opens in a new tab)" as hidden text, or appended to `aria-label` when the link has one. Icon-only links get the announcement but no visible icon.
   - **Left alone:** script, style, template, textarea and comment regions.
   - **In pages, write plain `<a href="https://…">`** and don't add `target`, `rel` or the icon by hand.

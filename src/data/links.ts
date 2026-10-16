@@ -89,3 +89,9 @@ export const mailto = (email: string, subject?: string, body?: string) => {
   const q = params.toString().replace(/\+/g, '%20');
   return `mailto:${email}${q ? `?${q}` : ''}`;
 };
+
+// The prefilled readerboard request email (used on the request page and its PayPal return page).
+export const readerboardRequest = {
+  subject: 'Readerboard Request',
+  body: 'Your first and last name:\nRequested date:\nMessage:\n',
+};

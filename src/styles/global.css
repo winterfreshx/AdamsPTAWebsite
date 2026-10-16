@@ -7,6 +7,7 @@
   --green-900: #0b3d27;
   --green-700: #105838;
   --green-500: #1f7a4d;
+  --green-200: #bcd9c6;
   --green-100: #e6f2ea;
   --gold-500: #e4a83c;
   --gold-300: #f5cd6e;
@@ -134,10 +135,6 @@ li + li { margin-top: var(--space-2); }
   .split { grid-template-columns: 1.1fr 0.9fr; }
   .split.reverse > :first-child { order: 2; }
 }
-.prose { max-width: 44rem; }
-.prose h2 { margin-top: var(--space-7); margin-bottom: var(--space-3); }
-.prose h3 { margin-top: var(--space-6); margin-bottom: var(--space-2); }
-.prose ul, .prose ol { margin-top: var(--space-3); }
 .muted { color: var(--ink-soft); }
 .center { text-align: center; }
 
@@ -170,6 +167,10 @@ li + li { margin-top: var(--space-2); }
   padding: var(--space-5); box-shadow: var(--shadow-sm);
 }
 .card h3 { margin-bottom: var(--space-2); }
+.card-icon { color: var(--green-500); flex: none; }
+/* Icon beside the card title. */
+.card-head { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3); }
+.card-head h3 { margin: 0; }
 .card-accent { border-top: 5px solid var(--gold-500); }
 .card-green { background: var(--green-700); color: var(--white); border-color: var(--green-700); }
 .card-green h2, .card-green h3 { color: var(--white); }
@@ -180,7 +181,6 @@ li + li { margin-top: var(--space-2); }
   font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.02em;
   background: var(--gold-100); color: var(--green-900); border: 1px solid var(--gold-300);
 }
-.badge-green { background: var(--green-100); border-color: #bcd9c6; }
 
 /* Checklist-style bullet lists */
 .check-list { list-style: none; padding: 0; }
@@ -217,7 +217,7 @@ tr:last-child td { border-bottom: 0; }
   background: var(--gold-100); border: 1px solid var(--gold-300);
 }
 .callout svg { flex: none; width: 1.75rem; height: 1.75rem; color: var(--green-700); }
-.callout-green { background: var(--green-100); border-color: #bcd9c6; }
+.callout-green { background: var(--green-100); border-color: var(--green-200); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }

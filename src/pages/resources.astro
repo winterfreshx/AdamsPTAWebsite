@@ -1,8 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import EmailLink from '../components/EmailLink.astro';
 import Icon from '../components/Icon.astro';
-import { links, mailto } from '../data/links';
+import { links } from '../data/links';
 import { ptaInboxes, gradeReps, schoolContacts, inbox } from '../data/contacts';
 import { site } from '../data/site';
 import { schoolYear } from '../data/schoolYear';
@@ -77,19 +78,19 @@ const linkGroups = [
       </div>
       <div class="grid grid-3">
         <article class="card card-accent">
-          <Icon name="mail" size={30} class="i" />
+          <Icon name="mail" size={30} class="card-icon" />
           <h3>Adams weekly newsletter</h3>
           <p>Sent most Tuesdays by email. The best way to hear about school events, volunteer opportunities and special announcements.</p>
           <a class="btn" href={links.newsletterSignup}>Subscribe</a>
         </article>
         <article class="card card-accent">
-          <Icon name="app" size={30} class="i" />
+          <Icon name="app" size={30} class="card-icon" />
           <h3>Konstella</h3>
           <p>Our private parent community app for timely updates, sign-ups, the directory and messages.</p>
           <a class="btn" href="/communications-app">About Konstella</a>
         </article>
         <article class="card card-accent">
-          <Icon name="calendar" size={30} class="i" />
+          <Icon name="calendar" size={30} class="card-icon" />
           <h3>Calendars & events</h3>
           <p>
             Follow the <a href={links.ptaCalendar}>PTA calendar</a> and the <a href={links.spsCalendar}>SPS school-year calendar</a>,
@@ -98,22 +99,22 @@ const linkGroups = [
           <a class="btn" href={links.ptaCalendar}>PTA calendar</a>
         </article>
         <article class="card">
-          <Icon name="users" size={30} class="i" />
+          <Icon name="users" size={30} class="card-icon" />
           <h3>Family directory</h3>
           <p>
             Families opt in to be listed; sign-up begins mid-September. The {schoolYear} family directory
-            is on Konstella. For edits or removal, email <a href={`mailto:${inbox.familyDirectory}`}>{inbox.familyDirectory}</a>.
+            is on Konstella. For edits or removal, email <EmailLink to={inbox.familyDirectory} />.
           </p>
           <a class="btn btn-ghost" href={links.konstellaDirectory}>Open the {schoolYear} directory</a>
         </article>
         <article class="card">
-          <Icon name="megaphone" size={30} class="i" />
+          <Icon name="megaphone" size={30} class="card-icon" />
           <h3>SPS School Beat newsletter</h3>
-          <p>District news about academic initiatives and the accomplishments of students and teachers. Story tips: <a href={`mailto:${schoolContacts.spsGoodNews}`}>{schoolContacts.spsGoodNews}</a>.</p>
+          <p>District news about academic initiatives and the accomplishments of students and teachers. Story tips: <EmailLink to={schoolContacts.spsGoodNews} />.</p>
           <a class="btn btn-ghost" href={links.spsSchoolBeatSignup}>Subscribe</a>
         </article>
         <article class="card">
-          <Icon name="instagram" size={30} class="i" />
+          <Icon name="instagram" size={30} class="card-icon" />
           <h3>Social media</h3>
           <p>Follow the Adams PTA for photos and reminders.</p>
           <div class="btn-row">
@@ -135,11 +136,11 @@ const linkGroups = [
       <div class="contacts">
         {
           ptaInboxes.map((c) => (
-            <a class="contact" href={mailto(c.email, c.subject)}>
+            <EmailLink class="contact" to={c.email} subject={c.subject}>
               <span class="c-label">{c.label}</span>
               <span class="c-email">{c.email}</span>
               {c.note && <span class="c-note">{c.note}</span>}
-            </a>
+            </EmailLink>
           ))
         }
       </div>
@@ -154,11 +155,11 @@ const linkGroups = [
         <ul class="rep-list" role="list">
           {gradeReps.map((r) => (
             <li class="rep">
-              <a href={mailto(r.email ?? inbox.execTeam, r.email ? undefined : `Class of ${r.classOf} grade rep`)}>
+              <EmailLink to={r.email ?? inbox.execTeam} subject={r.email ? undefined : `Class of ${r.classOf} grade rep`}>
                 <span class="class-of">Class of {r.classOf}</span>
                 <span class="grade">{r.grade}</span>
                 <span>{r.email ?? `Rep coming soon. Email ${inbox.execTeam}`}</span>
-              </a>
+              </EmailLink>
               {r.facebook && <a class="rep-fb" href={r.facebook}><Icon name="facebook" size={16} /> Class of {r.classOf} Facebook group</a>}
             </li>
           ))}
@@ -209,7 +210,6 @@ const linkGroups = [
   .quick a:hover :global(svg) { color: var(--green-900); }
   .card { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); }
   .card > .btn, .card > .btn-row { margin-top: auto; }
-  .card :global(.i) { color: var(--green-500); }
   .contacts { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); }
   .contact {
     display: flex; flex-direction: column; padding: var(--space-4); border-radius: var(--radius); text-decoration: none;

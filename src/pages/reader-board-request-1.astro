@@ -5,10 +5,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
 import readerboard from '../assets/images/readerboard.jpg';
-import { links, mailto } from '../data/links';
+import EmailLink from '../components/EmailLink.astro';
+import { links, readerboardRequest } from '../data/links';
 
 const email = inbox.readerboard;
-const requestMail = mailto(email, 'Readerboard Request', 'Your first and last name:\nRequested date:\nMessage:\n');
 ---
 
 <BaseLayout title="Readerboard Request" description="Rent the Adams Elementary readerboard for a $25 donation: celebrate a birthday, a milestone or a shout-out for a full day.">
@@ -24,7 +24,7 @@ const requestMail = mailto(email, 'Readerboard Request', 'Your first and last na
         <h2>How to schedule your message</h2>
         <ol class="steps">
           <li>
-            <strong>Email your request</strong> to <a href={requestMail}>{email}</a> with:
+            <strong>Email your request</strong> to <EmailLink to={email} {...readerboardRequest} /> with:
             <ul class="req">
               <li>Your first and last name</li>
               <li>Requested date</li>
@@ -35,10 +35,10 @@ const requestMail = mailto(email, 'Readerboard Request', 'Your first and last na
           <li><strong>Watch for your message</strong> on the big day!</li>
         </ol>
         <div class="btn-row stack-mobile">
-          <a class="btn btn-lg" href={requestMail}><Icon name="mail" /> Email your request</a>
+          <EmailLink class="btn btn-lg" to={email} {...readerboardRequest}><Icon name="mail" /> Email your request</EmailLink>
           <a class="btn btn-accent btn-lg" href={links.donateReaderboard}><Icon name="heart" /> Donate $25 now</a>
         </div>
-        <p class="muted small">Questions? Email <a href={mailto(email)}>{email}</a>.</p>
+        <p class="muted small">Questions? Email <EmailLink to={email} />.</p>
       </div>
       <div class="photo rb-photo">
         <Image src={readerboard} alt="The Adams Elementary readerboard reading “Happy 9th Birthday Ellie!”" width={360} />

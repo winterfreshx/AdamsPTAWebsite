@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import EmailLink from '../components/EmailLink.astro';
 import Icon from '../components/Icon.astro';
 import eagle from '../assets/images/eagle-logo.png';
 import { execBoard } from '../data/contacts';
@@ -61,14 +62,14 @@ const initials = (n: string) => n.split(' ').map((p) => p[0]).join('');
               <span class="avatar" aria-hidden="true">{initials(m.name)}</span>
               <h3>{m.name}</h3>
               <p class="role">{m.role}</p>
-              <a href={`mailto:${m.email}`} class="email"><Icon name="mail" size={18} /> {m.email}</a>
+              <EmailLink to={m.email} class="email"><Icon name="mail" size={18} /> {m.email}</EmailLink>
             </article>
           ))
         }
       </div>
       <p class="callout callout-green board-note">
         <Icon name="info" />
-        <span>Not sure who to contact? Reach our team by emailing <a href={`mailto:${site.email}`}>{site.email}</a>.</span>
+        <span>Not sure who to contact? Reach our team by emailing <EmailLink to={site.email} />.</span>
       </p>
     </div>
   </section>

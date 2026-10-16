@@ -2,9 +2,10 @@
 import { Image } from 'astro:assets';
 import eagle from '../assets/images/eagle-logo.png';
 import { site, school, bellTimes, landAcknowledgment } from '../data/site';
-import { links, mailto } from '../data/links';
+import { links } from '../data/links';
 import { nav } from '../data/nav';
 import Icon from './Icon.astro';
+import EmailLink from './EmailLink.astro';
 
 const year = new Date().getFullYear();
 ---
@@ -18,7 +19,7 @@ const year = new Date().getFullYear();
       <section class="footer-brand">
         <Image src={eagle} alt="Adams Elementary Eagles logo" width={150} class="footer-eagle" />
         <p class="footer-tag">{site.tagline}</p>
-        <a class="btn btn-accent" href={mailto(site.email)}><Icon name="mail" /> Contact the PTA</a>
+        <EmailLink class="btn btn-accent" to={site.email}><Icon name="mail" /> Contact the PTA</EmailLink>
         <div class="socials">
           <a href={links.instagram} aria-label="Adams PTA on Instagram"><Icon name="instagram" /></a>
           <a href={links.facebook} aria-label="Adams PTA on Facebook"><Icon name="facebook" /></a>

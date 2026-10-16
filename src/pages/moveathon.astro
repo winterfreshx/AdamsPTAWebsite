@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import LogoGrid from '../components/LogoGrid.astro';
 import Icon from '../components/Icon.astro';
 import shirt from '../assets/images/moveathon-2026-shirt.jpg';
 import { links } from '../data/links';
@@ -99,11 +100,7 @@ const schedule = {
         <p class="eyebrow">With gratitude</p>
         <h2 id="sponsors-title">Thank you to our 2026 sponsors</h2>
       </div>
-      <ul class="logos" role="list">
-        {moveathonSponsors.map((s) => (
-          <li><Image src={s.logo} alt={s.name} width={220} class="logo" /></li>
-        ))}
-      </ul>
+      <LogoGrid items={moveathonSponsors} />
     </div>
   </section>
 </BaseLayout>
@@ -112,7 +109,4 @@ const schedule = {
   .shirt { max-width: 18rem; margin-inline: auto; text-align: center; }
   .shirt .photo { border: 8px solid var(--white); transform: rotate(-2deg); }
   .shirt figcaption { margin-top: var(--space-4); }
-  .logos { list-style: none; padding: 0; display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(min(45%, 10rem), 1fr)); }
-  .logos li { margin: 0; display: grid; place-items: center; aspect-ratio: 4 / 3; padding: var(--space-4); background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); }
-  .logos :global(.logo) { max-height: 100%; width: auto; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; }
 </style>

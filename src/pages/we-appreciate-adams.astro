@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import EmailLink from '../components/EmailLink.astro';
 import Icon from '../components/Icon.astro';
 import staffPhoto from '../assets/images/staff-appreciation.jpg';
 import { site } from '../data/site';
@@ -33,11 +34,11 @@ import { site } from '../data/site';
         <a class="btn btn-accent" href="/volunteering">Volunteer <Icon name="arrow-right" /></a>
       </article>
       <article class="card stack">
-        <Icon name="gift" size={32} class="i" />
+        <Icon name="gift" size={32} class="card-icon" />
         <h3>Staff lounge snack restocks</h3>
         <p>
           The Adams PTA regularly coordinates staff lounge snack restocks. This is one role of our staff appreciation team.
-          A contribution to our staff is welcome any time. Contact <a href={`mailto:${site.email}`}>{site.email}</a>.
+          A contribution to our staff is welcome any time. Contact <EmailLink to={site.email} />.
         </p>
       </article>
     </div>
@@ -45,6 +46,5 @@ import { site } from '../data/site';
 </BaseLayout>
 
 <style>
-  .card :global(.i) { color: var(--green-500); }
   .card-green :global(svg) { color: var(--gold-300); }
 </style>

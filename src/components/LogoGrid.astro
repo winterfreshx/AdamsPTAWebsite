@@ -1,0 +1,47 @@
+---
+// Logo tiles for sponsors and supporters: the logo with the name under it, in centered rows (2 per row on phones,
+// 3 from 720px, 5 from 1100px). Items with a `url` are links; items without one are plain tiles with no hover.
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+interface Props {
+  items: { name: string; logo?: ImageMetadata; url?: string }[];
+}
+const { items } = Astro.props;
+---
+
+<ul class="logo-grid" role="list">
+  {items.map((s) => {
+    const Tile = s.url ? 'a' : 'div';
+    return (
+      <li>
+        <Tile class="tile" href={s.url}>
+          {s.logo && <Image src={s.logo} alt="" width={320} class="logo" />}
+          {s.name}
+        </Tile>
+      </li>
+    );
+  })}
+</ul>
+
+<style>
+  /* Centered rows, so a short last row sits in the middle instead of hanging left. */
+  .logo-grid { --cols: 2; --gap: var(--space-3); list-style: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap); }
+  .logo-grid li { margin: 0; display: flex; flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols)); min-width: 0; }
+  .tile {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: var(--space-3);
+    padding: var(--space-4) var(--space-3); text-align: center; text-decoration: none; line-height: 1.25;
+    font-family: var(--font-display); font-weight: 800; font-size: 0.9375rem; color: var(--green-700);
+    background: var(--white); border: 1px solid var(--line); border-radius: var(--radius);
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+  a.tile:hover { background: var(--green-100); border-color: var(--green-200); }
+  /* The name stays plain text so the external-link middleware keeps it and its icon together in one .ext-label. */
+  .logo-grid :global(.logo) { flex: none; height: 4rem; width: 100%; object-fit: contain; mix-blend-mode: multiply; }
+  @media (min-width: 720px) {
+    .logo-grid { --cols: 3; --gap: var(--space-4); }
+    .tile { padding: var(--space-5) var(--space-4); font-size: 1rem; }
+    .logo-grid :global(.logo) { height: 5.5rem; }
+  }
+  @media (min-width: 1100px) { .logo-grid { --cols: 5; } }
+</style>

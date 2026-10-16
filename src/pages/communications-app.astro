@@ -32,7 +32,7 @@ const features = [
       <div class="grid grid-4">
         {features.map((f) => (
           <article class="card">
-            <Icon name={f.icon} size={28} class="i" />
+            <Icon name={f.icon} size={28} class="card-icon" />
             <h3>{f.title}</h3>
             <p class="muted">{f.text}</p>
           </article>
@@ -48,6 +48,6 @@ const features = [
 
 <style>
   :global(.k-icon) { width: 9rem; border-radius: 2rem; box-shadow: var(--shadow-lg); }
-  .card :global(.i) { color: var(--green-500); margin-bottom: var(--space-3); }
+  .card :global(.card-icon) { margin-bottom: var(--space-3); }
   .how { margin-top: var(--space-6); }
 </style>

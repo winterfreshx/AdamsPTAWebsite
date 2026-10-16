@@ -1,15 +1,15 @@
 ---
 import { inbox } from '../data/contacts';
 import MessageLayout from '../layouts/MessageLayout.astro';
+import EmailLink from '../components/EmailLink.astro';
 ---
 
 <MessageLayout title="Thank You for Giving" heading="Thank you for supporting the Adams Elementary PTA with the Big Give!">
   <p>
     Please ask your employer about corporate matches! For questions about a corporate match, or to report one, contact
-    <a href={`mailto:${inbox.treasurer}`}>{inbox.treasurer}</a>.
+    <EmailLink to={inbox.treasurer} />.
   </p>
-  <div class="btn-row">
+  <Fragment slot="actions">
     <a class="btn btn-accent" href="/corporate-matching">Find your employer</a>
-    <a class="btn btn-ghost" href="/">Back to home</a>
-  </div>
+  </Fragment>
 </MessageLayout>

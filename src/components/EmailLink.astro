@@ -1,0 +1,15 @@
+---
+// A mailto link built with the `mailto()` helper. With no slot content the link text is the address;
+// otherwise the slot is the text. Other attributes (class, aria-label, …) pass through to the <a>.
+import type { HTMLAttributes } from 'astro/types';
+import { mailto } from '../data/links';
+
+interface Props extends Omit<HTMLAttributes<'a'>, 'href'> {
+  to: string;
+  subject?: string;
+  body?: string;
+}
+const { to, subject, body, ...attrs } = Astro.props;
+---
+
+<a href={mailto(to, subject, body)} {...attrs}>{Astro.slots.has('default') ? <slot /> : to}</a>

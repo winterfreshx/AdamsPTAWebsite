@@ -4,19 +4,17 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isExternalHref, siteHosts, withoutProtectedRegions } from '../src/lib/external-links.mjs';
+import { BASE, dist, listHtmlFiles, requireDist } from './lib/site.mjs';
 
-const root = fileURLToPath(new URL('..', import.meta.url));
-const dist = join(root, 'dist');
-const crawlDir = join(root, 'designs/crawl');
-// Sub-folder the site was built for ("" at a domain root). Must match the SITE_BASE used for `npm run build`.
-const BASE = (process.env.SITE_BASE || '').replace(/\/$/, '');
+const crawlDir = fileURLToPath(new URL('../designs/crawl', import.meta.url));
 let failures = 0;
 const fail = (msg) => { failures++; console.log(`  ✗ ${msg}`); };
 const ok = (msg) => console.log(`  ✓ ${msg}`);
 
-if (!existsSync(dist)) { console.error('dist/ not found, so run `npm run build` first.'); process.exit(1); }
+requireDist();
 
-const htmlFiles = readdirSync(dist, { recursive: true }).filter((f) => f.endsWith('.html')).map(String);
+// Every HTML file, redirect stubs included: 9.2 counts a redirect as resolving an old Wix URL.
+const htmlFiles = listHtmlFiles();
 const pages = Object.fromEntries(htmlFiles.map((f) => [f, readFileSync(join(dist, f), 'utf8')]));
 const decode = (s) => s.replace(/&amp;/g, '&').replace(/&#38;/g, '&').replace(/&quot;/g, '"');
 const hrefsOf = (html) => [...html.matchAll(/href="([^"]+)"/g)].map((m) => decode(m[1]));
@@ -119,6 +117,14 @@ console.log('\n7.x No words glued to links/bold text');
 for (const [f, html] of Object.entries(pages)) {
   const body = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '');
   for (const m of body.matchAll(/[a-z]<(a|strong)\b[^>]*>[A-Za-z]/g)) fail(`${f}: glued text near "${body.slice(m.index - 20, m.index + 40).replace(/\s+/g, ' ')}"`);
+}
+ok('checked');
+
+// ---- HTML entities cut in half by a tag (e.g. "Rosellini&#" + "<span>39;s", which shows "&#39;s" on the page) ----
+console.log('\n7.x No HTML entities split by tags');
+for (const [f, html] of Object.entries(pages)) {
+  const body = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '');
+  for (const m of body.matchAll(/&#?[\da-z]*</gi)) fail(`${f}: split entity near "${body.slice(m.index - 20, m.index + 30).replace(/\s+/g, ' ')}"`);
 }
 ok('checked');
 

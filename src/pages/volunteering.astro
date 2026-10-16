@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import EmailLink from '../components/EmailLink.astro';
 import Icon from '../components/Icon.astro';
 import { links } from '../data/links';
 import { schoolContacts } from '../data/contacts';
@@ -60,8 +61,8 @@ const faqs = [
           </li>
         </ol>
         <div class="btn-row">
-          <a class="btn" href={links.spsVolunteerSite}>SPS Volunteer Website <Icon name="external" /></a>
-          <a class="btn btn-ghost" href={`mailto:${schoolContacts.volunteerOffice.email}`}><Icon name="mail" /> Email {schoolContacts.volunteerOffice.name}</a>
+          <a class="btn" href={links.spsVolunteerSite}>SPS Volunteer Website</a>
+          <EmailLink class="btn btn-ghost" to={schoolContacts.volunteerOffice.email}><Icon name="mail" /> Email {schoolContacts.volunteerOffice.name}</EmailLink>
         </div>
       </div>
       <aside class="card card-green notes">
@@ -69,7 +70,7 @@ const faqs = [
         <ul class="check-list">
           <li>Volunteers must be within staff view.</li>
           <li>When you arrive for your volunteer shift, sign in using the email address you used on your volunteer application.</li>
-          <li>Questions? Email {schoolContacts.volunteerOffice.name} in the office at <a href={`mailto:${schoolContacts.volunteerOffice.email}`}>{schoolContacts.volunteerOffice.email}</a>.</li>
+          <li>Questions? Email {schoolContacts.volunteerOffice.name} in the office at <EmailLink to={schoolContacts.volunteerOffice.email} />.</li>
         </ul>
       </aside>
     </div>
@@ -81,7 +82,7 @@ const faqs = [
         <h2 id="status-title">Already an SPS volunteer?</h2>
         <p class="lead">Visit the SPS Volunteer Portal to check your status, renew, or add Adams to an existing volunteer profile from another SPS school.</p>
       </div>
-      <a class="btn btn-lg" href={links.spsVolunteerPortal}>SPS Volunteer Portal <Icon name="external" /></a>
+      <a class="btn btn-lg" href={links.spsVolunteerPortal}>SPS Volunteer Portal</a>
     </div>
   </section>
 
@@ -94,7 +95,7 @@ const faqs = [
           {mostNeeded.roles.map((r) => <li><Icon name="star" size={20} />{r}</li>)}
         </ul>
         <p>
-          Email <a href={`mailto:${site.email}`}>{site.email}</a> to ask about these roles, or
+          Email <EmailLink to={site.email} /> to ask about these roles, or
           <a href={links.konstellaCommittees}>sign up on Konstella</a>.
         </p>
       </div>
@@ -103,8 +104,8 @@ const faqs = [
         <h3>Check out our Google Doc describing all our volunteer roles!</h3>
         <p>Find the role that fits your interests and schedule.</p>
         <div class="btn-row">
-          <a class="btn btn-accent" href={links.volunteerRolesDoc}>Volunteer roles doc <Icon name="external" /></a>
-          <a class="btn btn-ghost" href={links.volunteerDoc}>Volunteer document <Icon name="external" /></a>
+          <a class="btn btn-accent" href={links.volunteerRolesDoc}>Volunteer roles doc</a>
+          <a class="btn btn-ghost" href={links.volunteerDoc}>Volunteer document</a>
         </div>
       </div>
     </div>
@@ -123,7 +124,7 @@ const faqs = [
         <li>Attending meetings: we often mention small volunteer needs at both Board and General PTA meetings.</li>
       </ul>
       <p>
-        Email <a href={`mailto:${site.email}`}>{site.email}</a> or keep an eye on <a href="/communications-app">Konstella</a>,
+        Email <EmailLink to={site.email} /> or keep an eye on <a href="/communications-app">Konstella</a>,
         our communications app, where we post new volunteer spots regularly.
       </p>
     </div>

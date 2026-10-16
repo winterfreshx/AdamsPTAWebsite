@@ -1,59 +1,15 @@
-// Rendered-color contrast audit: loads every built page in headless Chrome and checks each visible text
-// element's computed color against the background actually painted behind it (WCAG AA: 4.5:1, or 3:1
-// for large text). Run after `npm run build`. Needs Google Chrome; set CHROME_PATH if it isn't found.
-import { spawn } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+// Rendered-color contrast audit: loads every built page in headless Chromium (Playwright) and checks each visible
+// text element's computed color against the background actually painted behind it (WCAG AA: 4.5:1, or 3:1 for
+// large text). Run after `npm run build`. Needs Playwright's Chromium: `npx playwright install chromium`.
+import { chromium } from 'playwright';
+import { BASE, dist, listPages, requireDist } from './lib/site.mjs';
 import { serveDist } from './lib/serve-dist.mjs';
 
-const dist = fileURLToPath(new URL('../dist/', import.meta.url));
-// Sub-folder the site was built for ("" at a domain root). Must match the SITE_BASE used for `npm run build`.
-const BASE = (process.env.SITE_BASE || '').replace(/\/$/, '');
-if (!existsSync(dist)) { console.error('dist/ not found, so run `npm run build` first.'); process.exit(1); }
-
-const chromePath = [
-  process.env.CHROME_PATH,
-  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-  '/usr/bin/google-chrome',
-  '/usr/bin/google-chrome-stable',
-  '/usr/bin/chromium',
-  '/usr/bin/chromium-browser',
-].find((p) => p && existsSync(p));
-if (!chromePath) { console.error('Google Chrome not found; set CHROME_PATH.'); process.exit(1); }
+requireDist();
 
 // ---- Static server that mimics GitHub Pages ----
 const server = await serveDist(dist, BASE);
 const base = server.origin;
-
-// ---- Chrome over the DevTools protocol (no dependencies; Node 22+ has WebSocket) ----
-const profile = mkdtempSync(join(tmpdir(), 'contrast-'));
-const chrome = spawn(chromePath, ['--headless=new', '--no-sandbox', '--disable-gpu', '--hide-scrollbars', '--remote-debugging-port=0', `--user-data-dir=${profile}`, 'about:blank'], { stdio: 'ignore' });
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-let port;
-for (let i = 0; i < 80 && !port; i++) {
-  await sleep(100);
-  try { port = readFileSync(join(profile, 'DevToolsActivePort'), 'utf8').split('\n')[0]; } catch {}
-}
-let target;
-for (let i = 0; i < 40 && !target; i++) {
-  try { target = (await (await fetch(`http://127.0.0.1:${port}/json`)).json()).find((t) => t.type === 'page'); } catch {}
-  if (!target) await sleep(100);
-}
-const ws = new WebSocket(target.webSocketDebuggerUrl);
-await new Promise((r) => ws.addEventListener('open', r));
-let seq = 0;
-const pending = new Map();
-const listeners = [];
-ws.addEventListener('message', (e) => {
-  const m = JSON.parse(e.data);
-  if (m.id && pending.has(m.id)) { pending.get(m.id)(m); pending.delete(m.id); }
-  if (m.method) for (const l of listeners.splice(0)) l.method === m.method ? l.res() : listeners.push(l);
-});
-const send = (method, params = {}) => new Promise((res) => { const id = ++seq; pending.set(id, res); ws.send(JSON.stringify({ id, method, params })); });
-const once = (method) => new Promise((res) => listeners.push({ method, res }));
-await send('Page.enable');
 
 // Runs inside the page. Returns failing text elements.
 const AUDIT = `(() => {
@@ -96,35 +52,47 @@ const AUDIT = `(() => {
   return { fails, checked, skips, stylesLoaded };
 })()`;
 
-const pages = readdirSync(dist, { recursive: true })
-  .map(String)
-  .filter((f) => f.endsWith('.html') && !/http-equiv="refresh"/.test(readFileSync(join(dist, f), 'utf8')));
+const pages = listPages();
+const browser = await chromium.launch();
 
-let failures = 0, totalChecked = 0, totalSkipped = 0;
-for (const width of [375, 1280]) {
-  await send('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: width < 700 });
-  for (const f of pages) {
-    const path = f === 'index.html' ? '/' : '/' + f.replace(/\.html$/, '');
-    const loaded = once('Page.loadEventFired');
-    await send('Page.navigate', { url: base + BASE + path });
-    await Promise.race([loaded, sleep(5000)]);
-    const res = (await send('Runtime.evaluate', { expression: AUDIT, returnByValue: true })).result?.result?.value;
-    if (!res) { console.log(`  ✗ ${path} @${width}px: audit failed to run`); failures++; continue; }
-    if (!res.stylesLoaded) { failures++; console.log(`  ✗ ${path} @${width}px: site stylesheet did not load`); }
-    totalChecked += res.checked;
-    totalSkipped += res.skips.length;
-    if (process.env.AUDIT_VERBOSE) res.skips.forEach((x) => console.log(`  · skipped ${path} @${width}px  ${x}`));
+// Audits every page at one width. The two widths run in parallel, each in its own context; output is buffered
+// and printed in width order so the log reads the same every run.
+async function auditWidth(width) {
+  const out = { lines: [], failures: 0, checked: 0, skipped: 0 };
+  const context = await browser.newContext({ viewport: { width, height: 900 }, deviceScaleFactor: 1, isMobile: width < 700 });
+  const page = await context.newPage();
+  for (const path of pages) {
+    let res, error = '';
+    try {
+      // Wait for our own HTML, stylesheets and fonts, not the full load event: that also waits for third-party
+      // embeds (the Google Calendar iframe on "/"), and a slow outside site must not fail the deploy.
+      await page.goto(base + BASE + path, { waitUntil: 'domcontentloaded', timeout: 30000 });
+      await page.waitForFunction(() => [...document.querySelectorAll('link[rel="stylesheet"]')].every((l) => l.sheet), null, { timeout: 10000 });
+      await page.evaluate(() => document.fonts.ready);
+      res = await page.evaluate(AUDIT);
+    } catch (e) { error = ` (${String(e.message).split('\n')[0]})`; }
+    if (!res) { out.lines.push(`  ✗ ${path} @${width}px: audit failed to run${error}`); out.failures++; continue; }
+    if (!res.stylesLoaded) { out.failures++; out.lines.push(`  ✗ ${path} @${width}px: site stylesheet did not load`); }
+    out.checked += res.checked;
+    out.skipped += res.skips.length;
+    if (process.env.AUDIT_VERBOSE) res.skips.forEach((x) => out.lines.push(`  · skipped ${path} @${width}px  ${x}`));
     for (const x of res.fails) {
-      failures++;
-      console.log(`  ✗ ${path} @${width}px  ${x.el} "${x.text}"  ${x.fg} on ${x.bg} = ${x.ratio}:1 (needs ${x.need}:1)`);
+      out.failures++;
+      out.lines.push(`  ✗ ${path} @${width}px  ${x.el} "${x.text}"  ${x.fg} on ${x.bg} = ${x.ratio}:1 (needs ${x.need}:1)`);
     }
   }
+  await context.close();
+  return out;
 }
 
-ws.close();
-chrome.kill();
+const results = await Promise.all([375, 1280].map(auditWidth));
+results.forEach((r) => r.lines.forEach((l) => console.log(l)));
+const failures = results.reduce((n, r) => n + r.failures, 0);
+const totalChecked = results.reduce((n, r) => n + r.checked, 0);
+const totalSkipped = results.reduce((n, r) => n + r.skipped, 0);
+
+await browser.close();
 server.close();
-try { rmSync(profile, { recursive: true, force: true }); } catch {}
 console.log(`\nContrast audit: ${pages.length} pages × 2 widths, ${totalChecked} text elements checked, ${totalSkipped} skipped (text over images/gradients).`);
 console.log(failures ? `${failures} contrast failure(s).` : 'All rendered text meets WCAG AA contrast.');
 process.exit(failures ? 1 : 0);

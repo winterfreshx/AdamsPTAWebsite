@@ -1,5 +1,6 @@
 ---
 // Centered single-message page: thank-you pages, info stubs and the 404.
+// Ends with a button row: the page's own buttons (slot="actions"), then "Back to home" unless homeLink={false}.
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import BaseLayout from './BaseLayout.astro';
@@ -12,8 +13,9 @@ interface Props {
   noindex?: boolean;
   image?: ImageMetadata;
   imageAlt?: string;
+  homeLink?: boolean;
 }
-const { title, heading, description, noindex = true, image = eagle, imageAlt = 'The Adams Elementary Eagle' } = Astro.props;
+const { title, heading, description, noindex = true, image = eagle, imageAlt = 'The Adams Elementary Eagle', homeLink = true } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description} noindex={noindex}>
@@ -24,7 +26,15 @@ const { title, heading, description, noindex = true, image = eagle, imageAlt = '
         <Image src={image} alt={imageAlt} width={360} class="img" />
       </div>
       <h1>{heading}</h1>
-      <div class="body stack"><slot /></div>
+      <div class="body stack">
+        <slot />
+        {(homeLink || Astro.slots.has('actions')) && (
+          <div class="btn-row">
+            <slot name="actions" />
+            {homeLink && <a class="btn btn-ghost" href="/">Back to home</a>}
+          </div>
+        )}
+      </div>
     </div>
   </section>
 </BaseLayout>

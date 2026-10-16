@@ -41,10 +41,19 @@ test('button with a leading icon: trailing text becomes one label (no flex colum
   assert.match(out, /<path d="heart"\/><\/svg><span class="ext-label"> Donate <span class="ext-nowrap">now<svg/);
 });
 
-test('very long last word stays breakable (no no-wrap)', () => {
+test('long last word stays breakable, with only its last characters bound to the icon', () => {
   const out = mark('<a href="https://x.org">https://averyveryverylongdomainname.example.org</a>');
-  assert.doesNotMatch(out, /ext-nowrap/);
+  assert.match(out, /<span class="ext-label">https:\/\/averyveryverylongdomainname\.example<span class="ext-nowrap">\.org<svg/);
   assert.equal(count(out, EXT), 1);
+  const dom = mark('<a class="btn" href="https://x.org">smithbrothersfarms.com</a>');
+  assert.match(dom, /<span class="ext-label">smithbrothersfarms<span class="ext-nowrap">\.com<svg/);
+});
+
+test('HTML entities count as one character and are never split', () => {
+  const short = mark('<a href="https://x.org">Rosellini&#39;s</a>');
+  assert.match(short, /<span class="ext-label"><span class="ext-nowrap">Rosellini&#39;s<svg/);
+  const long = mark('<a href="https://x.org">Rosellini&#39;sBakeryCafe</a>');
+  assert.match(long, /<span class="ext-label">Rosellini&#39;sBakery<span class="ext-nowrap">Cafe<svg/);
 });
 
 test('existing rel tokens are kept', () => {
