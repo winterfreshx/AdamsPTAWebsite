@@ -24,7 +24,7 @@ export const bigGive = {
   corporateMatchGoal: 50_000,
   // TODO(PTA): update this ONE number during the campaign. Every page that shows Big Give progress (the home page card
   // and the Big Give page) reads it through the BigGiveProgress component.
-  raised: 28_116.61,
+  raised: 32_000,
 };
 
 export const fallFest = {
