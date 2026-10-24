@@ -46,12 +46,14 @@ jobs:
       # runner image and Playwright version: Playwright downloads a WebKit build for the OS release it installs on, so a
       # copy cached on an older image fails to start on a newer one. On a cache hit only the system libraries are installed.
       - id: playwright
-        run: echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+          echo "os=$(. /etc/os-release && echo "$ID-$VERSION_ID")" >> "$GITHUB_OUTPUT"
       - id: pw-cache
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ env.ImageOS }}-${{ steps.playwright.outputs.version }}
+          key: playwright-${{ steps.playwright.outputs.os }}-${{ steps.playwright.outputs.version }}
       - if: steps.pw-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps chromium webkit
       - if: steps.pw-cache.outputs.cache-hit == 'true'
