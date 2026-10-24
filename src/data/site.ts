@@ -10,6 +10,8 @@ export const site = {
   url: 'https://www.adamselementarypta.org',
   taxId: '91-0963029',
   email: inbox.execTeam,
+  // The new family welcome packet. Replace the file in public/ each year (same name, so the links keep working).
+  newFamilyPacket: '/adams-new-family-packet.pdf',
 };
 
 export const school = {
