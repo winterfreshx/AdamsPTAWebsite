@@ -20,9 +20,7 @@ concurrency:
 
 jobs:
   build:
-    # Pinned: ubuntu-latest moved to 26.04, where Playwright's WebKit build fails to start (missing libicudata.so.74).
-    # Move to a newer image only after the menu tests pass on it.
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -45,8 +43,8 @@ jobs:
           SITE_BASE: ${{ steps.pages.outputs.base_path }}
       - run: npm run test:links # unit tests for the external-link rule (no browser)
       # Playwright's Chromium and WebKit, used by the contrast audit and the menu tests. The browsers are cached per
-      # runner image and Playwright version (the browser builds differ by OS release); on a cache hit only the
-      # system libraries are installed.
+      # runner image and Playwright version: Playwright downloads a WebKit build for the OS release it installs on, so a
+      # copy cached on an older image fails to start on a newer one. On a cache hit only the system libraries are installed.
       - id: playwright
         run: echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
       - id: pw-cache
