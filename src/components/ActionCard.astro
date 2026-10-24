@@ -4,23 +4,31 @@ import { scheduled, type DateWindow } from '../data/schedule';
 
 // A whole-card link with an icon, title and short description.
 // `window` (optional) shows the card only inside that date window (see src/data/schedule.ts).
+// `file` marks a link to a file on this site (like a PDF): it opens in a new tab with a download icon.
 interface Props {
   href: string;
   title: string;
   icon: Parameters<typeof Icon>[0]['name'];
   tone?: 'green' | 'gold';
   window?: DateWindow;
+  file?: boolean;
 }
-const { href, title, icon, tone = 'green', window } = Astro.props;
+const { href, title, icon, tone = 'green', window, file = false } = Astro.props;
 ---
 
-<a href={href} class:list={['action-card', tone]} {...(window ? scheduled(window) : {})}>
+<a
+  href={href}
+  class:list={['action-card', tone]}
+  {...(window ? scheduled(window) : {})}
+  {...(file ? { target: '_blank', rel: 'noopener' } : {})}
+>
   <span class="ac-icon"><Icon name={icon} size={26} /></span>
   <span class="ac-body">
     <span class="ac-title">{title}</span>
     <span class="ac-text"><slot /></span>
   </span>
-  <Icon name="arrow-right" size={20} class="ac-arrow" />
+  {file && <span class="visually-hidden"> (opens in a new tab)</span>}
+  <Icon name={file ? 'download' : 'arrow-right'} size={20} class="ac-arrow" />
 </a>
 
 <style>

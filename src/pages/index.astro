@@ -14,6 +14,7 @@ import { bigGive, spiritWear, afterSchoolEnrollment, fallFest } from '../data/an
 import { scheduled } from '../data/schedule';
 import { usd as fmt } from '../lib/format';
 import { site, school, bellTimes } from '../data/site';
+import { schoolYear } from '../data/schoolYear';
 
 ---
 
@@ -77,6 +78,9 @@ import { site, school, bellTimes } from '../data/site';
         </ActionCard>
         <ActionCard href="/corporate-matching" title="Corporate Matching" icon="briefcase" tone="gold">
           Many employers match your gifts and volunteer hours.
+        </ActionCard>
+        <ActionCard href={site.newFamilyPacket} title="New Family Packet" icon="book" file>
+          Our {schoolYear} welcome guide to Adams and the PTA (PDF).
         </ActionCard>
       </div>
     </div>
