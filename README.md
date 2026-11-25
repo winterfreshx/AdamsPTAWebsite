@@ -13,7 +13,7 @@ green and gold, built mobile-first with [Astro](https://astro.build).
 
 ## Run it locally
 
-Requires Node.js 22.12 or newer.
+Requires Node.js 22.23.4 or newer.
 
 ```sh
 npm install
