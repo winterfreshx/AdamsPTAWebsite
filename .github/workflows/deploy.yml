@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: ^22.23.4 # Astro's minimum; a plain 22 can use an older cached version
           cache: npm
       - run: npm ci
       # Ask GitHub Pages where the site is served: the custom domain with an empty base_path. If the domain were

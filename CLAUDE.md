@@ -8,7 +8,7 @@ A static Astro site for the Adams Elementary School PTA (Seattle). It replaces t
 
 ## Commands
 
-Requires Node ≥ 22.12 (Astro 7).
+Requires Node ≥ 22.23.4 (Astro 7).
 
 ```sh
 npm run dev       # dev server, http://localhost:4321
