@@ -10,7 +10,7 @@ import bigGiveLogo from '../assets/images/big-give-logo.png';
 import homeroomLogo from '../assets/images/homeroom-logo.png';
 import fallFestPoster from '../assets/images/fall-fest-2026.png';
 import { links } from '../data/links';
-import { bigGive, spiritWear, afterSchoolEnrollment, fallFest } from '../data/announcements';
+import { bigGive, spiritWear, afterSchoolEnrollment, fallFest, familyMathNight } from '../data/announcements';
 import { scheduled } from '../data/schedule';
 import { usd as fmt } from '../lib/format';
 import { site, school, bellTimes } from '../data/site';
@@ -131,6 +131,43 @@ import { schoolYear } from '../data/schoolYear';
             <a class="btn btn-accent" href={links.donateGeneral}><Icon name="heart" /> Donate to Adams</a>
             <a class="btn btn-ghost" href="/fundraising">Where it goes</a>
           </div>
+        </article>
+
+        <article class="card card-accent" {...scheduled(familyMathNight.window)}>
+          <span class="news-icon"><Icon name="sparkles" size={28} /></span>
+          <div class="ff-body">
+            <span class="badge">{familyMathNight.date} · {familyMathNight.time}</span>
+            <h3>Family Math Night</h3>
+          </div>
+          <div class="ff-body">
+            <p>
+              In collaboration with Cuemath, the Adams PTA is hosting a free Family Math Night! Join us in the Library for a
+              fun evening of hands-on math activities and games for grades K–5.
+            </p>
+            <p>
+              Your child will take on four challenge tables, one for each of the four ways of being good at math. Nothing is
+              scored and nothing is ranked. At the final station, they will open a sealed card revealing their math
+              personality—one of six strengths: The Linear, The Geometric, The Exponential, The Infinite, The Symmetric, or
+              The Positive—and take it home along with everything they worked on.
+            </p>
+          </div>
+          <ul class="check-list">
+            <li><strong>When:</strong> {familyMathNight.date}, {familyMathNight.time}</li>
+            <li><strong>Where:</strong> Adams Elementary Library</li>
+            <li><strong>Who:</strong> Grades K–5 (Free!)</li>
+          </ul>
+          <h4>Tips</h4>
+          <ul class="check-list">
+            <li>
+              <strong>Plan to stay and play:</strong> Grown-ups join in on the fun alongside their kids, so please plan to
+              stay for the event.
+            </li>
+            <li>
+              <strong>Arrive on time:</strong> It's a jam-packed evening, so arriving early gives you plenty of time to
+              complete all four stations!
+            </li>
+          </ul>
+          <a class="btn" href={links.familyMathNightRsvp}>Family Math Night RSVP</a>
         </article>
 
         <article class="card fall-fest" {...scheduled(fallFest.window)}>

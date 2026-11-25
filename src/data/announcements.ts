@@ -35,6 +35,13 @@ export const fallFest = {
   window: { expires: '2026-10-23' } satisfies DateWindow,
 };
 
+export const familyMathNight = {
+  // Home page "News & happenings" card. Shown through the day of the event, then hidden.
+  date: 'Thursday, December 10',
+  time: '5:30–7:00 PM',
+  window: { expires: '2026-12-10' } satisfies DateWindow,
+};
+
 export const afterSchoolEnrollment = {
   // The home page's "After-School Enrollment" news card (Homeroom sign-up + scholarship form) and its
   // "After-School Programs" quick-link card.
